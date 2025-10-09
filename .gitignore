@@ -1,0 +1,163 @@
+# Laravel specific
+/vendor/
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+/storage/app/public/*
+!/storage/app/public/.gitkeep
+/storage/framework/cache/*
+!/storage/framework/cache/.gitkeep
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
+/storage/framework/views/*
+!/storage/framework/views/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.backup
+.env.testing
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# next.js build output
+.next
+
+# nuxt.js build output
+.nuxt
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# Docker
+.docker/
+
+# Backup files
+/backups/
+*.sql
+*.backup
+
+# Deployment logs
+deploy.log
+
+# SSL certificates (keep structure but not actual certificates)
+docker/nginx/ssl/*.crt
+docker/nginx/ssl/*.key
+docker/nginx/ssl/*.pem
+
+# Monitoring data
+/monitoring-data/
+/prometheus-data/
+/grafana-data/
+/elasticsearch-data/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Composer
+composer.phar
+composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+/coverage/
+
+# Laravel Mix
+/public/mix-manifest.json
+
+# Laravel Nova
+/nova/
+
+# Homestead
+Homestead.json
+Homestead.yaml
+
+# Vagrant
+.vagrant/
+
+# Local development
+/public_html/
+/www/
+
+# Cache
+bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+
+# Session files
+storage/framework/sessions/*
+!storage/framework/sessions/.gitkeep
+
+# Compiled views
+storage/framework/views/*
+!storage/framework/views/.gitkeep
+
+# Application cache
+storage/framework/cache/data/*
+!storage/framework/cache/data/.gitkeep
