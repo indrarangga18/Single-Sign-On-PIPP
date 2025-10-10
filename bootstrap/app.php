@@ -34,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'sso.token' => \App\Http\Middleware\SSOTokenMiddleware::class,
             'service.access' => \App\Http\Middleware\ServiceAccessMiddleware::class,
             'rate.limit' => \App\Http\Middleware\RateLimitMiddleware::class,
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

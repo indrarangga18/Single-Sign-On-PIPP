@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIPP Single Sign-On</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Particles -->
+    <div class="particles"></div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingPage">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMzQjgyRjYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI4IiB5PSI4Ij4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4KPC9zdmc+" alt="PIPP Logo" class="loading-logo">
+        <h2 class="loading-text">PIPP Single Sign-On</h2>
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Login Page -->
+    <div class="login-container hidden" id="loginPage">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMzQjgyRjYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI4IiB5PSI4Ij4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4KPC9zdmc+" alt="PIPP Logo" class="login-logo">
+                <h1 class="login-title">PIPP Single Sign-On</h1>
+                <p class="login-subtitle">Masuk ke akun Anda</p>
+            </div>
+
+            <div id="errorMessage" class="error-message"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="Masukkan username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Masukkan password" required>
+                </div>
+
+                <button type="submit" id="loginButton" class="login-button">Masuk</button>
+            </form>
+
+            <div class="forgot-password">
+                <a href="#" onclick="window.ssoRouter.showForgotPassword()">Lupa Password?</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SSO Dashboard -->
+    <div class="sso-container hidden" id="dashboardPage">
+        <div class="sso-header">
+            <div class="sso-logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMzQjgyRjYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI4IiB5PSI4Ij4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4KPC9zdmc+" alt="PIPP Logo">
+            </div>
+            <div class="sso-title-container">
+                <h1 class="sso-title">PIPP Single Sign-On</h1>
+                <p class="sso-subtitle">Akses semua aplikasi dengan satu akun</p>
+            </div>
+            <div class="sso-user-info">
+                <span id="userWelcome">Selamat datang, <span id="currentUser">User</span></span>
+                <button class="settings-btn" onclick="window.ssoRouter.showSettings()">
+                    ⚙️ Settings
+                </button>
+                <button class="logout-btn" onclick="window.ssoRouter.logout()">
+                    🚪 Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Statistics -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalApps">3</div>
+                <div class="stat-label">Total Aplikasi</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeApps">3</div>
+                <div class="stat-label">Aplikasi Aktif</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="lastLogin">Hari ini</div>
+                <div class="stat-label">Login Terakhir</div>
+            </div>
+        </div>
+
+        <div id="dashboardErrorMessage" class="error-message"></div>
+
+        <!-- Applications Section -->
+        <div class="apps-section">
+            <div class="section-header">
+                <h2 class="section-title">Aplikasi SSO</h2>
+            </div>
+            <div class="apps-container" id="appsContainer">
+                <!-- Applications will be loaded dynamically -->
+            </div>
+        </div>
+
+        <div class="sso-footer">
+            <p>&copy; 2024 PIPP Single Sign-On. Semua hak dilindungi.</p>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="settings-modal hidden">
+        <div class="settings-modal-content">
+            <div class="settings-header">
+                <h2>Pengaturan</h2>
+                <button class="close-btn" onclick="router.closeSettings()">&times;</button>
+            </div>
+            <div class="settings-body">
+                <div class="settings-section">
+                    <h3>Manajemen Aplikasi</h3>
+                    <p>Kelola aplikasi SSO yang tersedia di dashboard</p>
+                    <button class="settings-btn-primary" onclick="router.showAppManager()">
+                        Kelola Aplikasi
+                    </button>
+                </div>
+                <div class="settings-section">
+                    <h3>Profil Pengguna</h3>
+                    <p>Ubah informasi profil dan preferensi akun</p>
+                    <button class="settings-btn-secondary" onclick="router.showProfile()">
+                        Edit Profil
+                    </button>
+                </div>
+                <div class="settings-section">
+                    <h3>Keamanan</h3>
+                    <p>Pengaturan keamanan dan autentikasi</p>
+                    <button class="settings-btn-secondary" onclick="router.showSecurity()">
+                        Pengaturan Keamanan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Manager Modal -->
+    <div id="appManagerModal" class="settings-modal hidden">
+        <div class="settings-modal-content app-manager">
+            <div class="settings-header">
+                <h2>Manajemen Aplikasi SSO</h2>
+                <button class="close-btn" onclick="router.closeAppManager()">&times;</button>
+            </div>
+            <div class="settings-body">
+                <div class="app-manager-header">
+                    <button class="add-app-btn" onclick="router.showAddAppForm()">
+                        <span>+</span>
+                        Tambah Aplikasi
+                    </button>
+                </div>
+                <div id="appList" class="app-list">
+                    <!-- App list will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add App Modal -->
+    <div id="addAppModal" class="settings-modal hidden">
+        <div class="settings-modal-content">
+            <div class="settings-header">
+                <h2>Tambah Aplikasi SSO</h2>
+                <button class="close-btn" onclick="router.closeAddAppForm()">&times;</button>
+            </div>
+            <div class="settings-body">
+                <form id="addAppForm" class="add-app-form">
+                    <div class="form-group">
+                        <label for="appName">Nama Aplikasi</label>
+                        <input type="text" id="appName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appDescription">Deskripsi</label>
+                        <textarea id="appDescription" name="description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="appUrl">URL Aplikasi</label>
+                        <input type="url" id="appUrl" name="url" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appIcon">Icon (Unicode/Emoji)</label>
+                        <input type="text" id="appIcon" name="icon" placeholder="📊" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appColor">Warna</label>
+                        <input type="color" id="appColor" name="color" value="#667eea" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="router.closeAddAppForm()">
+                            Batal
+                        </button>
+                        <button type="submit" class="save-btn">
+                            Simpan Aplikasi
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/router.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard SSO - PIPP</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Particles -->
+    <div class="particles"></div>
+
+    <!-- SSO Dashboard -->
+    <div class="sso-container" id="dashboardPage">
+        <div class="sso-header">
+            <div class="sso-logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMzQjgyRjYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI4IiB5PSI4Ij4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4KPC9zdmc+" alt="PIPP Logo">
+            </div>
+            <div class="sso-title-container">
+                <h1 class="sso-title">PIPP Single Sign-On</h1>
+                <p class="sso-subtitle">Akses semua aplikasi dengan satu akun</p>
+            </div>
+            <div class="sso-user-info">
+                <span id="userWelcome">Selamat datang, <span id="currentUser">User</span></span>
+                <button class="logout-btn" onclick="window.ssoRouter.logout()">Logout</button>
+            </div>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <div class="apps-container" id="appsContainer">
+            <!-- Applications will be loaded dynamically -->
+        </div>
+
+        <div class="sso-footer">
+            <p>&copy; 2024 PIPP Single Sign-On. Semua hak dilindungi.</p>
+        </div>
+    </div>
+
+    <script src="/js/router.js"></script>
+</body>
+</html>

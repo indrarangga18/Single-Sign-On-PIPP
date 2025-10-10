@@ -18,8 +18,12 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    return view('loading');
+})->name('home');
+
+Route::get('/loading', function () {
+    return view('loading');
+})->name('loading');
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {
