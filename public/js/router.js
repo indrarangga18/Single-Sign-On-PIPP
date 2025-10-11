@@ -4,7 +4,7 @@ class SSORouter {
         this.routes = {
             '/': this.handleHome.bind(this),
             '/login': this.handleLogin.bind(this),
-            '/dashboardsso': this.handleDashboard.bind(this)
+            '/dashboard': this.handleDashboard.bind(this)
         };
         
         this.init();
@@ -48,7 +48,7 @@ class SSORouter {
         
         setTimeout(() => {
             if (this.isLoggedIn()) {
-                this.navigate('/dashboardsso');
+                this.navigate('/dashboard');
             } else {
                 this.navigate('/login');
             }
@@ -58,7 +58,7 @@ class SSORouter {
     handleLogin() {
         if (this.isLoggedIn()) {
             // If already logged in, redirect to dashboard
-            this.navigate('/dashboardsso');
+            this.navigate('/dashboard');
             return;
         }
         
@@ -167,7 +167,7 @@ class SSORouter {
                 if (this.login(username, password)) {
                     this.showSuccess('Login berhasil! Mengalihkan...');
                     setTimeout(() => {
-                        this.navigate('/dashboardsso');
+                        this.navigate('/dashboard');
                     }, 1000);
                 } else {
                     this.showError('Username atau password salah');

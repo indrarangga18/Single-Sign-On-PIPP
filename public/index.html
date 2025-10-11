@@ -57,11 +57,42 @@
 
         .footer { margin-top: 8px; font-size: 12px; color: #5773A6; }
     </style>
+    <style>
+        /* Futuristic enhancements: neon orbs, glass card, gradient loader */
+        body { background: linear-gradient(135deg, #0b1020 0%, #0e1e3c 38%, #061a3a 100%); color: #0f172a; }
+        .fx { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        .orb { position: absolute; width: 380px; height: 380px; border-radius: 50%; filter: blur(86px); opacity: .35; }
+        .orb.o1 { background: radial-gradient(closest-side, rgba(53,225,255,.9), transparent 72%); top: 10%; left: 8%; animation: float 14s ease-in-out infinite; }
+        .orb.o2 { background: radial-gradient(closest-side, rgba(167,139,250,.9), transparent 72%); bottom: 12%; right: 10%; animation: float 18s ease-in-out infinite reverse; }
+        .orb.o3 { background: radial-gradient(closest-side, rgba(96,165,250,.9), transparent 72%); top: 58%; left: 58%; animation: float 22s ease-in-out infinite; }
+        @keyframes float { 0%,100% { transform: translate(0,0) } 50% { transform: translate(16px,-12px) } }
+
+        .loading-card { background: transparent; border: none; box-shadow: none; padding: 0; position: relative; z-index: 1; display: grid; place-items: center; gap: 18px; }
+        .brand img { filter: drop-shadow(0 6px 12px rgba(99,102,241,.18)); }
+        .brand h1 { background: linear-gradient(90deg, #7dd3fc, #a78bfa 45%, #60a5fa); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 1px 14px rgba(53,225,255,.22); font-size: clamp(24px, 4vw, 36px); letter-spacing: .3px; background-size: 200% auto; animation: shimmer 8s linear infinite; }
+        .subtitle { color: #ffffff; font-size: clamp(14px, 1.8vw, 18px); opacity: 1; }
+        .brand { flex-direction: column; gap: 10px; margin-bottom: 0; position: relative; }
+        .brand::before { content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%; left: 50%; top: 50%; transform: translate(-50%,-50%); background: radial-gradient(closest-side, rgba(99,102,241,.35), transparent 70%); filter: blur(16px); }
+        .brand img { width: clamp(160px, 18vw, 240px); height: auto; border-radius: 12px; object-fit: contain; box-shadow: none; filter: drop-shadow(0 6px 18px rgba(99,102,241,.30)); animation: logoFloat 6s ease-in-out infinite alternate; }
+        .ring { width: clamp(100px, 11vw, 132px); height: clamp(100px, 11vw, 132px); }
+        .progress { height: 6px; border-radius: 999px; box-shadow: 0 0 14px rgba(99,102,241,.35), 0 0 24px rgba(53,225,255,.25); }
+        @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+        @keyframes logoFloat { 0% { transform: translateY(0); filter: drop-shadow(0 6px 16px rgba(99,102,241,.30)); } 100% { transform: translateY(-6px); filter: drop-shadow(0 8px 22px rgba(99,102,241,.36)); } }
+
+        /* Neon loader ring using conic-gradient & mask */
+        .loader-ring { width: 86px; height: 86px; border: none; margin: 12px auto; background: conic-gradient(from 0deg, rgba(14,165,233,.12), rgba(99,102,241,.75)); -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0); mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0); animation: spin 1.2s linear infinite; box-shadow: 0 0 0 1px rgba(53,225,255,.35), 0 18px 40px rgba(99,102,241,.26); position: relative; }
+        .loader-ring::after { content: ""; position: absolute; inset: 10px; border-radius: 50%; background: radial-gradient(closest-side, rgba(99,102,241,.15), transparent 66%); filter: blur(3px); }
+
+        .progress-bar { background: rgba(226,232,240,.7); }
+        .progress { background: linear-gradient(90deg, #0ea5e9, #6366f1); box-shadow: 0 6px 18px rgba(99,102,241,.18); animation: progress 2.2s ease-in-out infinite; }
+        @keyframes progress { 0% { width: 18%; transform: translateX(0) } 50% { width: 70%; transform: translateX(30%) } 100% { width: 18%; transform: translateX(0) } }
+    </style>
 </head>
 <body>
+    <div class="fx" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
     <div class="loading-card" aria-live="polite">
         <div class="brand">
-            <img src="/images/logo-KKP.png" alt="Logo KKP">
+            <img src="/images/logo-kkp-pipp.png" alt="Logo KKP">
             <h1>PIPP Single Sign-On</h1>
         </div>
         <p class="subtitle">Selamat Datang di Portal Satu Pintu<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>

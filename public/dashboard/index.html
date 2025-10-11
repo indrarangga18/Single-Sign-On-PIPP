@@ -7,14 +7,29 @@
     <link rel="icon" href="/images/logo-KKP.png" />
     <style>
       :root { --primary:#ffffff; --white:#ffffff; --text:#0e1e3c; --muted:#727f91; --border:#e2e8f0; --sidebar-width:280px; 
-               --bg1:#061a3a; --bg2:#0b1020; --bg3:#0e1e3c; --accent:#35e1ff; }
+               --bg1:#061a3a; --bg2:#0b1020; --bg3:#0e1e3c; --accent:#35e1ff; 
+               --neon1:#00f5ff; --neon2:#7c3aed; --neon3:#22d3ee; }
       *{box-sizing:border-box}
       html,body{height:100%}
       body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);
-           background:
-             radial-gradient(800px 420px at 14% 12%, rgba(var(--accent-r,53), var(--accent-g,225), var(--accent-b,255), .22) 0%, rgba(53,225,255,0) 55%),
-             linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 55%, var(--bg3) 100%);
+           background: linear-gradient(135deg, #0b1020 0%, #0e1e3c 38%, #061a3a 100%);
           }
+      /* Futuristic grid overlay */
+      .bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.08;
+        background:
+          repeating-linear-gradient(90deg, rgba(226,232,240,.15) 0 1px, transparent 1px 120px),
+          repeating-linear-gradient(0deg, rgba(226,232,240,.12) 0 1px, transparent 1px 120px);
+        mix-blend-mode:screen;animation:gridShift 28s linear infinite}
+      @keyframes gridShift{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-35px,20px,0)}100%{transform:translate3d(0,0,0)}}
+      /* background FX */
+      .fx{position:fixed;inset:0;pointer-events:none;z-index:0}
+      .orb{position:absolute;filter:blur(40px);opacity:.35}
+      .orb.o1{width:320px;height:320px;background:radial-gradient(circle at 30% 30%, var(--neon1), transparent 60%);left:-60px;top:-40px;animation:float1 18s ease-in-out infinite}
+      .orb.o2{width:280px;height:280px;background:radial-gradient(circle at 70% 30%, var(--neon2), transparent 60%);right:-80px;top:120px;animation:float2 22s ease-in-out infinite}
+      .orb.o3{width:260px;height:260px;background:radial-gradient(circle at 50% 60%, var(--neon3), transparent 60%);left:20%;bottom:-120px;animation:float3 26s ease-in-out infinite}
+      @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,20px)}}
+      @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-24px,18px)}}
+      @keyframes float3{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-24px)}}
       .wrap{max-width:1200px;margin:0 auto;padding:28px}
       header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
       .logo{width:48px;height:48px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #eef2f7}
@@ -61,7 +76,8 @@
       .menu-item{display:flex;align-items:center;gap:12px;color:#e5e7eb;text-decoration:none;padding:10px 12px;border-radius:12px;transition:background .15s ease, transform .06s ease}
       .menu-item .mi-icon{width:22px;text-align:center;opacity:.9}
       .menu-item:hover{background:linear-gradient(135deg,rgba(53,225,255,.10),rgba(255,255,255,.04));transform:translateX(1px)}
-      .menu-item.active{background:linear-gradient(135deg,rgba(53,225,255,.14),rgba(255,255,255,.06));}
+      .menu-item.active{background:linear-gradient(135deg,rgba(53,225,255,.16),rgba(255,255,255,.08));
+        box-shadow:inset 3px 0 0 0 rgba(124,58,237,.8), 0 6px 20px rgba(124,58,237,.25)}
       .menu-sep{height:1px;margin:8px 0;background:rgba(226,232,240,.12)}
       /* collapsed labels */
       .sidebar.is-collapsed .brand-title{display:none}
@@ -71,24 +87,55 @@
       .sidebar.is-collapsed .menu-item .mi-icon{width:28px}
 
       /* Cards in main content */
-      .status{display:flex;align-items:center;gap:14px;margin:16px 0 20px;color:var(--muted);font-size:13px}
-      .status .chip{background:rgba(255,255,255,.75);border:1px solid var(--border);padding:8px 12px;border-radius:999px}
-      .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+      /* Hero */
+      .hero{position:relative;margin:14px 0 20px;padding:18px 20px;border:1px solid rgba(226,232,240,.35);border-radius:18px;background:rgba(255,255,255,.10);
+            backdrop-filter:saturate(1.2) blur(12px);box-shadow:0 12px 34px rgba(4,37,92,.22)}
+      .hero::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;border-radius:2px;
+        background:linear-gradient(90deg,var(--neon2),var(--neon1),var(--neon3));opacity:.45;filter:blur(.2px)}
+      .hero h2{margin:0;font-size:24px;font-weight:900;letter-spacing:.3px;background:linear-gradient(90deg,#e2f4ff,#a5f3fc,#d8b4fe);-webkit-background-clip:text;background-clip:text;color:transparent}
+      .hero p{margin:6px 0 12px;color:#cbd5e1}
+      .hero .chips{display:flex;flex-wrap:wrap;gap:8px}
+      .chip{background:rgba(255,255,255,.82);border:1px solid var(--border);padding:8px 12px;border-radius:999px;color:#0f172a;font-size:12px;
+        box-shadow:0 6px 16px rgba(4,37,92,.18)}
+      .grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
       @media (max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
       @media (max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}}
       @media (max-width:520px){.grid{grid-template-columns:1fr}}
-      .card{position:relative;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.92);
-            backdrop-filter:saturate(1.1) blur(8px);padding:18px;display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;color:inherit;
-            box-shadow:0 10px 24px rgba(4,37,92,.18);transition:transform .08s ease, box-shadow .18s ease, background .18s ease}
-      .card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(4,37,92,.26);background:#fff}
+      .card{position:relative;overflow:hidden;border:1px solid rgba(226,232,240,.65);border-radius:18px;
+            background:linear-gradient(180deg, rgba(255,255,255,.94) 0%, rgba(255,255,255,.88) 100%);
+            backdrop-filter:saturate(1.15) blur(10px);padding:20px;display:flex;align-items:center;gap:14px;cursor:pointer;text-decoration:none;color:inherit;
+            box-shadow:0 14px 32px rgba(4,37,92,.22);transition:transform .16s ease, box-shadow .26s ease, background .26s ease;will-change:transform}
+      .card::before{content:"";position:absolute;inset:auto -60px -60px auto;width:200px;height:200px;border-radius:50%;
+                    background:radial-gradient(circle at 50% 50%, rgba(124,58,237,.22) 0%, rgba(53,225,255,0) 70%);
+                    transform:rotate(18deg);opacity:.9;transition:transform .3s ease, opacity .3s ease}
+      .card::after{content:"";position:absolute;left:0;top:0;width:100%;height:2px;background:linear-gradient(90deg,var(--neon2),var(--neon1),var(--neon3));opacity:.35}
+      .card:hover{transform:translateY(-4px);box-shadow:0 22px 42px rgba(4,37,92,.30);background:linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,.96) 100%)}
+      .card:hover::before{transform:rotate(0deg) scale(1.08);opacity:1}
+      .card:focus-visible{outline:2px solid rgba(53,225,255,.6);outline-offset:3px}
       .card:active{transform:translateY(0)}
-      .icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#eef2f7;color:#0b3b9b}
-      .card h3{margin:0;font-size:15px;font-weight:800}
+      .icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;
+            background:linear-gradient(135deg,#e0f7ff,#f6f7fb);border:1px solid #dbeafe;color:#0b3b9b;
+            box-shadow:0 8px 18px rgba(11,59,155,.14), inset 0 0 12px rgba(255,255,255,.65);transition:transform .12s ease, box-shadow .26s ease}
+      .card:hover .icon{transform:translateY(-2px);box-shadow:0 12px 22px rgba(11,59,155,.2), inset 0 0 14px rgba(255,255,255,.75)}
+      .card h3{margin:0;font-size:15px;font-weight:800;color:#0f172a}
       .card p{margin:2px 0 0;font-size:12px;color:var(--muted)}
       footer{margin-top:24px;color:var(--muted);font-size:12px;text-align:center}
+  </style>
+    <style>
+      /* Override: samakan dengan halaman root (nonaktifkan grid, aktifkan orbs) */
+      .bg-grid { display: none !important; }
+      /* Orbs persis seperti root */
+      .fx { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+      .orb { position: absolute; width: 380px; height: 380px; border-radius: 50%; filter: blur(86px); opacity: .35; }
+      .orb.o1 { background: radial-gradient(closest-side, rgba(53,225,255,.9), transparent 72%); top: 10%; left: 8%; animation: float 14s ease-in-out infinite; }
+      .orb.o2 { background: radial-gradient(closest-side, rgba(167,139,250,.9), transparent 72%); bottom: 12%; right: 10%; animation: float 18s ease-in-out infinite reverse; }
+      .orb.o3 { background: radial-gradient(closest-side, rgba(96,165,250,.9), transparent 72%); top: 58%; left: 58%; animation: float 22s ease-in-out infinite; }
+      @keyframes float { 0%,100% { transform: translate(0,0) } 50% { transform: translate(16px,-12px) } }
     </style>
   </head>
   <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="fx" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
     <div class="wrap">
       <header>
         <span class="logo"><img src="/images/logo-KKP.png" alt="Logo KKP"/></span>
@@ -129,10 +176,16 @@
         </aside>
 
         <main>
-          <div class="status">
-            <span class="chip" id="date"></span>
-            <span class="chip">Menu layanan PIPP dan eksternal</span>
-          </div>
+          <section class="hero" aria-label="Hero Dashboard">
+            <h2>Portal PIPP Futuristik</h2>
+            <p>SSO Terpadu • Aman • Nyaman • Modern</p>
+            <div class="chips">
+              <span class="chip" id="date"></span>
+              <span class="chip">Enkripsi JWT</span>
+              <span class="chip">Monitoring Real-time</span>
+              <span class="chip">UI Glassmorphism</span>
+            </div>
+          </section>
 
           <section class="grid" aria-label="Menu Utama">
             <a class="card" href="/pemantauan/">
@@ -205,6 +258,29 @@
             burger.setAttribute('aria-expanded', (!isNowCollapsed).toString());
           });
         }
+      })();
+      // Tilt efek kartu
+      (function(){
+        const cards = document.querySelectorAll('.card');
+        const max = 8; // derajat maksimal
+        cards.forEach(card => {
+          let rID;
+          const onMove = (e)=>{
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rx = ((y/rect.height)-0.5) * -max;
+            const ry = ((x/rect.width)-0.5) * max;
+            cancelAnimationFrame(rID);
+            rID = requestAnimationFrame(()=>{
+              card.style.transform = `perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+            });
+          };
+          const reset = ()=>{ card.style.transform = ''; };
+          card.addEventListener('mousemove', onMove);
+          card.addEventListener('mouseleave', reset);
+          card.addEventListener('blur', reset);
+        });
       })();
       // Toggle menu My Account
       (function(){
