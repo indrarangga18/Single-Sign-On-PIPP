@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Produksi & Hasil Tangkapan — SSO PIPP</title>
+    <link rel="icon" href="/images/logo-KKP.png" />
+    <style>
+      :root { --primary:#04255c; --white:#ffffff; --text:#0f172a; --muted:#64748b; --border:#e2e8f0; --accent:#35e1ff; }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);
+           background:
+             radial-gradient(800px 420px at 14% 12%, rgba(53,225,255,.22) 0%, rgba(53,225,255,0) 55%),
+             linear-gradient(135deg, #061a3a 0%, #0b1020 55%, #0e1e3c 100%);
+          }
+      .wrap{max-width:1200px;margin:0 auto;padding:28px}
+      header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+      .logo{width:48px;height:48px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #eef2f7}
+      .logo img{width:42px;height:42px;object-fit:contain}
+      .title{font-size:22px;font-weight:800;color:#e2f4ff;margin:0;text-shadow:0 1px 8px rgba(53,225,255,.35)}
+      .subtitle{margin:2px 0 0;color:#cbd5e1;font-size:13px}
+
+      .toolbar{display:flex;align-items:center;gap:10px;margin:16px 0}
+      .btn{background:#0f172a;color:#e5e7eb;border:1px solid rgba(226,232,240,.14);border-radius:10px;padding:10px 12px;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+      .btn:hover{background:#111827}
+      .filters{flex:1;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px}
+      .filters select,.filters input{padding:10px 12px;border:1px solid var(--border);border-radius:10px}
+      .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0}
+      @media (max-width:920px){.summary{grid-template-columns:repeat(2,1fr)}}
+      @media (max-width:560px){.summary{grid-template-columns:1fr}}
+      .tile{border:1px solid var(--border);border-radius:14px;background:#fff;padding:14px;display:flex;align-items:center;gap:10px}
+      .tile .icon{width:36px;height:36px;border-radius:10px;background:#eef2f7;display:grid;place-items:center;color:#0b3b9b}
+      .tile b{font-size:18px}
+      .tile span{color:var(--muted);font-size:12px}
+
+      .layout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+      @media (max-width:920px){.layout{grid-template-columns:1fr}}
+      .panel{position:relative;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.94);
+             backdrop-filter:saturate(1.1) blur(8px);padding:16px;box-shadow:0 10px 24px rgba(4,37,92,.18)}
+      .panel h2{margin:0 0 8px;font-size:18px;font-weight:800;color:#0b3b9b}
+      .panel p{margin:0 0 8px;color:var(--muted);font-size:13px}
+
+      table{width:100%;border-collapse:collapse}
+      th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left;font-size:13px}
+      thead th{background:#f8fafc;color:#0f172a;font-weight:700}
+      tbody tr:hover{background:#f1f5f9}
+
+      .chart{height:220px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}
+      .chart canvas{width:100%;height:100%}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="logo" href="/dashboard/"><img src="/images/logo-KKP.png" alt="Logo KKP"/></a>
+        <div>
+          <h1 class="title">Produksi & Hasil Tangkapan</h1>
+          <p class="subtitle">Laporan berdasarkan wilayah, pelabuhan, dan alat tangkap</p>
+        </div>
+      </header>
+
+      <div class="toolbar">
+        <a class="btn" href="/dashboard/">⬅️ Kembali ke Dashboard</a>
+        <div class="filters">
+          <select id="fWilayah">
+            <option value="">Semua Wilayah</option>
+            <option value="Utara">Utara</option>
+            <option value="Selatan">Selatan</option>
+          </select>
+          <select id="fPelabuhan">
+            <option value="">Semua Pelabuhan</option>
+            <option value="PPN Nusantara">PPN Nusantara</option>
+            <option value="PPP Samudera">PPP Samudera</option>
+          </select>
+          <select id="fAlat">
+            <option value="">Semua Alat Tangkap</option>
+            <option value="Pukat Cincin">Pukat Cincin</option>
+            <option value="Rawai">Rawai</option>
+            <option value="Pancing">Pancing</option>
+          </select>
+          <input id="fTanggal" type="date" />
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="tile"><span class="icon">📦</span><div><b id="sumVolume">0</b><br/><span>Total Volume (ton)</span></div></div>
+        <div class="tile"><span class="icon">🐟</span><div><b id="sumJenis">0</b><br/><span>Jenis Ikan</span></div></div>
+        <div class="tile"><span class="icon">⚓</span><div><b id="sumPelabuhan">0</b><br/><span>Pelabuhan Aktif</span></div></div>
+        <div class="tile"><span class="icon">🧰</span><div><b id="sumAlat">0</b><br/><span>Alat Tangkap Aktif</span></div></div>
+      </div>
+
+      <div class="layout">
+        <section class="panel" aria-label="Data Produksi Harian">
+          <h2>Data Produksi Harian</h2>
+          <p>Rekap harian per jenis ikan, pelabuhan, dan alat tangkap.</p>
+          <table id="prodTable">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Wilayah</th>
+                <th>Pelabuhan</th>
+                <th>Alat Tangkap</th>
+                <th>Jenis Ikan</th>
+                <th>Volume (ton)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <aside class="panel" aria-label="Jenis & Volume Ikan">
+          <h2>Jenis & Volume Ikan</h2>
+          <p>Distribusi volume per jenis ikan dari data terfilter.</p>
+          <div class="chart"><canvas id="chart"></canvas></div>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+      // Data contoh (placeholder). Ganti dengan data API bila tersedia.
+      const PROD = [
+        { t:'2025-10-10', wilayah:'Utara', pelabuhan:'PPN Nusantara', alat:'Pukat Cincin', jenis:'Tongkol', volume:22 },
+        { t:'2025-10-10', wilayah:'Utara', pelabuhan:'PPN Nusantara', alat:'Pancing', jenis:'Cakalang', volume:14 },
+        { t:'2025-10-10', wilayah:'Selatan', pelabuhan:'PPP Samudera', alat:'Rawai', jenis:'Tuna', volume:18 },
+        { t:'2025-10-11', wilayah:'Utara', pelabuhan:'PPN Nusantara', alat:'Pukat Cincin', jenis:'Tongkol', volume:28 },
+        { t:'2025-10-11', wilayah:'Selatan', pelabuhan:'PPP Samudera', alat:'Pancing', jenis:'Cakalang', volume:12 },
+        { t:'2025-10-11', wilayah:'Selatan', pelabuhan:'PPP Samudera', alat:'Rawai', jenis:'Tuna', volume:24 },
+      ];
+
+      const tbody = document.querySelector('#prodTable tbody');
+      const fWilayah = document.getElementById('fWilayah');
+      const fPelabuhan = document.getElementById('fPelabuhan');
+      const fAlat = document.getElementById('fAlat');
+      const fTanggal = document.getElementById('fTanggal');
+      const chartEl = document.getElementById('chart');
+      const ctx = chartEl.getContext('2d');
+
+      function renderTable(rows){
+        tbody.innerHTML = '';
+        rows.forEach(r => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${r.t}</td><td>${r.wilayah}</td><td>${r.pelabuhan}</td><td>${r.alat}</td><td>${r.jenis}</td><td>${r.volume}</td>`;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function renderSummary(rows){
+        const totalVol = rows.reduce((a,b)=>a+b.volume,0);
+        const jenis = new Set(rows.map(r=>r.jenis));
+        const pel = new Set(rows.map(r=>r.pelabuhan));
+        const alat = new Set(rows.map(r=>r.alat));
+        document.getElementById('sumVolume').textContent = totalVol;
+        document.getElementById('sumJenis').textContent = jenis.size;
+        document.getElementById('sumPelabuhan').textContent = pel.size;
+        document.getElementById('sumAlat').textContent = alat.size;
+      }
+
+      function drawChart(rows){
+        const agg = {};
+        rows.forEach(r => { agg[r.jenis] = (agg[r.jenis]||0) + r.volume; });
+        const labels = Object.keys(agg);
+        const values = labels.map(l => agg[l]);
+
+        const w = chartEl.width = chartEl.clientWidth; const h = chartEl.height = chartEl.clientHeight;
+        ctx.clearRect(0,0,w,h);
+        ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(40,10); ctx.lineTo(40,h-30); ctx.lineTo(w-10,h-30); ctx.stroke();
+        const max = Math.max(10, Math.max(...values) * 1.2);
+        const stepX = (w-60)/(labels.length||1);
+        values.forEach((v, i) => {
+          const x = 40 + i*stepX + 4;
+          const barH = (h-50) * (v/max);
+          const y = (h-30) - barH;
+          ctx.fillStyle = '#0b3b9b';
+          ctx.fillRect(x, y, Math.max(16, stepX-12), barH);
+          ctx.fillStyle = '#0f172a'; ctx.font = '12px system-ui';
+          ctx.fillText(labels[i], x, h-12);
+        });
+      }
+
+      function filter(){
+        let rows = PROD.slice();
+        if(fWilayah.value) rows = rows.filter(r => r.wilayah === fWilayah.value);
+        if(fPelabuhan.value) rows = rows.filter(r => r.pelabuhan === fPelabuhan.value);
+        if(fAlat.value) rows = rows.filter(r => r.alat === fAlat.value);
+        if(fTanggal.value) rows = rows.filter(r => r.t === fTanggal.value);
+        renderTable(rows); renderSummary(rows); drawChart(rows);
+      }
+
+      [fWilayah,fPelabuhan,fAlat,fTanggal].forEach(el => el.addEventListener('change', filter));
+
+      // init
+      renderTable(PROD); renderSummary(PROD); drawChart(PROD);
+    </script>
+  </body>
+  </html>

@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #04255C 0%, #FFFFFF 100%);
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
@@ -20,7 +20,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #04255C 0%, #FFFFFF 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -61,6 +61,94 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Enhanced Loading Components */
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 2rem 2.5rem;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+}
+
+.loader-ring {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.25) 60%, rgba(255,255,255,0.05) 100%);
+    animation: rotate 1.4s linear infinite;
+    /* Create donut mask */
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 8px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 8px));
+    box-shadow: 0 0 30px rgba(255,255,255,0.4);
+}
+
+@keyframes rotate {
+    to { transform: rotate(360deg); }
+}
+
+.loading-title {
+    color: #ffffff;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-shadow: 0 6px 24px rgba(0,0,0,0.25);
+}
+
+.loading-subtitle {
+    color: rgba(255,255,255,0.9);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.dots {
+    display: inline-flex;
+    gap: 2px;
+    margin-left: 4px;
+}
+.dots span {
+    opacity: 0.2;
+    animation: blink 1s infinite;
+}
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+
+.progress-bar {
+    width: 280px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #3b82f6, #22d3ee, #a78bfa, #f472b6);
+    background-size: 200% 100%;
+    animation: progressGrow 2s ease-in-out forwards, progressShift 2s linear infinite;
+}
+
+@keyframes progressGrow {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
+@keyframes progressShift {
+    from { background-position: 0% 50%; }
+    to { background-position: 100% 50%; }
 }
 
 /* Login Page Styles */

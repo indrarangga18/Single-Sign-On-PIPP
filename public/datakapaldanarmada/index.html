@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Data Kapal dan Armada — SSO PIPP</title>
+    <link rel="icon" href="/images/logo-KKP.png" />
+    <style>
+      :root { --primary:#04255c; --white:#ffffff; --text:#0f172a; --muted:#64748b; --border:#e2e8f0; --accent:#35e1ff; }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);
+           background:
+             radial-gradient(800px 420px at 14% 12%, rgba(53,225,255,.22) 0%, rgba(53,225,255,0) 55%),
+             linear-gradient(135deg, #061a3a 0%, #0b1020 55%, #0e1e3c 100%);
+          }
+      .wrap{max-width:1200px;margin:0 auto;padding:28px}
+      header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+      .logo{width:48px;height:48px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #eef2f7}
+      .logo img{width:42px;height:42px;object-fit:contain}
+      .title{font-size:22px;font-weight:800;color:#e2f4ff;margin:0;text-shadow:0 1px 8px rgba(53,225,255,.35)}
+      .subtitle{margin:2px 0 0;color:#cbd5e1;font-size:13px}
+
+      .toolbar{display:flex;align-items:center;gap:10px;margin:16px 0}
+      .btn{background:#0f172a;color:#e5e7eb;border:1px solid rgba(226,232,240,.14);border-radius:10px;padding:10px 12px;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+      .btn:hover{background:#111827}
+      .search{flex:1;display:flex;gap:8px}
+      .search input,.search select{padding:10px 12px;border:1px solid var(--border);border-radius:10px}
+      .search input{flex:1}
+
+      .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0}
+      @media (max-width:920px){.summary{grid-template-columns:repeat(2,1fr)}}
+      @media (max-width:560px){.summary{grid-template-columns:1fr}}
+      .tile{border:1px solid var(--border);border-radius:14px;background:#fff;padding:14px;display:flex;align-items:center;gap:10px}
+      .tile .icon{width:36px;height:36px;border-radius:10px;background:#eef2f7;display:grid;place-items:center;color:#0b3b9b}
+      .tile b{font-size:18px}
+      .tile span{color:var(--muted);font-size:12px}
+
+      .layout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+      @media (max-width:920px){.layout{grid-template-columns:1fr}}
+      .panel{position:relative;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.94);
+             backdrop-filter:saturate(1.1) blur(8px);padding:16px;box-shadow:0 10px 24px rgba(4,37,92,.18)}
+      .panel h2{margin:0 0 8px;font-size:18px;font-weight:800;color:#0b3b9b}
+      .panel p{margin:0 0 8px;color:var(--muted);font-size:13px}
+
+      table{width:100%;border-collapse:collapse}
+      th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left;font-size:13px}
+      thead th{background:#f8fafc;color:#0f172a;font-weight:700}
+      tbody tr{cursor:pointer}
+      tbody tr:hover{background:#f1f5f9}
+      .status{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;font-size:12px;border:1px solid}
+      .status.aktif{color:#166534;background:#ecfdf5;border-color:#86efac}
+      .status.nonaktif{color:#7f1d1d;background:#fef2f2;border-color:#fecaca}
+      .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;font-size:12px;border:1px solid}
+      .badge.berlayar{color:#1d4ed8;background:#eff6ff;border-color:#93c5fd}
+      .badge.sandar{color:#9a3412;background:#fff7ed;border-color:#fdba74}
+
+      .timeline{display:grid;gap:10px}
+      .item{border:1px solid var(--border);border-radius:12px;background:#fff;padding:12px}
+      .item h3{margin:0 0 4px;font-size:14px}
+      .item p{margin:0;color:var(--muted);font-size:12px}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="logo" href="/dashboard/"><img src="/images/logo-KKP.png" alt="Logo KKP"/></a>
+        <div>
+          <h1 class="title">Data Kapal dan Armada</h1>
+          <p class="subtitle">Daftar kapal perikanan, status izin, keberangkatan & kedatangan</p>
+        </div>
+      </header>
+
+      <div class="toolbar">
+        <a class="btn" href="/dashboard/">⬅️ Kembali ke Dashboard</a>
+        <div class="search">
+          <input id="q" placeholder="Cari kapal (nama/registrasi)..." />
+          <select id="filterIzin">
+            <option value="">Semua izin</option>
+            <option value="aktif">Izin aktif</option>
+            <option value="nonaktif">Izin nonaktif</option>
+          </select>
+          <select id="filterStatus">
+            <option value="">Semua status</option>
+            <option value="berlayar">Berlayar</option>
+            <option value="sandar">Sandar</option>
+          </select>
+          <a class="btn" id="reset">Reset</a>
+        </div>
+      </div>
+
+      <div class="summary" id="summary">
+        <div class="tile"><span class="icon">🛥️</span><div><b id="sumTotal">0</b><br/><span>Total Kapal Terdaftar</span></div></div>
+        <div class="tile"><span class="icon">✅</span><div><b id="sumIzinAktif">0</b><br/><span>Izin Aktif</span></div></div>
+        <div class="tile"><span class="icon">🌊</span><div><b id="sumBerlayar">0</b><br/><span>Sedang Berlayar</span></div></div>
+        <div class="tile"><span class="icon">⚓</span><div><b id="sumSandar">0</b><br/><span>Sedang Sandar</span></div></div>
+      </div>
+
+      <div class="layout">
+        <section class="panel" aria-label="Daftar Kapal Terdaftar">
+          <h2>Daftar Kapal Terdaftar</h2>
+          <p>Informasi registrasi, GT, status izin serta status berlayar/sandar.</p>
+          <table id="shipTable">
+            <thead>
+              <tr>
+                <th>Nama Kapal</th>
+                <th>Registrasi</th>
+                <th>GT</th>
+                <th>Status Izin</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <aside class="panel" aria-label="Aktivitas Berlayar / Sandar">
+          <h2>Aktivitas Berlayar / Sandar</h2>
+          <p>Log keberangkatan dan kedatangan terakhir.</p>
+          <div class="timeline" id="timeline"></div>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+      // Data contoh (placeholder). Ganti dengan data API bila tersedia.
+      const KAPAL = [
+        { id:1, nama:'KM Samudera Indah', registrasi:'ID-001', gt:120, izin:true, status:'berlayar', last:{ berangkat:'2025-10-08 06:15', tiba:null } },
+        { id:2, nama:'KM Bahari Nusantara', registrasi:'ID-002', gt:95, izin:true, status:'sandar', last:{ berangkat:'2025-10-05 05:40', tiba:'2025-10-10 18:10' } },
+        { id:3, nama:'KM Laut Jaya', registrasi:'ID-003', gt:75, izin:false, status:'sandar', last:{ berangkat:null, tiba:'2025-10-09 12:30' } },
+        { id:4, nama:'KM Arunika', registrasi:'ID-004', gt:150, izin:true, status:'berlayar', last:{ berangkat:'2025-10-11 04:20', tiba:null } },
+      ];
+
+      const timelineEl = document.getElementById('timeline');
+      const tbody = document.querySelector('#shipTable tbody');
+      const q = document.getElementById('q');
+      const fIzin = document.getElementById('filterIzin');
+      const fStatus = document.getElementById('filterStatus');
+      const resetBtn = document.getElementById('reset');
+
+      function fmtStatusIzin(b){ return `<span class="status ${b?'aktif':'nonaktif'}">${b?'Aktif':'Nonaktif'}</span>`; }
+      function fmtStatus(s){ return `<span class="badge ${s}">${s==='berlayar'?'Berlayar':'Sandar'}</span>`; }
+
+      function renderTable(rows){
+        tbody.innerHTML = '';
+        rows.forEach(r => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${r.nama}</td><td>${r.registrasi}</td><td>${r.gt}</td><td>${fmtStatusIzin(r.izin)}</td><td>${fmtStatus(r.status)}</td>`;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function renderTimeline(rows){
+        timelineEl.innerHTML = '';
+        rows.forEach(r => {
+          const div = document.createElement('div');
+          div.className = 'item';
+          const berangkat = r.last.berangkat ? `Keberangkatan: ${r.last.berangkat}` : 'Keberangkatan: -';
+          const tiba = r.last.tiba ? `Kedatangan: ${r.last.tiba}` : 'Kedatangan: -';
+          div.innerHTML = `<h3>${r.nama} • ${fmtStatus(r.status)}</h3><p>${berangkat}</p><p>${tiba}</p>`;
+          timelineEl.appendChild(div);
+        });
+      }
+
+      function updateSummary(rows){
+        const total = rows.length;
+        const izinAktif = rows.filter(r=>r.izin).length;
+        const berlayar = rows.filter(r=>r.status==='berlayar').length;
+        const sandar = rows.filter(r=>r.status==='sandar').length;
+        document.getElementById('sumTotal').textContent = total;
+        document.getElementById('sumIzinAktif').textContent = izinAktif;
+        document.getElementById('sumBerlayar').textContent = berlayar;
+        document.getElementById('sumSandar').textContent = sandar;
+      }
+
+      function filter(){
+        const term = (q.value||'').toLowerCase();
+        let rows = KAPAL.filter(r => `${r.nama} ${r.registrasi}`.toLowerCase().includes(term));
+        if(fIzin.value==='aktif') rows = rows.filter(r=>r.izin);
+        else if(fIzin.value==='nonaktif') rows = rows.filter(r=>!r.izin);
+        if(fStatus.value==='berlayar') rows = rows.filter(r=>r.status==='berlayar');
+        else if(fStatus.value==='sandar') rows = rows.filter(r=>r.status==='sandar');
+        renderTable(rows); renderTimeline(rows); updateSummary(rows);
+      }
+
+      q.addEventListener('input', filter);
+      fIzin.addEventListener('change', filter);
+      fStatus.addEventListener('change', filter);
+      resetBtn.addEventListener('click', () => { q.value=''; fIzin.value=''; fStatus.value=''; filter(); });
+
+      // init
+      renderTable(KAPAL); renderTimeline(KAPAL); updateSummary(KAPAL);
+    </script>
+  </body>
+  </html>

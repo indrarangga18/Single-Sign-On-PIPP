@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard — SSO PIPP</title>
+    <link rel="icon" href="/images/logo-KKP.png" />
+    <style>
+      :root { --primary:#ffffff; --white:#ffffff; --text:#0e1e3c; --muted:#727f91; --border:#e2e8f0; --sidebar-width:280px; 
+               --bg1:#061a3a; --bg2:#0b1020; --bg3:#0e1e3c; --accent:#35e1ff; }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);
+           background:
+             radial-gradient(800px 420px at 14% 12%, rgba(var(--accent-r,53), var(--accent-g,225), var(--accent-b,255), .22) 0%, rgba(53,225,255,0) 55%),
+             linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 55%, var(--bg3) 100%);
+          }
+      .wrap{max-width:1200px;margin:0 auto;padding:28px}
+      header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+      .logo{width:48px;height:48px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #eef2f7}
+      .logo img{width:42px;height:42px;object-fit:contain}
+      .title{font-size:22px;font-weight:800;color:var(--primary);margin:0}
+      .subtitle{margin:2px 0 0;color:var(--muted);font-size:13px}
+
+      /* Layout */
+      .layout{display:grid;grid-template-columns:var(--sidebar-width) 1fr;gap:18px;transition:grid-template-columns .2s ease}
+      .layout.sidebar-collapsed{grid-template-columns:72px 1fr}
+      @media (max-width:920px){.layout{grid-template-columns:1fr}}
+
+      /* Sidebar (sticky) dengan gaya seperti contoh */
+      .sidebar{position:sticky;top:18px;align-self:start;z-index:10;border:1px solid var(--border);
+               background:#0b1020;border-radius:16px;box-shadow:0 10px 24px rgba(4,37,92,.28);
+               padding:0;height:calc(100vh - 36px);overflow:auto;scrollbar-width:thin;scrollbar-color:#334155 #0b1020}
+      .sidebar::-webkit-scrollbar{width:8px}
+      .sidebar::-webkit-scrollbar-track{background:#0b1020;border-radius:10px}
+      .sidebar::-webkit-scrollbar-thumb{background:#334155;border-radius:10px}
+      .sidebar::-webkit-scrollbar-thumb:hover{background:#475569}
+      .brand{position:relative;padding:16px 16px 18px;border-bottom:1px solid rgba(226,232,240,.12);}
+      .brand::before{content:"";position:absolute;inset:-1px -1px auto -1px;height:88px;background:linear-gradient(135deg,#35e1ff 0%, transparent 55%);opacity:.85;border-top-left-radius:16px;border-top-right-radius:16px;}
+      .brand-title{position:relative;z-index:1;font-weight:800;letter-spacing:.2px;color:#e2f4ff;font-size:18px;text-shadow:0 1px 8px rgba(53,225,255,.35)}
+      .burger{position:absolute;right:12px;top:12px;width:38px;height:38px;border-radius:12px;background:#0f172a;border:1px solid rgba(226,232,240,.12);display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25);transition:background .2s ease, transform .06s ease}
+      .burger:hover{background:#111827;transform:translateY(-1px)}
+      .burger::before,.burger::after{content:"";display:block;width:18px;height:2px;background:#e2e8f0;border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,.06);transition:transform .2s ease}
+      .burger .line{display:block;width:18px;height:2px;background:#e2e8f0;border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,.06);margin:4px 0}
+      .sidebar.is-collapsed .burger .line{opacity:0}
+      .sidebar.is-collapsed .burger::before{transform:translateY(6px) rotate(45deg)}
+      .sidebar.is-collapsed .burger::after{transform:translateY(-6px) rotate(-45deg)}
+      .profile{display:flex;align-items:center;gap:10px;padding:12px 16px;color:#e2e8f0;border-bottom:1px solid rgba(226,232,240,.12)}
+      .profile{position:relative;cursor:pointer}
+      .profile .chev{margin-left:auto;transition:transform .15s ease}
+      .profile.open .chev{transform:rotate(180deg)}
+      .account-menu{position:absolute;left:12px;right:12px;top:100%;margin-top:8px;background:#0b1020;border:1px solid rgba(226,232,240,.12);
+                    border-radius:12px;box-shadow:0 12px 28px rgba(4,37,92,.26);padding:8px;display:none;z-index:20}
+      .profile.open .account-menu{display:block}
+      .account-menu a{display:flex;align-items:center;gap:10px;color:#e5e7eb;text-decoration:none;padding:10px;border-radius:10px}
+      .account-menu a:hover{background:linear-gradient(135deg,rgba(53,225,255,.12),rgba(255,255,255,.06))}
+      .avatar{width:36px;height:36px;border-radius:50%;background:#111827;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #23324a;color:#7dd3fc;font-weight:800}
+      .profile-info small{color:#94a3b8;display:block;margin-top:2px}
+      .menu-label{display:block;color:#9aa6b2;font-size:12px;padding:10px 16px;border-bottom:1px solid rgba(226,232,240,.12)}
+      .menu-list{display:grid;padding:10px}
+      .menu-item{display:flex;align-items:center;gap:12px;color:#e5e7eb;text-decoration:none;padding:10px 12px;border-radius:12px;transition:background .15s ease, transform .06s ease}
+      .menu-item .mi-icon{width:22px;text-align:center;opacity:.9}
+      .menu-item:hover{background:linear-gradient(135deg,rgba(53,225,255,.10),rgba(255,255,255,.04));transform:translateX(1px)}
+      .menu-item.active{background:linear-gradient(135deg,rgba(53,225,255,.14),rgba(255,255,255,.06));}
+      .menu-sep{height:1px;margin:8px 0;background:rgba(226,232,240,.12)}
+      /* collapsed labels */
+      .sidebar.is-collapsed .brand-title{display:none}
+      .sidebar.is-collapsed .profile{display:none}
+      .sidebar.is-collapsed .menu-item{justify-content:center;padding:12px}
+      .sidebar.is-collapsed .menu-item span:last-child{display:none}
+      .sidebar.is-collapsed .menu-item .mi-icon{width:28px}
+
+      /* Cards in main content */
+      .status{display:flex;align-items:center;gap:14px;margin:16px 0 20px;color:var(--muted);font-size:13px}
+      .status .chip{background:rgba(255,255,255,.75);border:1px solid var(--border);padding:8px 12px;border-radius:999px}
+      .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+      @media (max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
+      @media (max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}}
+      @media (max-width:520px){.grid{grid-template-columns:1fr}}
+      .card{position:relative;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.92);
+            backdrop-filter:saturate(1.1) blur(8px);padding:18px;display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;color:inherit;
+            box-shadow:0 10px 24px rgba(4,37,92,.18);transition:transform .08s ease, box-shadow .18s ease, background .18s ease}
+      .card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(4,37,92,.26);background:#fff}
+      .card:active{transform:translateY(0)}
+      .icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#eef2f7;color:#0b3b9b}
+      .card h3{margin:0;font-size:15px;font-weight:800}
+      .card p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+      footer{margin-top:24px;color:var(--muted);font-size:12px;text-align:center}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <span class="logo"><img src="/images/logo-KKP.png" alt="Logo KKP"/></span>
+        <div>
+          <h1 class="title">Dashboard PIPP</h1>
+          <p class="subtitle" id="greeting">Selamat Datang di Portal Satu Pintu</p>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="sidebar" aria-label="Menu Sidebar">
+      <div class="brand"><button id="burger" class="burger" aria-label="Toggle sidebar" title="Toggle sidebar"><span class="line"></span></button><span class="brand-title">SSO PIPP</span></div>
+          <div id="profileToggle" class="profile" aria-haspopup="menu" aria-expanded="false">
+            <div class="avatar">P</div>
+            <div class="profile-info">
+              <strong>My Account</strong>
+              <small>Portal Terpadu</small>
+            </div>
+            <span class="chev">▾</span>
+            <div class="account-menu" role="menu" aria-label="Menu Akun">
+              <a href="/dashboard/" role="menuitem"><span>👤</span><span>Profil</span></a>
+              <a href="#" role="menuitem"><span>⚙️</span><span>Pengaturan</span></a>
+              <a href="/login/" role="menuitem"><span>🚪</span><span>Keluar</span></a>
+            </div>
+          </div>
+          <span class="menu-label">MENU</span>
+          <nav class="menu-list">
+            <a class="menu-item active" href="/dashboard/"><span class="mi-icon">🏠</span><span>Dashboard</span></a>
+            <a class="menu-item" href="/informasipelabuhan/"><span class="mi-icon">⚓</span><span>Informasi Pelabuhan</span></a>
+            <a class="menu-item" href="/datakapaldanarmada/"><span class="mi-icon">🛥️</span><span>Data Kapal dan Armada</span></a>
+            <a class="menu-item" href="/produksidanhasiltangkapan/"><span class="mi-icon">🐟</span><span>Produksi dan hasil tangkapan</span></a>
+            <a class="menu-item" href="/spb/"><span class="mi-icon">📜</span><span>Surat Persetujuan Berlayar (SPB)</span></a>
+            <a class="menu-item" href="/shti/"><span class="mi-icon">🎣</span><span>Sertifikasi Hasil Tangkapan Ikan (SHTI)</span></a>
+            <a class="menu-item" href="/pemantauan/"><span class="mi-icon">📊</span><span>Statistik & Analitik</span></a>
+            <span class="menu-sep"></span>
+            <a class="menu-item" href="#"><span class="mi-icon">⚙️</span><span>Setting</span></a>
+          </nav>
+        </aside>
+
+        <main>
+          <div class="status">
+            <span class="chip" id="date"></span>
+            <span class="chip">Menu layanan PIPP dan eksternal</span>
+          </div>
+
+          <section class="grid" aria-label="Menu Utama">
+            <a class="card" href="/pemantauan/">
+              <span class="icon">🛰️</span>
+              <div>
+                <h3>Pemantauan</h3>
+                <p>Dashboard pemantauan PIPP</p>
+              </div>
+            </a>
+            <a class="card" href="/shti/">
+              <span class="icon">🎣</span>
+              <div>
+                <h3>SHTI</h3>
+                <p>Sertifikat Hasil Tangkapan Ikan</p>
+              </div>
+            </a>
+            <a class="card" href="/perizinan/">
+              <span class="icon">🛂</span>
+              <div>
+                <h3>Perizinan Berusaha</h3>
+                <p>Layanan Perizinan KKP</p>
+              </div>
+            </a>
+            <a class="card" href="/berita/">
+              <span class="icon">📰</span>
+              <div>
+                <h3>Berita</h3>
+                <p>Informasi dan kabar terbaru</p>
+              </div>
+            </a>
+            <a class="card" href="/informasipelabuhan/">
+              <span class="icon">⚓</span>
+              <div>
+                <h3>Informasi Pelabuhan</h3>
+                <p>Data, fasilitas, kegiatan, dan statistik</p>
+              </div>
+            </a>
+            <a class="card" href="https://www.bmkg.go.id/" target="_blank" rel="noopener">
+              <span class="icon">☁️</span>
+              <div>
+                <h3>Informasi Cuaca</h3>
+                <p>BMKG — Prakiraan & peringatan</p>
+              </div>
+            </a>
+          </section>
+
+          <footer>© 2025 KKP • SSO PIPP</footer>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        const layout = document.querySelector('.layout');
+        const sidebar = document.querySelector('.sidebar');
+        const burger = document.getElementById('burger');
+        const storeKey = 'sidebarCollapsed';
+        // apply initial state from localStorage
+        const initialCollapsed = localStorage.getItem(storeKey) === '1';
+        if(initialCollapsed){
+          layout.classList.add('sidebar-collapsed');
+          sidebar.classList.add('is-collapsed');
+        }
+        if(burger){
+          burger.setAttribute('aria-expanded', (!initialCollapsed).toString());
+          burger.addEventListener('click', () => {
+            const isNowCollapsed = layout.classList.toggle('sidebar-collapsed');
+            sidebar.classList.toggle('is-collapsed');
+            localStorage.setItem(storeKey, isNowCollapsed ? '1' : '0');
+            burger.setAttribute('aria-expanded', (!isNowCollapsed).toString());
+          });
+        }
+      })();
+      // Toggle menu My Account
+      (function(){
+        const prof = document.getElementById('profileToggle');
+        if(!prof) return;
+        const setExpanded = (open)=> prof.setAttribute('aria-expanded', (!!open).toString());
+        const openMenu = ()=>{ prof.classList.add('open'); setExpanded(true); };
+        const closeMenu = ()=>{ prof.classList.remove('open'); setExpanded(false); };
+        prof.addEventListener('click', (e)=>{
+          // If clicking a menu link, let it navigate
+          const isLink = e.target.closest('.account-menu a');
+          if(isLink) return;
+          if(prof.classList.contains('open')) closeMenu(); else openMenu();
+        });
+        document.addEventListener('click', (e)=>{
+          if(!prof.contains(e.target)) closeMenu();
+        });
+        document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
+      })();
+      // Salam dinamis
+      (function(){
+        const h = new Date().getHours();
+        const greet = h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 19 ? 'Selamat sore' : 'Selamat malam';
+        document.getElementById('greeting').textContent = greet + ' di Portal Satu Pintu';
+        document.getElementById('date').textContent = new Date().toLocaleString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      })();
+
+      // Tandai item aktif berdasarkan URL
+      (function(){
+        const links = document.querySelectorAll('.menu-item');
+        links.forEach(a => {
+          if(a.getAttribute('href') && a.getAttribute('href') !== '#' && location.pathname.startsWith(new URL(a.href).pathname)){
+            a.classList.add('active');
+          }
+        });
+      })();
+    </script>
+  </body>
+  </html>

@@ -67,7 +67,7 @@ def run_server(port=8000):
             print("📋 Routes yang tersedia:")
             print(f"   • http://localhost:{port}/")
             print(f"   • http://localhost:{port}/login")
-            print(f"   • http://localhost:{port}/dashboardsso")
+            print(f"   • http://localhost:{port}/dashboard")
             print("\n⚡ Client-side routing aktif - semua route akan diarahkan ke index.html")
             print("🛑 Tekan Ctrl+C untuk menghentikan server\n")
             
