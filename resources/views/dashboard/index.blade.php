@@ -256,8 +256,33 @@
 </style>
 @endpush
 
+@push('styles')
+<style>
+    /* Sidebar minimal */
+    .dashboard-container { display: flex; gap: 20px; }
+    .sidebar { width: 220px; min-width: 220px; background: rgba(13,23,56,0.6); border: 1px solid rgba(120,200,255,0.28); border-radius: 12px; backdrop-filter: blur(10px); padding: 12px; position: sticky; top: 20px; height: calc(100vh - 40px); }
+    .sidebar .brand { display: flex; align-items: center; gap: 10px; padding: 8px 6px; border-bottom: 1px solid rgba(120,200,255,0.18); margin-bottom: 10px; }
+    .sidebar .brand .logo { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#6366f1,#06b6d4); }
+    .sidebar .menu { display: flex; flex-direction: column; gap: 8px; }
+    .sidebar .menu a { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 10px; color: #dbeafe; text-decoration: none; border: 1px solid rgba(120,200,255,0.18); background: rgba(10,20,50,0.35); }
+    .sidebar .menu a.active { border-color: rgba(140,220,255,0.35); }
+    .page { flex: 1; min-width: 0; }
+</style>
+@endpush
+
 @section('content')
 <div class="dashboard-container">
+    <aside class="sidebar" id="sidebar">
+        <div class="brand"><div class="logo"></div><div class="title">SSO PIPP</div></div>
+        <nav class="menu">
+            <a href="{{ route('dashboard') }}" class="active">🏠 Dashboard</a>
+            <a href="{{ route('services.spb') }}">📄 SPB</a>
+            <a href="{{ route('services.shti') }}">🧮 SHTI</a>
+            <a href="{{ route('services.sahbandar') }}">🚢 Sahbandar</a>
+            <a href="{{ route('services.epit') }}">🖥️ EPIT</a>
+        </nav>
+    </aside>
+    <main class="page">
     <!-- Header Section -->
     <div class="dashboard-header">
         <div class="welcome-section">
@@ -364,6 +389,7 @@
             </div>
         @endif
     </div>
+    </main>
 </div>
 @endsection
 
