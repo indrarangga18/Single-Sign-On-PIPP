@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SSOController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,20 @@ Route::prefix('sso')->name('sso.')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    
+    // Profile Settings Routes
+    Route::get('/profile/settings', [ProfileController::class, 'edit'])->name('profile.settings');
+    Route::post('/profile/settings', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Data Entry Page
+    Route::get('/dataentry', function () {
+        return view('dataentry.index');
+    })->name('dataentry');
+
+    // Pemantauan Page
+    Route::get('/pemantauan', function () {
+        return view('pemantauan.index');
+    })->name('pemantauan');
     
     // Service Access Routes
     Route::prefix('services')->name('services.')->group(function () {
