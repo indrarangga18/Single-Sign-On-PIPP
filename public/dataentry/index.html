@@ -98,40 +98,19 @@
     .activity-time { color: var(--text-muted); font-size: 12px; }
     @media (max-width: 768px) { .welcome-section { flex-direction: column; text-align: center; } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } .services-grid { grid-template-columns: 1fr; } }
   </style>
-  <style>
-    /* Headbar (menu teks) dengan gaya pill, sticky, dan neon glow */
-    .headbar { background: rgba(18,28,56,0.65); border: 1px solid rgba(120,200,255,0.28); border-radius: 12px; backdrop-filter: blur(10px); padding: 8px 10px; margin-bottom: 12px; box-shadow: 0 0 20px rgba(34,211,238,0.15), 0 0 40px rgba(168,85,247,0.12); overflow-x: auto; position: sticky; top: 0; z-index: 100; }
-    .headbar-menu { display: flex; gap: 10px; min-width: max-content; }
-    .headbar-link { display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; background: rgba(10,20,50,0.35); border: 1px solid rgba(120,200,255,0.18); color: #dbeafe; text-decoration: none; white-space: nowrap; transition: all .2s ease; }
-    .headbar-link:hover { border-color: rgba(140,220,255,0.45); color: #e6f2ff; transform: translateY(-1px); }
-  </style>
 </head>
 <body>
   <div class="dashboard-container">
     <aside class="sidebar" id="sidebar">
-      <div class="brand"><div class="logo"></div><div class="label"><div class="title">Pengguna</div><div class="subtitle">Peran</div></div><button class="toggle-btn" id="toggleSidebar" aria-label="Toggle Sidebar">◀</button></div>
+      <div class="brand"><div class="label"><div class="title">Pengguna</div><div class="subtitle">Peran</div></div><button class="toggle-btn" id="toggleSidebar" aria-label="Toggle Sidebar">◀</button></div>
       <nav class="menu">
-        <a href="/dashboard/" data-icon="dashboard"><span>Dashboard</span></a>
-        <a href="/dataentry/" class="active" data-icon="spb"><span>Data Entry</span></a>
-        <a href="/pemantauan/" data-icon="shti"><span>Pemantauan</span></a>
-        <a href="#" data-icon="sahbandar"><span>Sahbandar</span></a>
-        <a href="#" data-icon="epit"><span>EPIT</span></a>
+        <a href="/setting/">⚙️ Settings</a>
+        <div class="muted" style="margin:8px 0 4px">Menu Aplikasi</div>
+        <a href="/dataentry/" class="active">📝 Data Entry</a>
+        <a href="/pemantauan/">👁️ Pemantauan</a>
       </nav>
     </aside>
     <main class="page">
-      <!-- Headbar teks layanan di atas topbar -->
-      <div class="headbar">
-        <div class="headbar-menu">
-          <a href="#" class="headbar-link">VTC</a>
-          <a href="#" class="headbar-link">CCTV</a>
-          <a href="#" class="headbar-link">Profil Pelabuhan</a>
-          <a href="#" class="headbar-link">Kinerja Petugas</a>
-          <a href="#" class="headbar-link">Kedatangan & Keberangkatan Kapal</a>
-          <a href="#" class="headbar-link">Pendaratan Ikan</a>
-          <a href="#" class="headbar-link">SHTI</a>
-          <a href="#" class="headbar-link">Penggunaan Fasilitas</a>
-        </div>
-      </div>
       <!-- Topbar Brand di paling atas -->
       <div class="topbar">
         <div class="header-brand">

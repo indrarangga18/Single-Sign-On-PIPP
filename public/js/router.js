@@ -3,8 +3,7 @@ class SSORouter {
     constructor() {
         this.routes = {
             '/': this.handleHome.bind(this),
-            '/login': this.handleLogin.bind(this),
-            '/dashboard': this.handleDashboard.bind(this)
+            '/login': this.handleLogin.bind(this)
         };
         
         this.init();
@@ -63,11 +62,6 @@ class SSORouter {
         }
         
         this.showPage('login');
-        // Ensure login logo uses PNG asset
-        const loginLogo = document.querySelector('.login-logo');
-        if (loginLogo) {
-            loginLogo.setAttribute('src', '/images/logo-KKP.png');
-        }
         this.initLoginForm();
     }
 
@@ -199,17 +193,6 @@ class SSORouter {
             logoutBtn.addEventListener('click', () => {
                 this.logout();
             });
-        }
-
-        // Force dashboard logo to PNG asset
-        const logoImg = document.querySelector('.sso-logo img');
-        if (logoImg) {
-            const src = logoImg.getAttribute('src') || '';
-            if (src.startsWith('/public/images/')) {
-                logoImg.setAttribute('src', src.replace('/public/images/', '/images/'));
-            } else {
-                logoImg.setAttribute('src', '/images/logo-KKP.png');
-            }
         }
 
         // Render SSO applications
