@@ -93,6 +93,7 @@
     .seg button{border:1px solid var(--border);background:rgba(12,20,40,.55);color:#e6f2ff;border-radius:999px;padding:6px 10px;cursor:pointer}
     .seg button.active{background:linear-gradient(90deg,var(--primary),var(--secondary));border-color:transparent}
     .hint{font-size:12px;color:var(--muted)}
+    .error-msg{font-size:12px;color:#f43f5e}
      .info-tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--border);background:rgba(12,20,40,.55);color:#f59e0b;font-size:12px;line-height:1;margin-left:6px;cursor:help}
      .info-tip:hover{background:rgba(12,20,40,.75);}
      .popover{position:absolute;top:28px;left:0;display:none;background:rgba(12,20,40,.85);border:1px solid var(--border);border-radius:12px;padding:10px;max-width:320px;box-shadow:0 10px 24px rgba(0,0,0,.35);z-index:10}
@@ -267,18 +268,20 @@
                         <option value="query">Query</option>
                       </select>
                     </div>
-                    <div class="field" style="flex:1 1 220px">
-                      <span class="label">Nama Header/Param</span>
-                      <input id="auth-api-key-name" class="input" placeholder="Authorization / X-API-Key / api_key" />
-                    </div>
                     <div class="field" style="flex:1 1 180px">
-                      <span class="label">Prefix</span>
+                      <span class="label">Prefix <span class="info-tip" title="Jika Authorization dan prefix ≠ None, nilai otomatis menjadi '<prefix> <nilai>'">i</span></span>
                       <select id="auth-api-key-prefix" class="input">
                         <option value="ApiKey" selected>ApiKey</option>
                         <option value="Bearer">Bearer</option>
                         <option value="Token">Token</option>
                         <option value="None">None</option>
                       </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="field" style="flex:1 1 220px">
+                      <span class="label">Nama Header/Param</span>
+                      <input id="auth-api-key-name" class="input" placeholder="Authorization / X-API-Key / api_key" />
                     </div>
                     <div class="field" style="flex:1 1 220px">
                       <span class="label">Nilai</span>

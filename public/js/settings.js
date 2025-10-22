@@ -30,28 +30,29 @@
     const methods=Array.from(document.querySelectorAll('#method-seg button.active')).map(b=>b.dataset.method);
     const method=methods.length?methods:['GET'];
     const invalid=[]; if(!name) invalid.push('api-name'); if(!url) invalid.push('api-url');
+    // clear invalid and error messages
     document.querySelectorAll('.input').forEach(i=>i.classList.remove('invalid'));
-    if(invalid.length){invalid.forEach(id=>byId(id)?.classList.add('invalid')); alert('Nama & URL wajib'); return}
+    document.querySelectorAll('.error-msg').forEach(e=>e.remove());
+    function setError(id,msg){const el=byId(id); if(!el) return; el.classList.add('invalid'); const f=el.closest('.field'); if(!f) return; const m=document.createElement('span'); m.className='error-msg'; m.textContent=msg; f.appendChild(m)}
+    if(invalid.length){invalid.forEach(id=>{byId(id)?.classList.add('invalid'); setError(id,'Wajib diisi')}); return}
     // Minimal validation per tipe auth
     const authType=val('api-auth');
     const cfg=getAuthConfig();
     if(authType==='oauth2' && !(cfg.token||'').trim()){
-      byId('auth-oauth2-token')?.classList.add('invalid');
-      alert('Token OAuth2 wajib diisi');
+      setError('auth-oauth2-token','Token OAuth2 wajib diisi');
       return;
     }
     if(authType==='jwt' && !(cfg.token||'').trim()){
-      byId('auth-jwt-token')?.classList.add('invalid');
-      alert('Token JWT wajib diisi');
+      setError('auth-jwt-token','Token JWT wajib diisi');
       return;
     }
     if(authType==='basic'){
       const u=(cfg.user||'').trim(); const p=(cfg.pass||'').trim();
-      if(!u || !p){ byId('auth-basic-user')?.classList.add('invalid'); byId('auth-basic-pass')?.classList.add('invalid'); alert('Basic Auth: username dan password wajib diisi'); return; }
+      if(!u || !p){ setError('auth-basic-user','Username wajib'); setError('auth-basic-pass','Password wajib'); return; }
     }
     if(authType==='api_key'){
       const nm=(cfg.name||'').trim(); const vv=(cfg.value||'').trim();
-      if(!nm || !vv){ byId('auth-api-key-name')?.classList.add('invalid'); byId('auth-api-key-value')?.classList.add('invalid'); alert('API Key: name dan value wajib diisi'); return; }
+      if(!nm || !vv){ if(!nm) setError('auth-api-key-name','Nama header/param wajib'); if(!vv) setError('auth-api-key-value','Nilai wajib'); return; }
     }
     const ep=S._edit?S.endpoints.find(e=>e.id===S._edit):{id:id(),active:true};
     Object.assign(ep,{name,url,method,group,version,access:val('api-access'),auth:authType,authConfig:cfg,params});
