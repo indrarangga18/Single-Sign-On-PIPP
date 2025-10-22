@@ -50,21 +50,113 @@
     .stat{display:flex;gap:12px}
     .badge{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid var(--border);font-size:12px;color:#dbeafe}
     .muted{color:var(--muted);font-size:12px}
+    .toggle-btn{margin-left:auto;border:1px solid var(--border);background:rgba(10,20,50,.35);color:#dbeafe;border-radius:8px;padding:6px 8px;cursor:pointer}
+    .sidebar.collapsed{width:72px;min-width:72px}
+    .sidebar.collapsed .brand .muted,.sidebar.collapsed .brand .brand-title{display:none}
+    .sidebar.collapsed .menu .label{display:none}
+    /* Futuristic API Config UI */
+    .chip{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid var(--border);font-size:12px}
+    .chip.get{background:linear-gradient(90deg,#0ea5e9,#22d3ee);color:#fff}
+    .chip.post{background:linear-gradient(90deg,#22c55e,#14b8a6);color:#fff}
+    .chip.put{background:linear-gradient(90deg,#f59e0b,#f97316);color:#fff}
+    .chip.delete{background:linear-gradient(90deg,#ef4444,#f43f5e);color:#fff}
+    .chip.patch{background:linear-gradient(90deg,#8b5cf6,#6366f1);color:#fff}
+    .chip.head{background:linear-gradient(90deg,#64748b,#94a3b8);color:#fff}
+    .chip.auth{background:linear-gradient(90deg,#0ea5e9,#6366f1);color:#fff}
+    .status-pill{display:inline-block;padding:4px 8px;border-radius:10px;font-size:12px;border:1px solid var(--border)}
+    .status-pill.active{background:rgba(34,197,94,.15);color:#22c55e}
+    .status-pill.inactive{background:rgba(244,63,94,.15);color:#f43f5e}
+    .toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .toolbar .input{max-width:280px}
+    /* Fix KPI grid to stay inside the card and be responsive */
+    .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;width:100%}
+    .kpi .item{background:rgba(12,20,40,.55);border:1px solid var(--border);border-radius:12px;padding:12px;min-height:84px;display:flex;flex-direction:column;justify-content:center}
+    .kpi .num{font-size:22px;font-weight:700}
+    .kpi .label{font-size:12px;color:var(--muted)}
+    tbody tr:hover{background:rgba(12,20,40,.35)}
+    /* Info Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(2px);display:none;z-index:50}
+    .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(12,20,40,.92);border:1px solid var(--border);border-radius:12px;box-shadow:0 18px 36px rgba(0,0,0,.35);width:min(720px,90vw);max-height:80vh;display:none;z-index:51}
+    .modal.open,.modal-backdrop.open{display:block}
+    .modal-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .modal-title{font-size:14px;font-weight:700;color:#dbeafe}
+    .modal-body{padding:12px 14px;overflow:auto}
+    .close-btn{border:1px solid var(--border);background:rgba(10,20,50,.35);color:#dbeafe;border-radius:8px;padding:6px 8px;cursor:pointer}
+    .code{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px; background:rgba(255,255,255,.06); border:1px solid rgba(226,232,240,.18); border-radius:8px; padding:8px; color:#e2e8f0}
+
+    /* Register API Futuristic */
+    .field{display:flex;flex-direction:column;gap:6px;position:relative}
+    .label{font-size:12px;color:var(--muted)}
+    .req{color:#f43f5e;font-weight:700;}
+    .input.invalid{border-color:#f43f5e;box-shadow:0 0 0 2px rgba(244,63,94,.25)}
+    .seg{display:flex;gap:8px;flex-wrap:wrap}
+    .seg button{border:1px solid var(--border);background:rgba(12,20,40,.55);color:#e6f2ff;border-radius:999px;padding:6px 10px;cursor:pointer}
+    .seg button.active{background:linear-gradient(90deg,var(--primary),var(--secondary));border-color:transparent}
+    .hint{font-size:12px;color:var(--muted)}
+     .info-tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--border);background:rgba(12,20,40,.55);color:#f59e0b;font-size:12px;line-height:1;margin-left:6px;cursor:help}
+     .info-tip:hover{background:rgba(12,20,40,.75);}
+     .popover{position:absolute;top:28px;left:0;display:none;background:rgba(12,20,40,.85);border:1px solid var(--border);border-radius:12px;padding:10px;max-width:320px;box-shadow:0 10px 24px rgba(0,0,0,.35);z-index:10}
+     .popover.open{display:block}
+     .popover-title{font-size:13px;font-weight:600;margin-bottom:6px;color:#dbeafe}
+      .field .label:hover + .popover{display:block}
+      /* Stack API Config cards vertically */
+    #panel-api .grid{grid-template-columns:1fr;gap:12px}
+    @media (min-width: 960px){
+      #panel-api .grid{grid-template-columns:1fr 1fr}
+      #panel-api .grid .card:first-child{grid-column:1/-1}
+    }
   </style>
 </head>
 <body>
   <div class="fx" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
   <div class="layout">
     <aside class="sidebar">
-      <div class="brand"><div><div class="brand-title">Microservices Control</div><div class="muted">API Pool System</div></div></div>
+      <div class="brand"><div><div class="brand-title">Microservices Control</div><div class="muted">API Pool System</div></div><button class="toggle-btn" id="toggleSidebar" aria-label="Toggle Sidebar">◀</button></div>
       <nav class="menu">
-        <a href="/setting/" class="active">⚙️ Settings</a>
+        <a href="/setting/" class="active">⚙️ <span class="label">Settings</span></a>
         <div class="muted" style="margin:8px 0 4px">Menu Aplikasi</div>
-        <a href="/dataentry/">📝 Data Entry</a>
-        <a href="/pemantauan/">👁️ Pemantauan</a>
+        <a href="/dataentry/">📝 <span class="label">Data Entry</span></a>
+        <a href="/pemantauan/">👁️ <span class="label">Pemantauan</span></a>
       </nav>
     </aside>
     <main class="main">
+      <div id="info-backdrop" class="modal-backdrop" aria-hidden="true"></div>
+      <div id="info-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="info-title" aria-describedby="info-body">
+        <div class="modal-header">
+          <div class="modal-title" id="info-title">API Info</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label class="muted" for="info-method">Method</label>
+            <select id="info-method" class="input" style="width:auto;min-width:120px"></select>
+            <button class="close-btn" id="info-close">Tutup</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="muted" id="info-meta"></div>
+          <!-- Query Params UI -->
+          <div id="info-query-section" style="margin-top:8px">
+            <div class="muted">Query Params</div>
+            <div id="info-qparams" class="row" style="gap:6px"></div>
+            <button class="btn" id="info-add-param" style="margin-top:6px">Tambah Param</button>
+          </div>
+          <!-- Request body UI -->
+          <div id="info-req-section" style="margin-top:8px">
+            <div class="muted">Content-Type</div>
+            <select id="info-ctype" class="input" style="width:auto;min-width:180px">
+              <option value="application/json">application/json</option>
+              <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+              <option value="text/plain">text/plain</option>
+            </select>
+            <div style="margin-top:8px">
+              <div class="muted">Request Body</div>
+              <textarea id="info-body-input" class="input" rows="6" placeholder="Isi body sesuai content-type"></textarea>
+            </div>
+          </div>
+          <!-- Response -->
+          <div style="margin-top:8px"><div class="muted">Status</div><div id="info-status" class="badge">-</div></div>
+          <div style="margin-top:8px"><div class="muted">Headers</div><pre id="info-headers" class="code">{}</pre></div>
+          <div style="margin-top:8px"><div class="muted">Body</div><pre id="info-body" class="code">(tidak ada)</pre></div>
+        </div>
+      </div>
       <div class="topbar">
         <div style="display:flex;align-items:center;gap:10px">
           <img src="/images/logo-kkp-pipp.png" alt="KKP" style="height:40px" />
@@ -99,14 +191,128 @@
       <section class="panel active" id="panel-api">
         <div class="grid">
           <div class="card">
+            <h3>API Overview</h3>
+            <div class="kpi">
+              <div class="item"><div class="num" id="api-count">0</div><div class="label">Total API</div></div>
+              <div class="item"><div class="num" id="api-active-count">0</div><div class="label">Aktif</div></div>
+              <div class="item"><div class="num" id="api-group-count">0</div><div class="label">Group</div></div>
+              <div class="item"><div class="num" id="api-method-count">0</div><div class="label">Method</div></div>
+            </div>
+          </div>
+          <div class="card">
             <h3>Register API Endpoint</h3>
             <div class="row">
-              <input class="input" id="api-name" placeholder="Nama API (mis. Auth Service)" />
-              <input class="input" id="api-url" placeholder="URL (https://...)" />
-              <select id="api-method" class="input"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option><option>HEAD</option></select>
-              <input class="input" id="api-group" placeholder="Group (PIPP, SPB, SHTI, Logbook)" />
-              <input class="input" id="api-version" placeholder="Versi (v1, v2)" />
-              <textarea class="input" id="api-params" placeholder="Parameter (JSON) opsional" rows="2"></textarea>
+              <div class="field" style="flex:1 1 260px">
+                <span class="label">Nama API <span class="req" aria-hidden="true">*</span></span>
+                <input class="input" id="api-name" placeholder="mis. Auth Service" aria-required="true" />
+              </div>
+              <div class="field" style="flex:1 1 260px">
+                <span class="label">URL <span class="req" aria-hidden="true">*</span></span>
+                <input class="input" id="api-url" placeholder="https://domain/path" aria-required="true" />
+                <span class="hint">Gunakan endpoint publik atau internal yang dapat diakses.</span>
+              </div>
+              <div class="field" style="flex:1 1 200px">
+                <span class="label">Method <span class="info-tip" id="method-info" title="Metode dapat dipilih lebih dari satu" aria-label="Metode dapat dipilih lebih dari satu">!</span></span>
+                <div id="method-pop" class="popover" role="dialog" aria-modal="false" aria-labelledby="method-pop-title">
+                  <div class="popover-title" id="method-pop-title">Informasi Method</div>
+                  <p class="muted">Metode dapat dipilih lebih dari satu. Klik tombol untuk menambah atau menghapus pilihan.</p>
+                </div>
+                <div class="seg" id="method-seg">
+                  <button data-method="GET" class="active">GET</button>
+                  <button data-method="POST">POST</button>
+                  <button data-method="PUT">PUT</button>
+                  <button data-method="DELETE">DELETE</button>
+                  <button data-method="PATCH">PATCH</button>
+                  <button data-method="HEAD">HEAD</button>
+                </div>
+                <select id="api-method" class="input" style="display:none"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option><option>HEAD</option></select>
+              </div>
+              <div class="field" style="flex:1 1 220px">
+                <span class="label">Group</span>
+                <input class="input" id="api-group" placeholder="PIPP, SPB, SHTI, Logbook" />
+              </div>
+              <div class="field" style="flex:1 1 160px">
+                <span class="label">Versi</span>
+                <input class="input" id="api-version" placeholder="v1, v2" />
+              </div>
+              <div class="field" style="flex:1 1 160px">
+                <span class="label">Akses</span>
+                <select id="api-access" class="input">
+                  <option value="public" selected>Public</option>
+                  <option value="private">Private</option>
+                </select>
+              </div>
+              <div class="field" style="flex:1 1 200px">
+                <span class="label">Authentication</span>
+                <select id="api-auth" class="input">
+                  <option value="none" selected>None</option>
+                  <option value="api_key">API Key</option>
+                  <option value="oauth2">OAuth2</option>
+                  <option value="jwt">JWT</option>
+                  <option value="basic">Basic</option>
+                </select>
+              </div>
+              <!-- Auth Config Sections -->
+              <div class="row" id="auth-config" style="gap:12px">
+                <div id="auth-none" class="field" style="flex:1 1 100%">
+                  <span class="hint">Tanpa authentication.</span>
+                </div>
+                <div id="auth-api_key" class="field" style="flex:1 1 100%;display:none">
+                  <span class="label">API Key</span>
+                  <div class="row">
+                    <div class="field" style="flex:1 1 160px">
+                      <span class="label">Lokasi</span>
+                      <select id="auth-api-key-loc" class="input">
+                        <option value="header" selected>Header</option>
+                        <option value="query">Query</option>
+                      </select>
+                    </div>
+                    <div class="field" style="flex:1 1 220px">
+                      <span class="label">Nama Header/Param</span>
+                      <input id="auth-api-key-name" class="input" placeholder="Authorization / X-API-Key / api_key" />
+                    </div>
+                    <div class="field" style="flex:1 1 180px">
+                      <span class="label">Prefix</span>
+                      <select id="auth-api-key-prefix" class="input">
+                        <option value="ApiKey" selected>ApiKey</option>
+                        <option value="Bearer">Bearer</option>
+                        <option value="Token">Token</option>
+                        <option value="None">None</option>
+                      </select>
+                    </div>
+                    <div class="field" style="flex:1 1 220px">
+                      <span class="label">Nilai</span>
+                      <input id="auth-api-key-value" class="input" placeholder="ApiKey <nilai>" />
+                    </div>
+                  </div>
+                  <span class="hint">Jika menggunakan Header <code>Authorization</code>, format umum: <code>ApiKey &lt;nilai&gt;</code> atau <code>Bearer &lt;token&gt;</code>.</span>
+                </div>
+                <div id="auth-oauth2" class="field" style="flex:1 1 100%;display:none">
+                  <span class="label">OAuth2 Access Token</span>
+                  <input id="auth-oauth2-token" class="input" placeholder="akses token (Bearer)" />
+                  <span class="hint">Masukkan access token yang sudah didapat. Pengambilan token tidak diotomasi di halaman ini.</span>
+                </div>
+                <div id="auth-jwt" class="field" style="flex:1 1 100%;display:none">
+                  <span class="label">JWT Token</span>
+                  <input id="auth-jwt-token" class="input" placeholder="eyJ..." />
+                </div>
+                <div id="auth-basic" class="field" style="flex:1 1 100%;display:none">
+                  <div class="row">
+                    <div class="field" style="flex:1 1 220px">
+                      <span class="label">Username</span>
+                      <input id="auth-basic-user" class="input" />
+                    </div>
+                    <div class="field" style="flex:1 1 220px">
+                      <span class="label">Password</span>
+                      <input id="auth-basic-pass" class="input" type="password" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="flex:1 1 320px">
+                <span class="label">Parameter (JSON) opsional</span>
+                <textarea class="input" id="api-params" placeholder='{"limit":10}' rows="2"></textarea>
+              </div>
             </div>
             <div class="row">
               <button class="btn" id="btn-add-api">Simpan API</button>
@@ -117,8 +323,16 @@
           </div>
           <div class="card">
             <h3>Daftar API</h3>
+            <div class="toolbar">
+              <input class="input" id="api-search" placeholder="Cari nama/group/method..." />
+              <div class="row">
+                <button class="btn" id="btn-test-all">Test Semua</button>
+                <button class="btn secondary" id="btn-enable-all">Enable Semua</button>
+                <button class="btn danger" id="btn-disable-all">Disable Semua</button>
+              </div>
+            </div>
             <table>
-              <thead><tr><th>Nama</th><th>Group</th><th>Method</th><th>Versi</th><th>Status</th><th>Aksi</th></tr></thead>
+              <thead><tr><th>Nama</th><th>Group</th><th>Method</th><th>Auth</th><th>Versi</th><th>Status</th><th>Aksi</th></tr></thead>
               <tbody id="api-table"></tbody>
             </table>
           </div>
@@ -267,6 +481,23 @@
       </section>
     </main>
   </div>
+  <script>
+    (function(){
+      const sidebar = document.querySelector('.sidebar');
+      const btn = document.getElementById('toggleSidebar');
+      const collapsed = localStorage.getItem('sidebarCollapsed') === '1';
+      if (collapsed) sidebar.classList.add('collapsed');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');
+          const isCollapsed = sidebar.classList.contains('collapsed');
+          localStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0');
+          btn.textContent = isCollapsed ? '▶' : '◀';
+        });
+        btn.textContent = collapsed ? '▶' : '◀';
+      }
+    })();
+  </script>
   <script src="/js/settings.js"></script>
 </body>
 </html>
