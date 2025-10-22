@@ -209,6 +209,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
     showAuthSection(sel.value);
     sel.addEventListener('change', ()=>showAuthSection(sel.value));
   }
+
+  // Wiring untuk hint dan validasi
+  ['auth-api-key-prefix','auth-api-key-loc','auth-api-key-name'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.addEventListener('change', updateApiKeyFormatHint);
+  });
+  const valEl=document.getElementById('auth-api-key-value'); if(valEl) valEl.addEventListener('input', updateApiKeyFormatHint);
+  updateApiKeyFormatHint();
+
+  bindRequired('api-name','Wajib diisi');
+  bindRequired('api-url','Wajib diisi');
+  bindRequired('auth-basic-user','Username wajib','basic');
+  bindRequired('auth-basic-pass','Password wajib','basic');
+  bindRequired('auth-api-key-name','Nama header/param wajib','api_key');
+  bindRequired('auth-api-key-value','Nilai wajib','api_key');
+  bindRequired('auth-oauth2-token','Token OAuth2 wajib','oauth2');
+  bindRequired('auth-jwt-token','Token JWT wajib','jwt');
 });
 function showAuthSection(t){
   const ids=['none','api_key','oauth2','jwt','basic'];
@@ -216,6 +232,48 @@ function showAuthSection(t){
     const el=document.getElementById('auth-'+x);
     if(el) el.style.display=((t===x)||((t==='none')&&(x==='none')))?'block':'none'
   })
+}
+// Hint format dinamis untuk API Key
+function updateApiKeyFormatHint(){
+  const el=document.getElementById('api-key-value-format'); if(!el) return;
+  const loc=document.getElementById('auth-api-key-loc')?.value||'header';
+  const name=(document.getElementById('auth-api-key-name')?.value||'').trim();
+  const prefix=document.getElementById('auth-api-key-prefix')?.value||'ApiKey';
+  const val=(document.getElementById('auth-api-key-value')?.value||'').trim()||'&lt;nilai&gt;';
+  let msg='';
+  if(loc==='header'){
+    const header=name||'Authorization';
+    if(header.toLowerCase()==='authorization'){
+      const prefTxt=prefix==='None'?'':(prefix+' ');
+      msg=`Format otomatis: <code>Authorization: ${prefTxt}${val}</code>`;
+    } else {
+      msg=`Header: <code>${header}: ${val}</code>`;
+    }
+  } else {
+    const param=name||'api_key';
+    msg=`Query: <code>?${param}=${val}</code>`;
+  }
+  el.innerHTML=msg;
+}
+// Validasi real-time saat mengetik
+function bindRequired(id, msg, onlyAuthType){
+  const el=document.getElementById(id); if(!el) return;
+  const run=()=>{
+    const currentAuth=document.getElementById('api-auth')?.value||'none';
+    const applicable=!onlyAuthType || currentAuth===onlyAuthType;
+    const v=(el.value||'').trim();
+    const field=el.closest('.field'); if(!field) return;
+    let m=field.querySelector('.error-msg');
+    if(applicable && !v){
+      el.classList.add('invalid');
+      if(!m){ m=document.createElement('span'); m.className='error-msg'; m.textContent=msg; field.appendChild(m); }
+    } else {
+      el.classList.remove('invalid');
+      if(m) m.remove();
+    }
+  };
+  el.addEventListener('input', run);
+  document.getElementById('api-auth')?.addEventListener('change', run);
 }
 function getAuthConfig(){
   const t=document.getElementById('api-auth')?.value||'none';
@@ -242,6 +300,7 @@ function fillAuthConfig(ep){
     const nm=document.getElementById('auth-api-key-name'); if(nm) nm.value=c.name||'';
     const pf=document.getElementById('auth-api-key-prefix'); if(pf) pf.value=c.prefix||'ApiKey';
     const vv=document.getElementById('auth-api-key-value'); if(vv) vv.value=c.value||'';
+    updateApiKeyFormatHint();
   }
   if(t==='oauth2'){
     const tok=document.getElementById('auth-oauth2-token'); if(tok) tok.value=c.token||'';
