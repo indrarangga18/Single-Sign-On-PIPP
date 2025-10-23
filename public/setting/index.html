@@ -292,20 +292,21 @@
               <div class="mini">
                  <div class="mini-title">Auth Mix</div>
                  <div class="glow-line"></div>
-                 <canvas id="overview-auth" width="320" height="120"></canvas>
+                 <canvas id="overview-auth" width="260" height="100"></canvas>
                  <div class="mini-legend" id="legend-auth"></div>
                </div>
               <div class="mini">
                  <div class="mini-title">Access Ratio</div>
                   <div class="glow-line"></div>
-                  <canvas id="overview-access" width="180" height="180"></canvas>
-                  <div id="access-threshold-switch" class="threshold-switch">
-                    <button data-thr="50">50%</button>
-                    <button data-thr="60">60%</button>
-                    <button data-thr="70">70%</button>
-                  </div>
+                  <canvas id="overview-access" width="100" height="100"></canvas>
                   <div class="badge-small" id="access-badge">Public 0% • Private 0%</div>
                   <div class="mini-legend" id="legend-access"></div>
+            </div>
+            <div class="mini">
+               <div class="mini-title">Auth per Group</div>
+               <div class="glow-line"></div>
+               <canvas id="overview-auth-group" width="280" height="140"></canvas>
+               <div class="mini-legend" id="legend-auth-group"></div>
             </div>
           </div>
           <div class="card">
@@ -627,12 +628,13 @@
           sidebar.classList.toggle('collapsed');
           const isCollapsed = sidebar.classList.contains('collapsed');
           localStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0');
-          btn.textContent = isCollapsed ? '▶' : '◀';
+          btn.textContent = isCollapsed ? '☰' : '◀';
         });
-        btn.textContent = collapsed ? '▶' : '◀';
+        btn.textContent = collapsed ? '☰' : '◀';
       }
     })();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="../js/settings.js"></script>
 </body>
 </html>

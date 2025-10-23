@@ -3,7 +3,8 @@ class SSORouter {
     constructor() {
         this.routes = {
             '/': this.handleHome.bind(this),
-            '/login': this.handleLogin.bind(this)
+            '/login': this.handleLogin.bind(this),
+            '/dashboard': this.handleDashboard.bind(this)
         };
         
         this.init();
@@ -31,9 +32,9 @@ class SSORouter {
     }
 
     handleRoute() {
-        const path = window.location.pathname;
+        const path = window.location.pathname.replace(/\/$/, '');
         const handler = this.routes[path] || this.handle404;
-        handler();
+        handler.call(this);
     }
 
     navigate(path) {
@@ -77,8 +78,9 @@ class SSORouter {
     }
 
     handle404() {
-        // Redirect to home for unknown routes
-        this.navigate('/');
+        // Redirect to home for unknown routes (safe without this binding)
+        try { window.history.pushState({}, '', '/'); } catch(e) { window.location.pathname = '/'; }
+        this.handleRoute();
     }
 
     showPage(pageType) {
@@ -480,9 +482,13 @@ class SSORouter {
 }
 
 // Initialize router when DOM is loaded
+// Only initialize on pages that use the SPA layout (home/login)
 document.addEventListener('DOMContentLoaded', () => {
-    window.ssoRouter = new SSORouter();
-    
+    const path = window.location.pathname.replace(/\/$/, '');
+    const shouldInit = (path === '/' || path === '/login');
+    if (shouldInit) {
+        window.ssoRouter = new SSORouter();
+    }
     // Create particles effect
     createParticles();
 });

@@ -184,6 +184,89 @@
      }
      return '<span class="muted">-</span>';
    }
+   // Chart.js instances cache
+   const Charts = { auth: null, access: null, usage: null };
+
+   function renderAuthChart(labels, counts, colors){
+     const ctx = document.getElementById('overview-auth'); if(!ctx || typeof Chart === 'undefined') return;
+     if(Charts.auth){
+       Charts.auth.data.labels = labels;
+       Charts.auth.data.datasets[0].data = counts;
+       Charts.auth.data.datasets[0].backgroundColor = colors;
+       Charts.auth.update();
+       return;
+     }
+     Charts.auth = new Chart(ctx, {
+       type: 'bar',
+       data: { labels, datasets: [{ data: counts, backgroundColor: colors }] },
+       options: {
+         responsive: false,
+         plugins: { legend: { display: false } },
+         scales: { x: { ticks: { color: '#dbeafe' } }, y: { ticks: { color: '#a7b4c7' }, beginAtZero: true } }
+       }
+     });
+   }
+
+   // Center text plugin for doughnut
+   if(typeof Chart!=='undefined'){
+     const centerTextPlugin={id:'centerText',afterDraw(chart){try{const ds=chart.data.datasets[0]; if(!ds||!ds.data||ds.data.length<2) return; const total=ds.data.reduce((a,b)=>a+b,0)||0; const pub=ds.data[0]||0; const priv=ds.data[1]||0; const pubPct=total?Math.round(pub/total*100):0; const privPct=total?Math.round(priv/total*100):0; const meta=chart.getDatasetMeta(0); const cx=meta.data[0].x; const cy=meta.data[0].y; const ctx=chart.ctx; ctx.save(); ctx.fillStyle='#cbd5e1'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.font='bold 11px sans-serif'; ctx.fillText(`Public ${pubPct}%`, cx, cy-8); ctx.font='10px sans-serif'; ctx.fillText(`Private ${privPct}%`, cx, cy+8); ctx.restore(); }catch(e){/* noop */}}};
+     Chart.register(centerTextPlugin);
+   }
+   
+   // Extend charts cache
+    if(typeof Charts!=='undefined'){ Charts.authGroup = Charts.authGroup || null; }
+   
+   function renderAccessChart(pubCount, privCount){
+     const ctx = document.getElementById('overview-access'); if(!ctx || typeof Chart === 'undefined') return;
+     const data = [pubCount, privCount];
+     if(Charts.access){
+       Charts.access.data.datasets[0].data = data;
+       Charts.access.update();
+     } else {
+       Charts.access = new Chart(ctx, {
+         type: 'doughnut',
+         data: { labels: ['Public','Private'], datasets: [{ data, backgroundColor: ['#14b8a6','#f43f5e'] }] },
+         options: { responsive: false, plugins: { legend: { display: false }, centerText: {} }, cutout: '75%' }
+       });
+     }
+   }
+   
+   function renderGroupAuthChart(){
+     const ctx=document.getElementById('overview-auth-group'); if(!ctx||typeof Chart==='undefined') return;
+     const eps=S.endpoints||[];
+     const groups=[...new Set(eps.map(e=>e.group||'Other'))];
+     const authTypes=['none','apiKey','jwt','oauth'];
+     const colors={none:'#94a3b8',apiKey:'#22c55e',jwt:'#38bdf8',oauth:'#f59e0b'};
+     const datasets=authTypes.map(t=>({label:t,data:groups.map(g=>eps.filter(e=>(e.group||'Other')===g && (e.auth||'none')===t).length),backgroundColor:colors[t]}));
+     if(Charts.authGroup){
+       Charts.authGroup.data.labels=groups;
+       Charts.authGroup.data.datasets=datasets;
+       Charts.authGroup.update();
+     } else {
+       Charts.authGroup=new Chart(ctx,{type:'bar',data:{labels:groups,datasets},options:{responsive:false,plugins:{legend:{display:true}},scales:{x:{stacked:true,ticks:{color:'#dbeafe'}},y:{stacked:true,ticks:{color:'#a7b4c7'},beginAtZero:true}}}});
+     }
+   }
+
+   function renderUsageChart(){
+     const ctx = document.getElementById('chart-usage'); if(!ctx || typeof Chart === 'undefined') return;
+     const eps = S.endpoints || [];
+     const byGroup = {};
+     eps.forEach(ep=>{ const g = (ep.group||'Other'); byGroup[g] = (byGroup[g]||0)+1; });
+     const labels = Object.keys(byGroup);
+     const counts = labels.map(l=>byGroup[l]);
+     if(Charts.usage){
+       Charts.usage.data.labels = labels;
+       Charts.usage.data.datasets[0].data = counts;
+       Charts.usage.update();
+     } else {
+       Charts.usage = new Chart(ctx, {
+         type: 'bar',
+         data: { labels, datasets: [{ label: 'API per Group', data: counts, backgroundColor: '#0ea5e9' }] },
+         options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#dbeafe' } }, y: { ticks: { color: '#a7b4c7' }, beginAtZero: true, precision: 0 } } }
+       });
+     }
+   }
+
    function apiOverview(){
      const total=S.endpoints.length;
      const aktif=S.endpoints.filter(e=>e.active).length;
@@ -199,13 +282,17 @@
      const authColors=['#64748b','#0ea5e9','#a855f7','#f59e0b','#f43f5e'];
      const authCounts=authKeys.map(t=>eps.filter(e=>((e.auth||'none')===t)).length);
      const cAuth=document.getElementById('overview-auth');
-     drawBars(cAuth, authLabels, authCounts, authColors);
+     if(typeof Chart!=='undefined'){ renderAuthChart(authLabels, authCounts, authColors); } else { drawBars(cAuth, authLabels, authCounts, authColors); }
      updateLegendAuth(authLabels, authCounts, authColors);
      const pub=eps.filter(e=>((e.access||'public')==='public')).length;
      const priv=eps.filter(e=>((e.access||'public')==='private')).length;
      const cAcc=document.getElementById('overview-access');
-     drawDonut(cAcc, [pub, priv], ['#14b8a6','#f43f5e'], ['Public','Private']);
+     if(typeof Chart!=='undefined'){ renderAccessChart(pub, priv); } else { drawDonut(cAcc, [pub, priv], ['#14b8a6','#f43f5e'], ['Public','Private']); }
      updateLegendAccess(pub, priv);
+     // Chart tambahan: Auth per Group
+     if(typeof Chart!=='undefined'){ renderGroupAuthChart(); }
+     // Optional: usage chart with Chart.js (skip if Chart not available)
+     if(typeof Chart!=='undefined'){ renderUsageChart(); }
    }
    byId('api-search')?.addEventListener('input',()=>{renderApi()});
    byId('btn-test-all')?.addEventListener('click',async()=>{
@@ -260,7 +347,23 @@
 
   // Monitoring
   byId('btn-health').addEventListener('click',async()=>{const ul=byId('health-list'); ul.innerHTML=''; for(const ep of S.endpoints){const t0=performance.now(); let st='ERR'; try{const r=await fetch(ep.url,{method:'HEAD'}); st=r.status}catch(e){st='ERR'} const ms=Math.round(performance.now()-t0); const li=document.createElement('li'); li.textContent=`${ep.name} • ${st} • ${ms}ms`; ul.appendChild(li)} log('Health check dijalankan')});
-  function renderUsage(){const c=byId('chart-usage'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const data=S.usage.slice(-18); const w=c.width/(data.length||1); data.forEach((u,i)=>{const h=Math.min(160, u.ms/2); ctx.fillStyle=u.status==='ERR'?'#f43f5e':'#22c55e'; ctx.fillRect(i*w+4, c.height-20-h, w-8, h); ctx.fillStyle='#a7b4c7'; ctx.font='10px sans-serif'; ctx.fillText(u.name.slice(0,8), i*w+6, c.height-6)})}
+  function renderUsage(){
+    const c=byId('chart-usage'); if(!c) return;
+    // If Chart.js usage chart is active, skip canvas rendering to prevent conflicts
+    if(typeof Chart!=='undefined' && typeof Charts!=='undefined' && Charts.usage){ return; }
+    const ctx=c.getContext('2d');
+    ctx.clearRect(0,0,c.width,c.height);
+    const data=S.usage.slice(-18);
+    const w=c.width/(data.length||1);
+    data.forEach((u,i)=>{
+      const h=Math.min(160, u.ms/2);
+      ctx.fillStyle=u.status==='ERR'?'#f43f5e':'#22c55e';
+      ctx.fillRect(i*w+4, c.height-20-h, w-8, h);
+      ctx.fillStyle='#a7b4c7';
+      ctx.font='10px sans-serif';
+      ctx.fillText(u.name.slice(0,8), i*w+6, c.height-6);
+    });
+  }
 
   // Sync
   byId('btn-sync').addEventListener('click',()=>{const t=val('sync-target')||'unknown'; S.status.unshift({sys:t,res:'OK',time:new Date().toLocaleString()}); renderStatus(); S.logs.unshift({t:new Date().toISOString(),msg:'Manual sync '+t}); renderLogs(); save()});
@@ -647,7 +750,7 @@ function updateLegendAccess(pubCount, privCount){
   el.innerHTML=`<span class="legend-item"><span class="legend-dot" style="background:#14b8a6"></span>Public: ${pubCount}</span> <span class="legend-item"><span class="legend-dot" style="background:#f43f5e"></span>Private: ${privCount}</span>`;
 }
 function drawDonut(c, values, colors, labels){
-  if(!c) return; const ctx=c.getContext('2d'); const W=c.width, H=c.height; const cx=W/2, cy=H/2; const r=Math.min(W,H)/2-10; const th=18;
+  if(!c) return; const ctx=c.getContext('2d'); const W=c.width, H=c.height; const cx=W/2, cy=H/2; const r=Math.min(W,H)/2-10; const th=(c.id==='overview-access'?10:18);
   const badge=(c.id==='overview-access')?document.getElementById('access-badge'):null;
   const prev=Array.isArray(c._lastValues)?c._lastValues:[0,0];
   const next=values.slice();
@@ -662,8 +765,9 @@ function drawDonut(c, values, colors, labels){
     ctx.clearRect(0,0,W,H);
     let a=-Math.PI/2; for(let i=0;i<curr.length;i++){ const ang=(curr[i]/sum)*Math.PI*2; ctx.beginPath(); ctx.arc(cx,cy,r,a,a+ang); ctx.arc(cx,cy,r-th,a+ang,a,true); ctx.closePath(); ctx.fillStyle=colors[i%colors.length]; ctx.fill(); a+=ang; }
     const pubPct=Math.round((curr[0]/sum)*100); const privPct=100-pubPct;
-    ctx.fillStyle='#dbeafe'; ctx.font='12px system-ui'; ctx.textAlign='center'; ctx.fillText(labels[0]+' '+pubPct+'%', cx, cy-2);
-    ctx.fillStyle='#a7b4c7'; ctx.fillText(labels[1]+' '+privPct+'%', cx, cy+14);
+    const isAccess=(c.id==='overview-access');
+    ctx.fillStyle='#dbeafe'; ctx.font=(isAccess?'11px system-ui':'12px system-ui'); ctx.textAlign='center'; ctx.fillText(labels[0]+' '+pubPct+'%', cx, isAccess?cy-1:cy-2);
+    ctx.fillStyle='#a7b4c7'; ctx.font=(isAccess?'10px system-ui':'12px system-ui'); ctx.fillText(labels[1]+' '+privPct+'%', cx, isAccess?cy+12:cy+14);
     if(badge){
       badge.textContent=`Public ${pubPct}% • Private ${privPct}%`;
       badge.classList.add('show');
