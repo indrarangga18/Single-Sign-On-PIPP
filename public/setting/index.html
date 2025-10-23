@@ -45,10 +45,19 @@
     .btn{border:none;border-radius:10px;padding:8px 12px;color:#fff;background:linear-gradient(90deg,var(--primary),var(--secondary));cursor:pointer}
     .btn.secondary{background:linear-gradient(90deg,#14b8a6,#22c55e)}
     .btn.danger{background:linear-gradient(90deg,#ef4444,#f43f5e)}
+    /* Action header & attractive buttons */
+    .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .card-head .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn.icon{display:inline-flex;align-items:center;gap:8px}
+    .btn.glow{box-shadow:0 8px 18px rgba(14,165,233,.25)}
+    .btn.glow:hover{filter:brightness(1.06);box-shadow:0 10px 24px rgba(14,165,233,.35)}
+    .btn.outline{background:rgba(10,20,50,.35);border:1px solid var(--border);color:#dbeafe}
+    .btn.outline:hover{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;border-color:transparent}
     table{width:100%;border-collapse:collapse}
     th,td{border-bottom:1px solid rgba(120,200,255,.18);padding:8px;text-align:left}
-    .stat{display:flex;gap:12px}
+    .stat{display:flex;gap:12px;align-items:center}
     .badge{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid var(--border);font-size:12px;color:#dbeafe}
+    .uptime-ring{border-radius:50%;background:rgba(12,20,40,.35)}
     .muted{color:var(--muted);font-size:12px}
     .toggle-btn{margin-left:auto;border:1px solid var(--border);background:rgba(10,20,50,.35);color:#dbeafe;border-radius:8px;padding:6px 8px;cursor:pointer}
     .sidebar.collapsed{width:72px;min-width:72px}
@@ -68,12 +77,35 @@
     .status-pill.inactive{background:rgba(244,63,94,.15);color:#f43f5e}
     .toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px}
     .toolbar .input{max-width:280px}
+    /* Toast */
+    .toast-container{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+    .toast{background:rgba(12,20,40,.85);color:#dbeafe;border:1px solid var(--border);border-radius:10px;padding:10px 12px;min-width:220px;box-shadow:0 10px 24px rgba(0,0,0,.35);opacity:0;transform:translateY(8px);transition:opacity .2s ease, transform .2s ease}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.success{border-color:#22c55e}
+    .toast.error{border-color:#ef4444}
+    .toast.info{border-color:#14b8a6}
     /* Fix KPI grid to stay inside the card and be responsive */
     .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;width:100%}
     .kpi .item{background:rgba(12,20,40,.55);border:1px solid var(--border);border-radius:12px;padding:12px;min-height:84px;display:flex;flex-direction:column;justify-content:center}
     .kpi .num{font-size:22px;font-weight:700}
+    .kpi .num .num-ok{color:var(--ok)}
+    .kpi .num .num-bad{color:var(--bad)}
     .kpi .label{font-size:12px;color:var(--muted)}
     tbody tr:hover{background:rgba(12,20,40,.35)}
+    /* Overview charts */
+    .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .mini { background: rgba(12, 20, 40, 0.55); border: 1px solid var(--border); border-radius: 12px; padding: 10px; position: relative; }
+    .mini-title { font-size: 12px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.4px; }
+    .mini canvas { width: 100%; height: auto; }
+    .mini .glow-line { position: absolute; height: 1px; left: 10px; right: 10px; top: 36px; background: linear-gradient(90deg, var(--primary), var(--secondary)); opacity: 0.25; }
+    .mini-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+    .legend-item{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#a7b4c7;border:1px solid var(--border);border-radius:12px;padding:4px 8px;background:rgba(12,20,40,.35)}
+    .legend-dot{width:10px;height:10px;border-radius:50%}
+    .badge-small{position:absolute;top:8px;right:10px;padding:4px 8px;border-radius:999px;border:1px solid var(--border);font-size:11px;color:#dbeafe;background:rgba(12,20,40,.55);backdrop-filter:blur(6px);box-shadow:0 6px 16px rgba(0,0,0,.25);transition:transform .18s ease, opacity .18s ease;opacity:.9}
+    .badge-small.show{opacity:1;transform:translateY(0)}
+    .badge-small.dominant-public{border-color:#22c55e;background:rgba(34,197,94,.12);color:#bbf7d0}
+    .badge-small.dominant-private{border-color:#f43f5e;background:rgba(244,63,94,.12);color:#fecdd3}
+    .badge-small.balanced{border-color:#94a3b8;background:rgba(148,163,184,.12);color:#e5e7eb}
     /* Info Modal */
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(2px);display:none;z-index:50}
     .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(12,20,40,.92);border:1px solid var(--border);border-radius:12px;box-shadow:0 18px 36px rgba(0,0,0,.35);width:min(720px,90vw);max-height:80vh;display:none;z-index:51}
@@ -94,17 +126,75 @@
     .seg button.active{background:linear-gradient(90deg,var(--primary),var(--secondary));border-color:transparent}
     .hint{font-size:12px;color:var(--muted)}
     .error-msg{font-size:12px;color:#f43f5e}
-     .info-tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--border);background:rgba(12,20,40,.55);color:#f59e0b;font-size:12px;line-height:1;margin-left:6px;cursor:help}
-     .info-tip:hover{background:rgba(12,20,40,.75);}
-     .popover{position:absolute;top:28px;left:0;display:none;background:rgba(12,20,40,.85);border:1px solid var(--border);border-radius:12px;padding:10px;max-width:320px;box-shadow:0 10px 24px rgba(0,0,0,.35);z-index:10}
-     .popover.open{display:block}
-     .popover-title{font-size:13px;font-weight:600;margin-bottom:6px;color:#dbeafe}
-      .field .label:hover + .popover{display:block}
+    .info-tip{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;border:1px solid var(--border);background:rgba(12,20,40,.55);color:#fbbf24;font-size:12px;line-height:1;margin-left:6px;cursor:help}
+    .info-tip:hover{background:rgba(12,20,40,.75);}
+    .popover{position:absolute;top:28px;left:0;display:none;background:rgba(12,20,40,.85);border:1px solid var(--border);border-radius:12px;padding:10px;max-width:320px;box-shadow:0 10px 24px rgba(0,0,0,.35);z-index:10;opacity:0;transform:translateX(6px);transition:opacity .18s ease, transform .18s ease}
+    .popover.open{display:block;opacity:1;transform:translateX(0)}
+    .popover-title{font-size:13px;font-weight:600;margin-bottom:6px;color:#dbeafe}
+    .popover::before{content:"";position:absolute;left:-6px;top:14px;border-width:6px;border-style:solid;border-color:transparent var(--border) transparent transparent}
+    .popover::after{content:"";position:absolute;left:-5px;top:14px;border-width:6px;border-style:solid;border-color:transparent rgba(12,20,40,.85) transparent transparent}
+     .field .label:hover + .popover{display:block}
       /* Stack API Config cards vertically */
-    #panel-api .grid{grid-template-columns:1fr;gap:12px}
+    #panel-api .grid{grid-template-columns:1fr;gap:16px}
+    /* Form two-column grid */
+     #panel-api .form-grid{display:flex;gap:12px;align-items:flex-start}
+     #panel-api .form-grid .col{flex:0 1 520px;display:flex;flex-direction:column;gap:8px}
+     #panel-api .form-grid .col:last-child{flex:0 1 520px}
+      /* Perkecil lebar input akses & authentication */
+      #panel-api #api-access,#panel-api #api-auth{max-width:240px}
+      #panel-api .access-method{flex-wrap:nowrap;gap:12px;align-items:flex-start;flex-wrap:nowrap;}
+      #panel-api .form-pairs .pair { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:8px; }
+      #panel-api .access-method { display:flex; flex-wrap:nowrap; gap:12px; }
+      #panel-api .method-inline { flex:1 1 auto; min-width:0; }
+      @media (max-width: 640px) {
+        #panel-api .form-pairs { flex-direction:column; flex-wrap:wrap; }
+        /* Pair rows container */
+        #panel-api .form-pairs { display:flex; gap:12px; align-items:flex-start; flex-wrap:nowrap; }
+        /* Rapatkan jarak antar baris pasangan */
+        #panel-api .card .row.form-pairs + .row.form-pairs { gap:6px; margin-top:0; }
+        /* Pair items */
+        #panel-api .form-pairs .pair { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:8px; }
+        /* Akses + Method row */
+        #panel-api .access-method { display:flex; flex-wrap:nowrap; gap:12px; align-items:flex-start; }
+        #panel-api .method-inline { flex:1 1 auto; min-width:0; }
+        /* Keep akses/auth compact */
+        #panel-api #api-access, #panel-api #api-auth { max-width:240px; }
+        /* Mobile */
+        @media (max-width: 640px) {
+          #panel-api .form-pairs { flex-direction:column; flex-wrap:wrap; gap:10px; }
+          #panel-api .card .row.form-pairs + .row.form-pairs { margin-top:0; }
+          #panel-api #api-access, #panel-api #api-auth { max-width:100%; }
+        }
+      }
+      /* keep akses/auth inputs compact on desktop */
+      #panel-api #api-access, #panel-api #api-auth { max-width: 240px; }
+      /* Rapatkan lagi: baris kedua tanpa margin ekstra */
+      #panel-api .card .row.form-pairs + .row.form-pairs { gap:6px; margin-top:0; }
+      /* Perkecil tinggi area Method */
+      #panel-api .method-inline .label { margin-bottom:4px; }
+      #panel-api .method-inline .seg { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:0; }
+      #panel-api #method-hint { display:none; }
+    /* Tabel API layout fix */
+    #panel-api table{width:100%;table-layout:fixed;border-collapse:collapse}
+    #panel-api table th,#panel-api table td{padding:8px 10px;vertical-align:middle}
+    #panel-api table th{white-space:nowrap}
+    #panel-api table td:nth-child(6){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    /* Lebar kolom agar rapi */
+    #panel-api table th:nth-child(1),#panel-api table td:nth-child(1){width:18%}
+    #panel-api table th:nth-child(2),#panel-api table td:nth-child(2){width:12%}
+    #panel-api table th:nth-child(3),#panel-api table td:nth-child(3){width:14%}
+    #panel-api table th:nth-child(4),#panel-api table td:nth-child(4){width:10%}
+    #panel-api table th:nth-child(5),#panel-api table td:nth-child(5){width:10%}
+    #panel-api table th:nth-child(6),#panel-api table td:nth-child(6){width:18%}
+    #panel-api table th:nth-child(7),#panel-api table td:nth-child(7){width:6%}
+    #panel-api table th:nth-child(8),#panel-api table td:nth-child(8){width:8%}
+    #panel-api table th:nth-child(9),#panel-api table td:nth-child(9){width:14%}
+    #panel-api .chip{display:inline-block;margin-right:6px}
     @media (min-width: 960px){
-      #panel-api .grid{grid-template-columns:1fr 1fr}
+      #panel-api .grid{grid-template-columns:1fr 1fr;gap:16px}
       #panel-api .grid .card:first-child{grid-column:1/-1}
+      #panel-api .grid .card:nth-child(2){grid-column:1/-1}
+      #panel-api .grid .card:nth-child(3){grid-column:1/-1}
     }
   </style>
 </head>
@@ -169,6 +259,7 @@
         <div class="stat">
           <span class="badge" id="stat-endpoints">0 API</span>
           <span class="badge" id="stat-roles">0 Role</span>
+          <canvas id="uptime-ring" width="40" height="40" class="uptime-ring"></canvas>
           <span class="badge" id="stat-uptime">Uptime: —</span>
         </div>
       </div>
@@ -192,42 +283,99 @@
       <section class="panel active" id="panel-api">
         <div class="grid">
           <div class="card">
-            <h3>API Overview</h3>
+            <h3 class="card-title">API Overview</h3>
             <div class="kpi">
               <div class="item"><div class="num" id="api-count">0</div><div class="label">Total API</div></div>
-              <div class="item"><div class="num" id="api-active-count">0</div><div class="label">Aktif</div></div>
-              <div class="item"><div class="num" id="api-group-count">0</div><div class="label">Group</div></div>
-              <div class="item"><div class="num" id="api-method-count">0</div><div class="label">Method</div></div>
+              <div class="item"><div class="num" id="api-active-ratio"><span class="num-ok">0</span>/<span class="num-bad">0</span></div><div class="label">Aktif/Tidak Aktif</div></div>
+            </div>
+            <div class="overview-grid">
+              <div class="mini">
+                 <div class="mini-title">Auth Mix</div>
+                 <div class="glow-line"></div>
+                 <canvas id="overview-auth" width="320" height="120"></canvas>
+                 <div class="mini-legend" id="legend-auth"></div>
+               </div>
+              <div class="mini">
+                 <div class="mini-title">Access Ratio</div>
+                  <div class="glow-line"></div>
+                  <canvas id="overview-access" width="180" height="180"></canvas>
+                  <div id="access-threshold-switch" class="threshold-switch">
+                    <button data-thr="50">50%</button>
+                    <button data-thr="60">60%</button>
+                    <button data-thr="70">70%</button>
+                  </div>
+                  <div class="badge-small" id="access-badge">Public 0% • Private 0%</div>
+                  <div class="mini-legend" id="legend-access"></div>
             </div>
           </div>
           <div class="card">
-            <h3>Register API Endpoint</h3>
+            <div class="card-head">
+              <h3>Register API Endpoint</h3>
+              <div class="actions">
+                <button class="btn glow" id="btn-add-api">Simpan API</button>
+                <button class="btn secondary glow" id="btn-backup">Backup</button>
+                <label class="btn outline" for="restore-file">Restore JSON</label>
+                <input type="file" id="restore-file" accept="application/json" style="display:none" />
+              </div>
+            </div>
+            <div class="row form-pairs">
+              <div class="pair">
+                <div class="field">
+                  <span class="label">Nama API <span class="req" aria-hidden="true">*</span></span>
+                  <input class="input" id="api-name" placeholder="mis. Auth Service" aria-required="true" style="text-transform:uppercase" />
+                </div>
+              </div>
+              <div class="pair">
+                <div class="row access-method">
+                  <div class="field" style="flex:0 1 240px">
+                    <span class="label">Akses</span>
+                    <select id="api-access" class="input">
+                      <option value="public" selected>Public</option>
+                      <option value="private">Private</option>
+                    </select>
+                  </div>
+                  <div class="field method-inline">
+                    <span class="label">Method <span class="info-tip" id="method-info" title="Metode dapat dipilih lebih dari satu" aria-label="Metode dapat dipilih lebih dari satu">!</span></span>
+                    <div id="method-pop" class="popover" role="dialog" aria-modal="false" aria-labelledby="method-pop-title">
+                      <div class="popover-title" id="method-pop-title">Informasi Method</div>
+                      <p class="muted">Metode dapat dipilih lebih dari satu. Klik tombol untuk menambah atau menghapus pilihan.</p>
+                    </div>
+                    <div class="seg" id="method-seg">
+                      <button data-method="GET" class="active">GET</button>
+                      <button data-method="POST">POST</button>
+                      <button data-method="PUT">PUT</button>
+                      <button data-method="DELETE">DELETE</button>
+                      <button data-method="PATCH">PATCH</button>
+                      <button data-method="HEAD">HEAD</button>
+                    </div>
+                    <span class="hint" id="method-hint">Pilih satu atau lebih metode; klik untuk toggle.</span>
+                    <select id="api-method" class="input" style="display:none"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option><option>HEAD</option></select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-pairs">
+              <div class="pair">
+                <div class="field">
+                  <span class="label">URL <span class="req" aria-hidden="true">*</span></span>
+                  <input class="input" id="api-url" placeholder="https://domain/path" aria-required="true" />
+                  <span class="hint">Gunakan endpoint publik atau internal yang dapat diakses.</span>
+                </div>
+              </div>
+              <div class="pair">
+                <div class="field">
+                  <span class="label">Authentication</span>
+                  <select id="api-auth" class="input">
+                    <option value="none" selected>None</option>
+                    <option value="api_key">API Key</option>
+                    <option value="oauth2">OAuth2</option>
+                    <option value="jwt">JWT</option>
+                    <option value="basic">Basic</option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <div class="row">
-              <div class="field" style="flex:1 1 260px">
-                <span class="label">Nama API <span class="req" aria-hidden="true">*</span></span>
-                <input class="input" id="api-name" placeholder="mis. Auth Service" aria-required="true" />
-              </div>
-              <div class="field" style="flex:1 1 260px">
-                <span class="label">URL <span class="req" aria-hidden="true">*</span></span>
-                <input class="input" id="api-url" placeholder="https://domain/path" aria-required="true" />
-                <span class="hint">Gunakan endpoint publik atau internal yang dapat diakses.</span>
-              </div>
-              <div class="field" style="flex:1 1 200px">
-                <span class="label">Method <span class="info-tip" id="method-info" title="Metode dapat dipilih lebih dari satu" aria-label="Metode dapat dipilih lebih dari satu">!</span></span>
-                <div id="method-pop" class="popover" role="dialog" aria-modal="false" aria-labelledby="method-pop-title">
-                  <div class="popover-title" id="method-pop-title">Informasi Method</div>
-                  <p class="muted">Metode dapat dipilih lebih dari satu. Klik tombol untuk menambah atau menghapus pilihan.</p>
-                </div>
-                <div class="seg" id="method-seg">
-                  <button data-method="GET" class="active">GET</button>
-                  <button data-method="POST">POST</button>
-                  <button data-method="PUT">PUT</button>
-                  <button data-method="DELETE">DELETE</button>
-                  <button data-method="PATCH">PATCH</button>
-                  <button data-method="HEAD">HEAD</button>
-                </div>
-                <select id="api-method" class="input" style="display:none"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option><option>HEAD</option></select>
-              </div>
               <div class="field" style="flex:1 1 220px">
                 <span class="label">Group</span>
                 <input class="input" id="api-group" placeholder="PIPP, SPB, SHTI, Logbook" />
@@ -236,23 +384,7 @@
                 <span class="label">Versi</span>
                 <input class="input" id="api-version" placeholder="v1, v2" />
               </div>
-              <div class="field" style="flex:1 1 160px">
-                <span class="label">Akses</span>
-                <select id="api-access" class="input">
-                  <option value="public" selected>Public</option>
-                  <option value="private">Private</option>
-                </select>
-              </div>
-              <div class="field" style="flex:1 1 200px">
-                <span class="label">Authentication</span>
-                <select id="api-auth" class="input">
-                  <option value="none" selected>None</option>
-                  <option value="api_key">API Key</option>
-                  <option value="oauth2">OAuth2</option>
-                  <option value="jwt">JWT</option>
-                  <option value="basic">Basic</option>
-                </select>
-              </div>
+            </div>
               <!-- Auth Config Sections -->
               <div class="row" id="auth-config" style="gap:12px">
                 <div id="auth-none" class="field" style="flex:1 1 100%">
@@ -284,9 +416,12 @@
                       <input id="auth-api-key-name" class="input" placeholder="Authorization / X-API-Key / api_key" />
                     </div>
                     <div class="field" style="flex:1 1 220px">
-                      <span class="label">Nilai</span>
-                      <input id="auth-api-key-value" class="input" placeholder="ApiKey <nilai>" />
-                      <span class="hint" id="api-key-value-format"></span>
+                      <span class="label">Nilai <span class="info-tip" id="api-key-tip" title="Tooltip format nilai otomatis">!</span></span>
+                      <div id="api-key-pop" class="popover" role="dialog" aria-modal="false" aria-labelledby="api-key-pop-title">
+                        <div class="popover-title" id="api-key-pop-title">Format Nilai</div>
+                        <span class="hint" id="api-key-value-format"></span>
+                      </div>
+                      <input id="auth-api-key-value" class="input" placeholder="ApiKey &lt;nilai&gt;" />
                     </div>
                   </div>
                   <span class="hint">Jika menggunakan Header <code>Authorization</code>, format umum: <code>ApiKey &lt;nilai&gt;</code> atau <code>Bearer &lt;token&gt;</code>.</span>
@@ -318,12 +453,7 @@
                 <textarea class="input" id="api-params" placeholder='{"limit":10}' rows="2"></textarea>
               </div>
             </div>
-            <div class="row">
-              <button class="btn" id="btn-add-api">Simpan API</button>
-              <button class="btn secondary" id="btn-backup">Backup Config (JSON)</button>
-              <label class="btn" for="restore-file">Restore JSON</label>
-              <input type="file" id="restore-file" accept="application/json" style="display:none" />
-            </div>
+            <!-- Actions moved to header card-head -->
           </div>
           <div class="card">
             <h3>Daftar API</h3>
@@ -336,8 +466,8 @@
               </div>
             </div>
             <table>
-              <thead><tr><th>Nama</th><th>Group</th><th>Method</th><th>Auth</th><th>Versi</th><th>Status</th><th>Aksi</th></tr></thead>
-              <tbody id="api-table"></tbody>
+              <thead><tr><th>Nama</th><th>Group</th><th>Method</th><th>Access</th><th>Auth</th><th>Auth Detail</th><th>Versi</th><th>Status</th><th>Aksi</th></tr></thead>
+               <tbody id="api-table"></tbody>
             </table>
           </div>
         </div>
@@ -485,6 +615,7 @@
       </section>
     </main>
   </div>
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
   <script>
     (function(){
       const sidebar = document.querySelector('.sidebar');
@@ -502,6 +633,6 @@
       }
     })();
   </script>
-  <script src="/js/settings.js"></script>
+  <script src="../js/settings.js"></script>
 </body>
 </html>
