@@ -20,82 +20,334 @@
     .orb.o2{background:radial-gradient(closest-side,rgba(167,139,250,.9),transparent 72%);bottom:10%;right:12%;animation:float 18s ease-in-out infinite reverse}
     @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-12px)}}
 
-    .layout{display:flex;gap:20px;padding:20px;min-height:100vh;position:relative;z-index:1}
-    .sidebar{width:220px;min-width:220px;background:var(--glass);border:1px solid var(--border);border-radius:12px;backdrop-filter:blur(10px);padding:12px;position:sticky;top:20px;height:calc(100vh - 40px);box-shadow:0 12px 28px rgba(34,211,238,.12)}
-    .brand{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid var(--border);margin-bottom:10px}
-    .menu{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-    .menu a{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;color:#dbeafe;text-decoration:none;border:1px solid var(--border);background:rgba(10,20,50,.35)}
-    .menu a.active{border-color:rgba(140,220,255,.45);box-shadow:0 0 12px rgba(34,211,238,.12)}
-    .main{flex:1;min-width:0}
-    .topbar{background:var(--glass);border:1px solid var(--border);border-radius:12px;backdrop-filter:blur(10px);padding:10px 12px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
-    .brand-title{font-weight:800;letter-spacing:.3px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .muted{color:var(--muted);font-size:12px}
-    .toggle-btn{margin-left:auto;border:1px solid var(--border);background:rgba(10,20,50,.35);color:#dbeafe;border-radius:8px;padding:6px 8px;cursor:pointer}
-    .sidebar.collapsed{width:72px;min-width:72px}
-    .sidebar.collapsed .brand .muted,.sidebar.collapsed .brand .brand-title{display:none}
-    .sidebar.collapsed .menu .label{display:none}
-
-    .card{max-width:720px;width:100%;background:var(--glass);border:1px solid var(--border);border-radius:16px;backdrop-filter:blur(10px);padding:28px;text-align:center;box-shadow:0 12px 28px rgba(34,211,238,.12);margin:0 auto}
-    .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-    .btn{border:none;border-radius:12px;padding:10px 14px;color:#fff;background:linear-gradient(90deg,var(--primary),var(--secondary));cursor:pointer;text-decoration:none;display:inline-block}
-    .menu-inline{display:flex;gap:8px;justify-content:center;margin-top:12px}
-    .menu-inline a{color:#dbeafe;text-decoration:none;border:1px solid var(--border);background:rgba(10,20,50,.35);padding:8px 12px;border-radius:10px}
+    .page{min-height:100vh;position:relative;z-index:1}
+    .sticky{position:sticky;top:0;z-index:10;background:rgba(10,20,40,.78);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+    .header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px}
+    .title{font-size:28px;font-weight:800;letter-spacing:.3px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .apps{display:flex;gap:18px;justify-content:center;padding:8px 20px}
+    .app-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border:2px solid #60a5fa;color:#e6f2ff;text-decoration:none;border-radius:8px;min-width:160px;background:transparent}
+    .app-btn:hover{filter:brightness(1.06)}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;padding:10px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .tab{border:2px solid #cbd5e1;background:#0b1020;color:#e6f2ff;border-radius:8px;padding:8px 12px;cursor:pointer}
+    .tab.active{background:#ea580c;border-color:#ea580c;color:#fff}
+    .content{padding:16px clamp(14px, 2.5vw, 28px);max-width:min(1600px, 96vw);margin:0 auto}
+    .section{background:rgba(12,20,40,.55);border:1px solid var(--border);border-radius:12px;padding:18px;margin:0 auto 18px;}
+    .section h2{margin:0 0 10px;font-size:18px}
+    .toolbar{display:flex;justify-content:flex-end;align-items:center;margin-bottom:10px}
+    .search{display:flex;gap:8px;align-items:center}
+    .search input{height:36px;border:1px solid rgba(226,232,240,.25);border-radius:8px;background:rgba(255,255,255,.06);color:#e2e8f0;padding:0 10px}
+    .outline{border:2px solid #cbd5e1;background:transparent;color:#e6f2ff;border-radius:8px;padding:8px 12px}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th,td{border-bottom:1px solid rgba(120,200,255,.18);padding:8px;text-align:left}
+    .pager{display:flex;gap:8px;justify-content:flex-end;padding-top:10px}
+    .page-btn{border:2px solid #cbd5e1;background:transparent;color:#e6f2ff;border-radius:8px;padding:6px 10px;cursor:pointer}
+    .page-btn.active{background:#0ea5e9;border-color:#0ea5e9}
+    .notif-list{list-style:none;padding:0;margin:0}
+    .notif-list li{margin:4px 0}
+    .notif-link{color:#60a5fa;text-decoration:underline;cursor:pointer}
+    .setting-layout{display:flex;gap:16px}
+    .setting-nav{width:180px;display:flex;flex-direction:column;gap:10px}
+    .setting-tab{border:2px solid #cbd5e1;background:#0b1020;color:#e6f2ff;border-radius:8px;padding:10px;cursor:pointer;text-align:left}
+    .setting-tab.active{background:#facc15;color:#0b1020;border-color:#facc15}
+    .setting-content{flex:1}
+    .mini{background:rgba(12,20,40,.55);border:1px solid var(--border);border-radius:12px;padding:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .profile-menu{position:relative;display:flex;align-items:center;gap:8px}
+    .profile-btn{border:2px solid #cbd5e1;background:transparent;color:#e6f2ff;border-radius:8px;padding:8px 12px}
+    .profile-dropdown{position:absolute;right:0;top:calc(100% + 8px);min-width:240px;background:rgba(18,28,56,.85);border:1px solid var(--border);border-radius:12px;backdrop-filter:blur(8px);box-shadow:0 12px 28px rgba(34,211,238,.18);padding:12px;display:none;z-index:20}
+    .profile-dropdown.open{display:block}
+    .profile-title{font-weight:700;margin-bottom:6px}
+    .profile-sub{color:#a7b4c7;font-size:12px;margin-bottom:10px}
+    .dropdown-btn{width:100%;border:2px solid #60a5fa;background:transparent;color:#e6f2ff;border-radius:8px;padding:8px 12px;margin:6px 0;cursor:pointer}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:30}
+    .modal.open{display:flex}
+    .modal-box{width:700px;max-width:92vw;background:rgba(18,28,56,.92);border:1px solid var(--border);border-radius:12px;padding:16px}
+    .form-grid{display:grid;grid-template-columns:180px 1fr;gap:12px;align-items:center}
+    .input{height:36px;border:1px solid rgba(226,232,240,.25);border-radius:8px;background:rgba(255,255,255,.06);color:#e2e8f0;padding:0 10px}
+    .readonly{background:#52525b;color:#e6e6e6}
+    .modal-actions{text-align:center;margin-top:12px}
+    .save-btn{border:2px solid #cbd5e1;background:transparent;color:#e6f2ff;border-radius:8px;padding:8px 14px}
+    .chart-box{background:rgba(12,20,40,.55);border:1px solid var(--border);border-radius:12px;padding:10px}
+    .chart-controls{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap}
+    .chart-title{font-weight:700;margin-bottom:8px}
+    .select{border:2px solid #cbd5e1;background:transparent;color:#e6f2ff;border-radius:8px;padding:8px 12px}
+    .compare-wrap{max-height:160px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px;display:none;margin-bottom:12px}
+    .compare-wrap.open{display:block}
+    .tooltip{position:fixed;background:rgba(18,28,56,.95);color:#e6f2ff;border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:12px;display:none;pointer-events:none;z-index:50}
   </style>
 </head>
 <body>
   <div class="fx" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span></div>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="brand"><div><div class="brand-title">Microservices Control</div><div class="muted">API Pool System</div></div><button class="toggle-btn" id="toggleSidebar" aria-label="Toggle Sidebar">◀</button></div>
-      <nav class="menu">
-        <a href="/setting/">⚙️ <span class="label">Settings</span></a>
-        <div class="muted" style="margin:8px 0 4px">Menu Aplikasi</div>
-        <a href="/dashboard/" class="active">📊 <span class="label">Dashboard</span></a>
-        <a href="/dataentry/">📝 <span class="label">Data Entry</span></a>
-        <a href="/pemantauan/">👁️ <span class="label">Pemantauan</span></a>
-      </nav>
-    </aside>
-    <main class="main">
-      <div class="topbar">
-        <div style="display:flex;align-items:center;gap:10px">
-          <img src="/images/logo-kkp-pipp.png" alt="KKP" style="height:40px" />
-          <div>
-            <div class="brand-title">SSO PIPP</div>
-            <div class="muted">Dashboard • Selamat Datang</div>
+  <div class="page">
+    <div class="sticky">
+      <div class="header">
+        <div class="title">Selamat Datang di SSO</div>
+        <div class="profile-menu"><img src="/images/logo-kkp-pipp.png" alt="KKP" style="height:40px;border-radius:8px" /><button class="profile-btn" id="profileBtn">Bomski ▾</button><div class="profile-dropdown" id="profileDropdown"><div class="profile-title">Selamat Datang Bomski’s</div><div class="profile-sub">Role: Administrator</div><button class="dropdown-btn" id="btnEditProfile">Edit Profile</button><button class="dropdown-btn" id="btnSecurity">Keamanan</button></div></div>
+      </div>
+      <div class="apps">
+        <a class="app-btn" href="/dashboard/">PIPP</a>
+        <a class="app-btn" href="/pemantauan/">SHTI</a>
+        <a class="app-btn" href="/dashboard/">Teman SPB</a>
+      </div>
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-target="#distribusi">View Distribusi data</button>
+        <button class="tab" data-target="#produksi">Data Produksi</button>
+        <button class="tab" data-target="#kedatangan">Kedatangan dan Keberangkatan Kapal</button>
+        <button class="tab" data-target="#shti">SHTI</button>
+        <button class="tab" data-target="#jenisikan">Data Jenis Ikan</button>
+        <button class="tab" data-target="#pelabuhan">Data Pelabuhan</button>
+        <button class="tab" data-target="#kapal">Data Kapal</button>
+        <button class="tab" data-target="#setting">Setting</button>
+      </div>
+    </div>
+    <main class="content" id="content">
+      <section class="section" id="distribusi">
+        <h2>View Distribusi data</h2>
+        <div class="toolbar"><div class="search"><input id="dist-q" type="text" placeholder="Search" /><button id="dist-search" class="outline">Cari</button><button id="dist-filter" class="outline">Filter</button></div></div>
+        <div style="overflow:auto">
+          <table id="tbl-distribusi">
+            <thead><tr><th>ID</th><th>Nama Pelabuhan</th><th>Jenis Kapal</th><th>Nama Kapal</th><th>Nomor STBLK</th><th>Tgl STBLK</th><th>Rencana Kegiatan</th><th>Jenis Notifikasi</th></tr></thead>
+            <tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+          </table>
+          <div class="pager" id="pager-distribusi"></div>
+        </div>
+      </section>
+      <section class="section" id="produksi">
+        <div class="chart-title">Grafik Produksi Ikan Pelabuhan PIPP Bulan <select id="prod-month" class="select"><option>November 2025</option><option>Oktober 2025</option><option>September 2025</option></select></div>
+        <div class="chart-controls">
+          <label>Top <select id="prod-topn" class="select"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="9999">All</option></select></label>
+          <label>Per Pelabuhan <select id="prod-port" class="select"><option value="">Semua</option></select></label>
+          <label>Range Produksi <select id="prod-range" class="select"><option value="all">Semua</option><option value="lt500">&lt; 500.000</option><option value="500to1000">500.000–1.000.000</option><option value="1000to3000">1.000.000–3.000.000</option><option value="gte3000">≥ 3.000.000</option></select></label>
+          <label style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" id="prod-compare-on"/> Komparasi per Pelabuhan</label>
+          <label style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" id="prod-values-on" checked/> Tampilkan Angka</label>
+        </div>
+        <div id="prod-compare" class="compare-wrap"></div>
+        <div class="chart-box"><svg id="chart-produksi" viewBox="0 0 1400 520" preserveAspectRatio="none" width="100%" height="520"></svg><div id="prod-tooltip" class="tooltip"></div></div>
+      </section>
+      <section class="section" id="kedatangan">
+        <h2>Kedatangan dan Keberangkatan Kapal</h2>
+        <div class="toolbar"><div class="search"><input id="ked-q" type="text" placeholder="Search" /><button id="ked-search" class="outline">Cari</button><button id="ked-filter" class="outline">Filter</button></div></div>
+        <div style="overflow:auto">
+          <table id="tbl-kedatangan">
+            <thead><tr><th>No STLBKK</th><th>Terbit</th><th>No SPB</th><th>Terbit</th><th>SIP/SIKPI</th><th>Masa Berlaku</th><th>SIUP</th><th>Nama Pelabuhan Datang</th><th>Nama Pelabuhan Berangkat</th><th>Nama Kapal</th><th>GT</th><th>Alat Tangkap</th><th>Nama Pemilik/Perusahaan</th></tr></thead>
+            <tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+          </table>
+          <div class="pager" id="pager-kedatangan"></div>
+        </div>
+      </section>
+      <section class="section" id="shti">
+        <h2>SHTI</h2>
+        <div class="toolbar"><div class="search"><input id="shti-q" type="text" placeholder="Search" /><button id="shti-search" class="outline">Cari</button><button id="shti-filter" class="outline">Filter</button></div></div>
+        <div style="overflow:auto">
+          <table id="tbl-shti">
+            <thead><tr><th>No SHTI</th><th>Tanggal SHTI</th><th>Jenis</th><th>Pelabuhan Penerbit</th><th>No buku kapal</th><th>Nama Kapal</th><th>GT Kapal</th><th>Nama Pemilik</th><th>Nama Alat Tangkap</th><th>Negara Tujuan Expor</th></tr></thead>
+            <tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+          </table>
+          <div class="pager" id="pager-shti"></div>
+        </div>
+      </section>
+      <section class="section" id="jenisikan">
+        <h2>Data Jenis Ikan</h2>
+        <div class="toolbar"><div class="search"><input id="jenis-q" type="text" placeholder="Search" /><button id="jenis-search" class="outline">Cari</button><button id="jenis-all" class="outline">Tampilkan Semua</button><button id="jenis-filter" class="outline">Filter</button></div></div>
+        <div id="jenisikan-results" style="overflow:auto;display:none">
+          <table id="tbl-jenisikan">
+            <thead><tr><th>No</th><th>Nama Ikan</th><th>Nama Internasional</th><th>Nama Latin</th><th>Kelompok Ikan</th><th>Gambar</th><th>Nama Daerah</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="pager" id="pager-jenisikan"></div>
+        </div>
+      </section>
+      <section class="section" id="pelabuhan">
+        <h2>Data Pelabuhan</h2>
+        <div class="toolbar"><div class="search"><input id="pel-q" type="text" placeholder="Search" /><button id="pel-search" class="outline">Cari</button><button id="pel-filter" class="outline">Filter</button></div></div>
+        <div style="overflow:auto"><table id="tbl-pelabuhan"><thead><tr><th>Kode</th><th>Nama</th><th>Provinsi</th><th>Kab/Kota</th><th>Lokasi</th><th>Tipe</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><div class="pager" id="pager-pelabuhan"></div></div>
+      </section>
+      <section class="section" id="kapal">
+        <h2>Data Kapal</h2>
+        <div class="toolbar"><div class="search"><select id="kapal-source" class="outline"><option value="">Pilih Sumber</option><option value="silat">SILAT</option><option value="simkada">SIMKADA</option><option value="daerah">Rekam Kapal Daerah</option></select><input id="kapal-q" type="text" placeholder="Search" /><button id="kapal-search" class="outline">Cari</button><button id="kapal-filter" class="outline">Filter</button></div></div>
+        <div id="kapal-panels">
+          <div id="panel-silat" style="display:none">
+            <table id="tbl-silat"><thead><tr><th>Nama Pemilik</th><th>No. SIUP</th><th>Nama Kapal</th><th>No. BKP</th><th>No. Tanda Selar</th><th>No. SIP/SIKPI</th><th>Tanggal Berlaku</th><th>Alat Tangkap</th><th>Berat Kotor</th><th>Pel. Pangkalan</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><div class="pager" id="pager-silat"></div>
+          </div>
+          <div id="panel-simkada" style="display:none">
+            <table id="tbl-simkada"><thead><tr><th>Nama Pemilik</th><th>No. SIUP</th><th>Nama Kapal</th><th>No. Tanda Selar</th><th>No. SIP/SIKPI</th><th>Tanggal Berlaku</th><th>Alat Tangkap</th><th>Berat Kotor</th><th>Pel. Pangkalan</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><div class="pager" id="pager-simkada"></div>
+          </div>
+          <div id="panel-daerah" style="display:none">
+            <table id="tbl-daerah"><thead><tr><th>Nama Pemilik</th><th>No. KTP</th><th>Nama Kapal</th><th>Pelabuhan Pangkalan</th><th>Alat Tangkap</th><th>Dimensi (PxLxD)</th><th>GT</th><th>ID KAPAL</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><div class="pager" id="pager-daerah"></div>
           </div>
         </div>
-      </div>
-      <div class="card">
-        <h1>Selamat datang di PIPP Dashboard</h1>
-        <p class="muted">Halaman ini sementara menjadi halaman sambutan. Silakan menuju Settings untuk mengelola konfigurasi dan layanan.</p>
-        <div class="actions">
-          <a class="btn" href="/setting/">Buka Settings</a>
-          <a class="btn" href="/login/">Masuk</a>
+      </section>
+      <section class="section" id="setting">
+        <h2>Setting</h2>
+        <div class="setting-layout">
+          <aside class="setting-nav"><button class="setting-tab active" data-view="#set-monitoring">Monitoring</button><button class="setting-tab" data-view="#set-rbac">RBAC</button><button class="setting-tab" data-view="#set-security">Security</button></aside>
+          <div class="setting-content">
+            <div id="set-monitoring" class="set-panel">
+              <div class="grid-3">
+                <div class="mini"><div style="font-weight:700;margin-bottom:6px">Trend Akses</div><div style="height:140px;background:rgba(255,255,255,.05);border:1px dashed rgba(226,232,240,.25);border-radius:8px"></div></div>
+                <div class="mini"><div style="font-weight:700;margin-bottom:6px">Akses Profile</div><div style="height:140px;background:rgba(255,255,255,.05);border:1px dashed rgba(226,232,240,.25);border-radius:8px"></div></div>
+                <div class="mini"><div style="font-weight:700;margin-bottom:6px">Authentication</div><div style="height:140px;background:rgba(255,255,255,.05);border:1px dashed rgba(226,232,240,.25);border-radius:8px"></div></div>
+              </div>
+              <div class="mini" style="margin-top:16px">
+                <div style="font-weight:700;margin-bottom:6px">List User Aktif</div>
+                <div class="toolbar"><div class="search"><input id="users-q" type="text" placeholder="Search" /><button id="users-search" class="outline">Cari</button></div></div>
+                <div style="overflow:auto"><table id="tbl-users"><thead><tr><th>No</th><th>Username</th><th>IP Address</th><th>Local/Public</th><th>Country</th><th>Start Login</th><th>Last Login</th><th>Status</th><th>Action</th><th>Log View</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><div class="pager" id="pager-users"></div></div>
+              </div>
+            </div>
+            <div id="set-rbac" class="set-panel" style="display:none">
+              <div class="mini"><div style="font-weight:700;margin-bottom:6px">Role Base Access</div><div class="toolbar"><div class="search"><input id="rbac-q" type="text" placeholder="Search" /><button id="rbac-search" class="outline">Cari</button></div></div><div style="overflow:auto"><table id="tbl-rbac"><thead><tr><th>Original ID</th><th>OID</th><th>Username</th><th>Password</th><th>Role</th><th>Access Matrix</th><th>Action</th><th>Log View</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><div class="pager" id="pager-rbac"></div></div>
+            </div>
+            <div id="set-security" class="set-panel" style="display:none">
+              <div class="mini"><div style="font-weight:700;margin-bottom:6px">Security</div><div class="toolbar"><div class="search"><input id="sec-q" type="text" placeholder="Search" /><button id="sec-search" class="outline">Cari</button></div></div><div style="overflow:auto"><table id="tbl-sec"><thead><tr><th>Policy</th><th>Status</th><th>Updated</th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table><div class="pager" id="pager-sec"></div></div></div>
+            </div>
+          </div>
         </div>
-        <div class="menu-inline">
-          <a href="/dashboard/">Dashboard</a>
-          <a href="/dataentry/">Data Entry</a>
-          <a href="/pemantauan/">Pemantauan</a>
-        </div>
-      </div>
+      </section>
     </main>
   </div>
   <script>
-    (function(){
-      const sidebar = document.querySelector('.sidebar');
-      const btn = document.getElementById('toggleSidebar');
-      const collapsed = localStorage.getItem('sidebarCollapsed') === '1';
-      if (collapsed) sidebar.classList.add('collapsed');
-      if (btn) {
-        btn.addEventListener('click', () => {
-          sidebar.classList.toggle('collapsed');
-          const isCollapsed = sidebar.classList.contains('collapsed');
-          localStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0');
-          btn.textContent = isCollapsed ? '☰' : '◀';
-        });
-        btn.textContent = collapsed ? '☰' : '◀';
-      }
-    })();
+    document.addEventListener('DOMContentLoaded',()=>{
+      const tabs=document.querySelectorAll('.tab');
+      const sections=Array.from(document.querySelectorAll('.section'));
+      function focusSection(id){const el=document.getElementById(id);if(!el) return;const sticky=document.querySelector('.sticky');const h=sticky?sticky.offsetHeight:0;const y=el.getBoundingClientRect().top + window.scrollY - h - 12;window.scrollTo({top:y,behavior:'smooth'});tabs.forEach(x=>x.classList.remove('active'));const t=tabMap.get(id);if(t) t.classList.add('active');}
+      tabs.forEach(t=>t.addEventListener('click',e=>{const id=t.getAttribute('data-target');const el=id?document.querySelector(id):null;if(el){focusSection(el.id);}}));
+      const tabMap=new Map();
+      tabs.forEach(t=>{const id=t.getAttribute('data-target');const el=id?document.querySelector(id):null;if(el) tabMap.set(el.id,t)});
+      function updateActive(){const sticky=document.querySelector('.sticky');const h=sticky?sticky.offsetHeight:0;const y=window.scrollY + h + 20;let current=sections[0]?.id;for(let i=0;i<sections.length;i++){const s=sections[i];const top=s.offsetTop;const nextTop=i<sections.length-1?sections[i+1].offsetTop:Infinity;if(y>=top && y<nextTop){current=s.id;break;}}tabs.forEach(x=>x.classList.remove('active'));const t=tabMap.get(current);if(t) t.classList.add('active');}
+      window.addEventListener('scroll',updateActive);
+      window.addEventListener('resize',updateActive);
+      setTimeout(updateActive,100);
+      const srcSel=document.getElementById('kapal-source');
+      const qInput=document.getElementById('kapal-q');
+      const btn=document.getElementById('kapal-search');
+      function showPanel(name){['silat','simkada','daerah'].forEach(k=>{const el=document.getElementById('panel-'+k);if(el) el.style.display=(k===name)?'block':'none';});}
+      if(btn){btn.addEventListener('click',()=>{const v=srcSel?srcSel.value:'';if(!v){alert('Pilih sumber data kapal');return;}showPanel(v);});}
+      const settingTabs=document.querySelectorAll('.setting-tab');
+      const setPanels=document.querySelectorAll('.set-panel');
+      settingTabs.forEach(b=>b.addEventListener('click',()=>{settingTabs.forEach(x=>x.classList.remove('active'));b.classList.add('active');setPanels.forEach(p=>p.style.display='none');const tgt=b.getAttribute('data-view');const el=document.querySelector(tgt);if(el) el.style.display='block';}));
+      const profileBtn=document.getElementById('profileBtn');
+      const profileDropdown=document.getElementById('profileDropdown');
+      document.addEventListener('click',e=>{if(e.target===profileBtn){if(profileDropdown) profileDropdown.classList.toggle('open');}else{if(profileDropdown && !profileDropdown.contains(e.target)) profileDropdown.classList.remove('open');}});
+      const mEdit=document.getElementById('modal-edit');
+      const mSec=document.getElementById('modal-sec');
+      const bEdit=document.getElementById('btnEditProfile');
+      const bSec=document.getElementById('btnSecurity');
+      if(bEdit){bEdit.addEventListener('click',()=>{if(profileDropdown) profileDropdown.classList.remove('open'); if(mEdit) mEdit.classList.add('open');});}
+      if(bSec){bSec.addEventListener('click',()=>{if(profileDropdown) profileDropdown.classList.remove('open'); if(mSec) mSec.classList.add('open');});}
+      [mEdit,mSec].forEach(m=>{if(m){m.addEventListener('click',e=>{if(e.target===m) m.classList.remove('open');});}});
+      const saveEdit=document.getElementById('save-edit');
+      const saveSec=document.getElementById('save-sec');
+      if(saveEdit){saveEdit.addEventListener('click',()=>{if(mEdit) mEdit.classList.remove('open');});}
+      if(saveSec){saveSec.addEventListener('click',()=>{if(mSec) mSec.classList.remove('open');});}
+      const pageSize=10;
+      function render(tableId,pagerId,rows){const tb=document.querySelector(`#${tableId} tbody`);const pager=document.getElementById(pagerId);if(!tb||!pager) return;let page=1;const total=rows.length;const pages=Math.max(1,Math.ceil(total/pageSize));function draw(){tb.innerHTML='';const start=(page-1)*pageSize;const slice=rows.slice(start,start+pageSize);slice.forEach(r=>{const tr=document.createElement('tr');r.forEach(c=>{const td=document.createElement('td');td.textContent=c;tr.appendChild(td);});tb.appendChild(tr);});pager.innerHTML='';const prev=document.createElement('button');prev.className='page-btn';prev.textContent='Prev';prev.disabled=page===1;prev.addEventListener('click',()=>{if(page>1){page--;draw();}});pager.appendChild(prev);for(let i=1;i<=pages;i++){const b=document.createElement('button');b.className='page-btn'+(i===page?' active':'');b.textContent=String(i);b.addEventListener('click',()=>{page=i;draw();});pager.appendChild(b);}const next=document.createElement('button');next.className='page-btn';next.textContent='Next';next.disabled=page===pages;next.addEventListener('click',()=>{if(page<pages){page++;draw();}});pager.appendChild(next);}draw();}
+      function renderHTML(tableId,pagerId,rows){const tb=document.querySelector(`#${tableId} tbody`);const pager=document.getElementById(pagerId);if(!tb||!pager) return;let page=1;const total=rows.length;const pages=Math.max(1,Math.ceil(total/pageSize));function draw(){tb.innerHTML='';const start=(page-1)*pageSize;const slice=rows.slice(start,start+pageSize);slice.forEach(r=>{const tr=document.createElement('tr');r.forEach(c=>{const td=document.createElement('td');td.innerHTML=c;tr.appendChild(td);});tb.appendChild(tr);});pager.innerHTML='';const prev=document.createElement('button');prev.className='page-btn';prev.textContent='Prev';prev.disabled=page===1;prev.addEventListener('click',()=>{if(page>1){page--;draw();}});pager.appendChild(prev);for(let i=1;i<=pages;i++){const b=document.createElement('button');b.className='page-btn'+(i===page?' active':'');b.textContent=String(i);b.addEventListener('click',()=>{page=i;draw();});pager.appendChild(b);}const next=document.createElement('button');next.className='page-btn';next.textContent='Next';next.disabled=page===pages;next.addEventListener('click',()=>{if(page<pages){page++;draw();}});pager.appendChild(next);}draw();}
+      function seq(n,fn){const a=[];for(let i=1;i<=n;i++) a.push(fn(i));return a;}
+      const dist=seq(24,i=>{const id=251100000+i;const pel=`PPS Nizam Zachman`;const jenis=i%2?"Pengangkut/Pengumpul":"Penangkap";const kapal=`Kapal ${i}`;const stblkk=`STBLK-${1000+i}`;const tgl=`10-11-2025`;const rencana=i%2?"Bongkar":"Muat";const notif=`<ul class="notif-list"><li>Data rekom bongkar : <a href="#" class="notif-link" data-doc="REKOM" data-id="${id}">ok</a></li><li>Data STBLKK status bongkar : <a href="#" class="notif-link" data-doc="STBLKK" data-id="${id}">ok</a></li><li>STBLKK : ${tgl} / 14:33:00</li><li>Rekom Bongkar : ${tgl} / 14:50:49</li></ul>`;return [String(id),pel,jenis,kapal,stblkk,tgl,rencana,notif];});renderHTML('tbl-distribusi','pager-distribusi',dist);
+      const ked=seq(34,i=>[`STLBKK-${i}`,`10-11-2025`,`SPB-${i}`,`10-11-2025`,`SIP-${i}`,`12-12-2025`,`SIUP-${i}`,`PPS NZ ${i}`,'PPN Sibolga',`KM Nusantara ${i}`,String(100+i),i%2?"Pancing":"Jaring",`PT Laut ${i}`]);render('tbl-kedatangan','pager-kedatangan',ked);
+      const shti=seq(27,i=>[`SHTI-${i}`,`09-11-2025`,`Ekspor`,`PPS NZ`,`BK-${i}`,`KM Samudra ${i}`,String(150+i),`Andi ${i}`,i%2?"Pancing":"Jaring","JP"]);render('tbl-shti','pager-shti',shti);
+      const ikan=seq(52,i=>[String(i),`Ikan ${i}`,`Fish ${i}`,`Pisces ${i}`,i%2?"Pelagis":"Demersal","-",`Daerah ${i}`]);
+      const pel=seq(43,i=>[`PLB${i}`,`Pelabuhan ${i}`,'DKI Jakarta','Jakarta Utara',`-`,i%2?"PPS":"PPN"]);render('tbl-pelabuhan','pager-pelabuhan',pel);
+      const silat=seq(32,i=>[`Pemilik ${i}`,`SIUP-${i}`,`KM ${i}`,`BKP-${i}`,`TS-${i}`,`SIP-${i}`,`12-12-2025`,i%2?"Pancing":"Jaring",String(1000+i),`PPS NZ`]);
+      const simk=seq(28,i=>[`Pemilik ${i}`,`SIUP-${i}`,`KM ${i}`,`TS-${i}`,`SIP-${i}`,`11-12-2025`,i%2?"Pancing":"Jaring",String(900+i),`PPN`]);
+      const daerah=seq(31,i=>[`Pemilik ${i}`,`KTP-${i}`,`KM ${i}`,`Pangkalan ${i}`,i%2?"Jaring":"Pancing","20x5x3",String(30+i),`ID-${i}`]);
+      function renderKapal(source,q){let data=[];if(source==='silat') data=silat;else if(source==='simkada') data=simk;else if(source==='daerah') data=daerah;const f=q?data.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):data;if(source==='silat') render('tbl-silat','pager-silat',f);if(source==='simkada') render('tbl-simkada','pager-simkada',f);if(source==='daerah') render('tbl-daerah','pager-daerah',f);}
+      const jenisQ=document.getElementById('jenis-q');
+      const jenisSearchBtn=document.getElementById('jenis-search');
+      const jenisAllBtn=document.getElementById('jenis-all');
+      const jenisWrap=document.getElementById('jenisikan-results');
+      let jenisAllOn=false;
+      function setJenisAllLabel(){ if(jenisAllBtn) jenisAllBtn.textContent = jenisAllOn ? 'Tutup Semua' : 'Tampilkan Semua'; }
+      setJenisAllLabel();
+      if(jenisSearchBtn){jenisSearchBtn.addEventListener('click',()=>{const q=jenisQ?jenisQ.value:'';const f=q?ikan.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):ikan; if(jenisWrap) jenisWrap.style.display='block'; render('tbl-jenisikan','pager-jenisikan',f); jenisAllOn=false; setJenisAllLabel();});}
+      if(jenisAllBtn){jenisAllBtn.addEventListener('click',()=>{ if(!jenisAllOn){ if(jenisWrap) jenisWrap.style.display='block'; render('tbl-jenisikan','pager-jenisikan',ikan); jenisAllOn=true; setJenisAllLabel(); } else { const tb=document.querySelector('#tbl-jenisikan tbody'); const pg=document.getElementById('pager-jenisikan'); if(tb) tb.innerHTML=''; if(pg) pg.innerHTML=''; if(jenisWrap) jenisWrap.style.display='none'; jenisAllOn=false; setJenisAllLabel(); } });}
+      const pelSearchBtn=document.querySelector('#pelabuhan .outline');
+      const pelInput=document.querySelector('#pelabuhan input');
+      if(pelSearchBtn){pelSearchBtn.addEventListener('click',()=>{const q=pelInput?pelInput.value:'';const f=q?pel.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):pel;render('tbl-pelabuhan','pager-pelabuhan',f);});}
+      const distQ=document.getElementById('dist-q');
+      const distSearchBtn=document.getElementById('dist-search');
+      if(distSearchBtn){distSearchBtn.addEventListener('click',()=>{const q=distQ?distQ.value:'';const f=q?dist.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):dist;renderHTML('tbl-distribusi','pager-distribusi',f);});}
+      const kedQ=document.getElementById('ked-q');
+      const kedSearchBtn=document.getElementById('ked-search');
+      if(kedSearchBtn){kedSearchBtn.addEventListener('click',()=>{const q=kedQ?kedQ.value:'';const f=q?ked.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):ked;render('tbl-kedatangan','pager-kedatangan',f);});}
+      const shtiQ=document.getElementById('shti-q');
+      const shtiSearchBtn=document.getElementById('shti-search');
+      if(shtiSearchBtn){shtiSearchBtn.addEventListener('click',()=>{const q=shtiQ?shtiQ.value:'';const f=q?shti.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):shti;render('tbl-shti','pager-shti',f);});}
+      const usersQ=document.getElementById('users-q');
+      const usersSearchBtn=document.getElementById('users-search');
+      if(usersSearchBtn){usersSearchBtn.addEventListener('click',()=>{const q=usersQ?usersQ.value:'';const f=q?users.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):users;render('tbl-users','pager-users',f);});}
+      const rbacQ=document.getElementById('rbac-q');
+      const rbacSearchBtn=document.getElementById('rbac-search');
+      if(rbacSearchBtn){rbacSearchBtn.addEventListener('click',()=>{const q=rbacQ?rbacQ.value:'';const f=q?rbac.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):rbac;render('tbl-rbac','pager-rbac',f);});}
+      const secQ=document.getElementById('sec-q');
+      const secSearchBtn=document.getElementById('sec-search');
+      if(secSearchBtn){secSearchBtn.addEventListener('click',()=>{const q=secQ?secQ.value:'';const f=q?sec.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):sec;render('tbl-sec','pager-sec',f);});}
+      if(btn){btn.addEventListener('click',()=>{const v=srcSel?srcSel.value:'';if(!v){alert('Pilih sumber data kapal');return;}showPanel(v);const q=qInput?qInput.value:'';renderKapal(v,q);});}
+      const users=seq(26,i=>[String(i),`user${i}`,`10.0.0.${i}`,i%2?"Local":"Public","ID","10:00","11:00",i%2?"Aktif":"Idle","View","Log"]);render('tbl-users','pager-users',users);
+      const rbac=seq(29,i=>[`RID${i}`,`OID${i}`,`user${i}`,'***','admin',`MATRIX-${i}`,'edit','view']);render('tbl-rbac','pager-rbac',rbac);
+      const sec=seq(18,i=>[`Policy-${i}`,i%2?"Enabled":"Disabled","2025-11-10"]);render('tbl-sec','pager-sec',sec);
+      const prodData=[
+        {port:'PPS Nizam Zachman',val:6000000},{port:'PPS Belawan',val:3600000},{port:'PPN Bajomulyo',val:3100000},{port:'PPN Tegalsari',val:2900000},{port:'PPN Brondong',val:2100000},{port:'PPS Cilacap',val:1800000},{port:'PPN Sibolga',val:1700000},{port:'PPS Bitung',val:1600000},{port:'PPN Pengambengan',val:1400000},{port:'PPN Kejawanan',val:1300000},{port:'PPN Pekalongan',val:1200000},{port:'PPN Prigi',val:1100000},{port:'PPN Sendang Biru',val:1000000},{port:'PPN Sungai Liat',val:930000},{port:'PPN Lampulo',val:900000},{port:'PPN Sadeng',val:850000},{port:'PPN Tamperan',val:820000},{port:'PPN Kendal',val:780000},{port:'PPN Untia',val:760000},{port:'PPN Ujung Batu',val:740000},{port:'PPN Eretan',val:700000},{port:'PPN PPP Muncar',val:680000},{port:'PPN PPP Kedonganan',val:660000},{port:'PPN PPP Lhokseumawe',val:640000}
+      ];
+      const prodTopSel=document.getElementById('prod-topn');
+      const prodRangeSel=document.getElementById('prod-range');
+      const prodPortSel=document.getElementById('prod-port');
+      const prodCompareWrap=document.getElementById('prod-compare');
+      const prodCompareOn=document.getElementById('prod-compare-on');
+      const prodValuesOn=document.getElementById('prod-values-on');
+      const prodTooltip=document.getElementById('prod-tooltip');
+      function fmt(n){return n.toLocaleString('id-ID');}
+      function fmtShort(n){if(n>=1000000){const v=Math.round(n/1000000);return v+" jt";}if(n>=1000){const v=Math.round(n/1000);return v+" rb";}return String(n);}
+      function drawBarChart(svgId,data,showValues){const svg=document.getElementById(svgId);if(!svg) return;const w=1400,h=520;svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.setAttribute('height','520');const left=120,bottom=130,right=30,top=30;const innerW=w-left-right,innerH=h-top-bottom;const max=Math.max(1,...data.map(d=>d.val));function stepFor(m){if(m<=1000000) return 200000; if(m<=3000000) return 500000; if(m<=6000000) return 1000000; return 2000000;}const step=stepFor(max);const scaleMax=Math.ceil(max/step)*step;const bw=Math.max(6,Math.min(18,(innerW/data.length)-18));const gap=10;let x=left;let bars='';data.forEach(d=>{const bh=(d.val/scaleMax)*innerH;const by=top+(innerH-bh);bars+=`<rect class="bar-rect" data-port="${d.port}" data-val="${d.val}" x="${x}" y="${by}" width="${bw}" height="${bh}" fill="#f59e0b"></rect>`;if(showValues){const ty=Math.max(top+18,by-14);bars+=`<text x="${x+bw/2}" y="${ty}" fill="#e6f2ff" font-size="12" text-anchor="middle">${fmtShort(d.val)}</text>`;}const lx=x+bw/2;const ly=by+bh-8;bars+=`<text x="${lx}" y="${ly}" fill="#0b1020" font-size="11" text-anchor="middle" transform="rotate(-90 ${lx},${ly})">${d.port}</text>`;x+=bw+gap;});let grid='';for(let t=0;t<=scaleMax;t+=step){const y=top+innerH-(t/scaleMax)*innerH;grid+=`<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" stroke="rgba(226,232,240,.15)"/>`;grid+=`<text x="${left-14}" y="${y+5}" fill="#e6f2ff" font-size="12" text-anchor="end">${fmt(t)}</text>`;}const axis=`<line x1="${left}" y1="${top}" x2="${left}" y2="${h-bottom}" stroke="rgba(226,232,240,.35)"/><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="rgba(226,232,240,.35)"/>`;const titleX=left-90;const titleY=top+innerH/2;const title=`<text x="${titleX}" y="${titleY}" fill="#e6f2ff" font-size="14" text-anchor="middle" transform="rotate(-90 ${titleX},${titleY})">Jumlah Produksi</text>`;svg.innerHTML=grid+axis+title+bars;const rects=svg.querySelectorAll('.bar-rect');rects.forEach(r=>{r.addEventListener('mousemove',e=>{const port=r.getAttribute('data-port');const val=r.getAttribute('data-val');if(prodTooltip){prodTooltip.style.display='block';prodTooltip.textContent=`${port}: ${fmt(parseInt(val,10))}`;prodTooltip.style.left=`${e.clientX+12}px`;prodTooltip.style.top=`${e.clientY+12}px`;}});r.addEventListener('mouseleave',()=>{if(prodTooltip){prodTooltip.style.display='none';}});});}
+      function fillPortSelect(){if(!prodPortSel) return;prodPortSel.innerHTML='<option value="">Semua</option>'+prodData.map(p=>`<option value="${p.port}">${p.port}</option>`).join('');}
+      function fillCompare(){if(!prodCompareWrap) return;const controls=`<div style="display:flex;gap:8px;margin-bottom:8px"><input id="prod-compare-search" class="input" placeholder="Cari pelabuhan" style="flex:1"/><button id="prod-compare-all" class="outline">Pilih Semua</button><button id="prod-compare-clear" class="outline">Hapus Semua</button></div>`;const list=prodData.map(p=>`<label style="display:block"><input type="checkbox" value="${p.port}"/> ${p.port}</label>`).join('');prodCompareWrap.innerHTML=controls+list;const s=document.getElementById('prod-compare-search');const btnAll=document.getElementById('prod-compare-all');const btnClear=document.getElementById('prod-compare-clear');if(s){s.addEventListener('input',()=>{const q=s.value.toLowerCase();prodCompareWrap.querySelectorAll('label').forEach(l=>{const t=(l.textContent||'').toLowerCase();l.style.display=t.includes(q)?'block':'none';});});}if(btnAll){btnAll.addEventListener('click',()=>{prodCompareWrap.querySelectorAll('input[type=\"checkbox\"]').forEach(i=>i.checked=true);updateCompareInput();applyProd();});}if(btnClear){btnClear.addEventListener('click',()=>{prodCompareWrap.querySelectorAll('input[type=\"checkbox\"]').forEach(i=>i.checked=false);updateCompareInput();applyProd();});}}
+      function getChecks(){return prodCompareWrap?Array.from(prodCompareWrap.querySelectorAll('input[type="checkbox"]:checked')).map(i=>i.value):[]}
+      
+      function currentTopData(){let arr=[...prodData];const range=prodRangeSel?prodRangeSel.value:'all';if(range==='lt500') arr=arr.filter(d=>d.val<500000);else if(range==='500to1000') arr=arr.filter(d=>d.val>=500000&&d.val<1000000);else if(range==='1000to3000') arr=arr.filter(d=>d.val>=1000000&&d.val<3000000);else if(range==='gte3000') arr=arr.filter(d=>d.val>=3000000);const port=prodPortSel?prodPortSel.value:'';if(port) arr=arr.filter(d=>d.port===port);arr.sort((a,b)=>b.val-a.val);const n=prodTopSel?parseInt(prodTopSel.value,10):10;return arr.slice(0,n);} 
+      function applyProd(){let arr=currentTopData();const compareOn=prodCompareOn?prodCompareOn.checked:false;const checks=getChecks();if(compareOn&&checks.length>0) arr=arr.filter(d=>checks.includes(d.port));const showVals=prodValuesOn?prodValuesOn.checked:false;drawBarChart('chart-produksi',arr,showVals);} 
+      if(prodCompareOn){prodCompareOn.addEventListener('change',()=>{if(prodCompareOn.checked){prodCompareWrap.classList.add('open');applyProd();}else{prodCompareWrap.classList.remove('open');prodCompareWrap.querySelectorAll('input[type="checkbox"]').forEach(i=>{i.checked=false;});applyProd();}})}
+      document.addEventListener('click',e=>{if(prodCompareWrap&&!prodCompareWrap.contains(e.target)){prodCompareWrap.classList.remove('open');}});
+      ['change'].forEach(ev=>{if(prodTopSel) prodTopSel.addEventListener(ev,()=>{applyProd();});if(prodRangeSel) prodRangeSel.addEventListener(ev,()=>{applyProd();});if(prodPortSel) prodPortSel.addEventListener(ev,()=>{applyProd();});if(prodValuesOn) prodValuesOn.addEventListener(ev,()=>{applyProd();});});
+      if(prodCompareWrap) prodCompareWrap.addEventListener('change',()=>{applyProd();});
+      fillPortSelect();fillCompare();applyProd();
+      function stripHTML(s){const d=document.createElement('div');d.innerHTML=s;return d.textContent||'';}
+      const advBox=document.getElementById('modal-adv');
+      const advTitle=document.getElementById('adv-title');
+      const advForm=document.getElementById('adv-form');
+      const advApply=document.getElementById('adv-apply');
+      const advClose=document.getElementById('adv-close');
+      let advSection=null;
+      function buildForm(fields){if(!advForm) return;advForm.innerHTML='';fields.forEach(f=>{const l=document.createElement('div');l.textContent=f.label;const i=document.createElement('input');i.className='input';i.type=f.type||'text';i.id='adv-'+f.key;advForm.appendChild(l);advForm.appendChild(i);});}
+      function openFilter(section){advSection=section;if(advTitle) advTitle.textContent='Advance Search • '+section.toUpperCase();let fields=[];if(section==='distribusi'){fields=[{key:'id',label:'ID'},{key:'pelabuhan',label:'Nama Pelabuhan'},{key:'jenis',label:'Jenis Kapal'},{key:'kapal',label:'Nama Kapal'},{key:'stblk',label:'Nomor STBLK'},{key:'tgl',label:'Tgl STBLK'},{key:'rencana',label:'Rencana Kegiatan'},{key:'notif',label:'Jenis Notifikasi'}];}
+      else if(section==='kedatangan'){fields=[{key:'stlbkk',label:'No STLBKK'},{key:'spb',label:'No SPB'},{key:'sip',label:'SIP/SIKPI'},{key:'siup',label:'SIUP'},{key:'pel_datang',label:'Pelabuhan Datang'},{key:'pel_berangkat',label:'Pelabuhan Berangkat'},{key:'kapal',label:'Nama Kapal'},{key:'alat',label:'Alat Tangkap'},{key:'pemilik',label:'Nama Pemilik/Perusahaan'}];}
+      else if(section==='shti'){fields=[{key:'no',label:'No SHTI'},{key:'tanggal',label:'Tanggal SHTI'},{key:'jenis',label:'Jenis'},{key:'penerbit',label:'Pelabuhan Penerbit'},{key:'buku',label:'No Buku Kapal'},{key:'kapal',label:'Nama Kapal'},{key:'gt',label:'GT Kapal'},{key:'pemilik',label:'Nama Pemilik'},{key:'alat',label:'Nama Alat Tangkap'},{key:'negara',label:'Negara Tujuan Ekspor'}];}
+      else if(section==='jenisikan'){fields=[{key:'nama',label:'Nama Ikan'},{key:'intl',label:'Nama Internasional'},{key:'latin',label:'Nama Latin'},{key:'kelompok',label:'Kelompok Ikan'},{key:'daerah',label:'Nama Daerah'}];}
+      else if(section==='pelabuhan'){fields=[{key:'kode',label:'Kode'},{key:'nama',label:'Nama'},{key:'prov',label:'Provinsi'},{key:'kab',label:'Kab/Kota'},{key:'lokasi',label:'Lokasi'},{key:'tipe',label:'Tipe'}];}
+      else if(section==='kapal'){const src=srcSel?srcSel.value:'';if(!src){alert('Pilih sumber data kapal');return;}advSection='kapal-'+src;if(src==='silat'){fields=[{key:'pemilik',label:'Nama Pemilik'},{key:'siup',label:'No. SIUP'},{key:'kapal',label:'Nama Kapal'},{key:'bkp',label:'No. BKP'},{key:'tanda',label:'No. Tanda Selar'},{key:'sip',label:'No. SIP/SIKPI'},{key:'alat',label:'Alat Tangkap'},{key:'pangkalan',label:'Pel. Pangkalan'}];}
+        else if(src==='simkada'){fields=[{key:'pemilik',label:'Nama Pemilik'},{key:'siup',label:'No. SIUP'},{key:'kapal',label:'Nama Kapal'},{key:'tanda',label:'No. Tanda Selar'},{key:'sip',label:'No. SIP/SIKPI'},{key:'alat',label:'Alat Tangkap'},{key:'pangkalan',label:'Pel. Pangkalan'}];}
+        else {fields=[{key:'pemilik',label:'Nama Pemilik'},{key:'ktp',label:'No. KTP'},{key:'kapal',label:'Nama Kapal'},{key:'pangkalan',label:'Pelabuhan Pangkalan'},{key:'alat',label:'Alat Tangkap'},{key:'dimensi',label:'Dimensi'},{key:'gt',label:'GT'},{key:'idkapal',label:'ID Kapal'}];}}
+      buildForm(fields);if(advBox) advBox.classList.add('open');}
+      function values(){const o={};if(!advForm) return o;advForm.querySelectorAll('input').forEach(i=>{o[i.id.replace('adv-','')]=i.value.trim().toLowerCase();});return o;}
+      function matches(v,cell){if(!v) return true;return String(cell).toLowerCase().includes(v);}
+      function applyFilter(){if(!advSection) return;const v=values();if(advSection==='distribusi'){const f=dist.filter(r=>matches(v.id,r[0])&&matches(v.pelabuhan,r[1])&&matches(v.jenis,r[2])&&matches(v.kapal,r[3])&&matches(v.stblk,r[4])&&matches(v.tgl,r[5])&&matches(v.rencana,r[6])&&matches(v.notif,stripHTML(r[7])));renderHTML('tbl-distribusi','pager-distribusi',f);}else if(advSection==='kedatangan'){const f=ked.filter(r=>matches(v.stlbkk,r[0])&&matches(v.spb,r[2])&&matches(v.sip,r[4])&&matches(v.siup,r[6])&&matches(v.pel_datang,r[7])&&matches(v.pel_berangkat,r[8])&&matches(v.kapal,r[9])&&matches(v.alat,r[11])&&matches(v.pemilik,r[12]));render('tbl-kedatangan','pager-kedatangan',f);}else if(advSection==='shti'){const f=shti.filter(r=>matches(v.no,r[0])&&matches(v.tanggal,r[1])&&matches(v.jenis,r[2])&&matches(v.penerbit,r[3])&&matches(v.buku,r[4])&&matches(v.kapal,r[5])&&matches(v.gt,r[6])&&matches(v.pemilik,r[7])&&matches(v.alat,r[8])&&matches(v.negara,r[9]));render('tbl-shti','pager-shti',f);}else if(advSection==='jenisikan'){const f=ikan.filter(r=>matches(v.nama,r[1])&&matches(v.intl,r[2])&&matches(v.latin,r[3])&&matches(v.kelompok,r[4])&&matches(v.daerah,r[6]));render('tbl-jenisikan','pager-jenisikan',f);if(jenisWrap) jenisWrap.style.display='block';}else if(advSection==='pelabuhan'){const f=pel.filter(r=>matches(v.kode,r[0])&&matches(v.nama,r[1])&&matches(v.prov,r[2])&&matches(v.kab,r[3])&&matches(v.lokasi,r[4])&&matches(v.tipe,r[5]));render('tbl-pelabuhan','pager-pelabuhan',f);}else if(advSection.startsWith('kapal-')){const src=advSection.split('-')[1];let data=[];let ids={};if(src==='silat'){data=silat;ids={pemilik:0,siup:1,kapal:2,bkp:3,tanda:4,sip:5,alat:7,pangkalan:9};}else if(src==='simkada'){data=simk;ids={pemilik:0,siup:1,kapal:2,tanda:3,sip:4,alat:6,pangkalan:8};}else{data=daerah;ids={pemilik:0,ktp:1,kapal:2,pangkalan:3,alat:4,dimensi:5,gt:6,idkapal:7};}
+        const f=data.filter(r=>Object.entries(ids).every(([k,idx])=>matches(v[k],r[idx])));
+        showPanel(src);if(src==='silat') render('tbl-silat','pager-silat',f);if(src==='simkada') render('tbl-simkada','pager-simkada',f);if(src==='daerah') render('tbl-daerah','pager-daerah',f);}if(advBox) advBox.classList.remove('open');}
+      if(advApply){advApply.addEventListener('click',applyFilter);} 
+      if(advClose){advClose.addEventListener('click',()=>{if(advBox) advBox.classList.remove('open');});}
+      const distFilter=document.getElementById('dist-filter');if(distFilter){distFilter.addEventListener('click',()=>openFilter('distribusi'));}
+      const kedFilter=document.getElementById('ked-filter');if(kedFilter){kedFilter.addEventListener('click',()=>openFilter('kedatangan'));}
+      const shtiFilter=document.getElementById('shti-filter');if(shtiFilter){shtiFilter.addEventListener('click',()=>openFilter('shti'));}
+      const jenisFilter=document.getElementById('jenis-filter');if(jenisFilter){jenisFilter.addEventListener('click',()=>openFilter('jenisikan'));}
+      const pelFilter=document.getElementById('pel-filter');if(pelFilter){pelFilter.addEventListener('click',()=>openFilter('pelabuhan'));}
+      const kapalFilter=document.getElementById('kapal-filter');if(kapalFilter){kapalFilter.addEventListener('click',()=>openFilter('kapal'));}
+      document.addEventListener('click',e=>{const a=e.target.closest('.notif-link');if(a){e.preventDefault();const type=a.getAttribute('data-doc');const id=a.getAttribute('data-id');const box=document.getElementById('modal-doc');const title=document.getElementById('doc-title');const body=document.getElementById('doc-body');if(title) title.textContent=`Dokumen ${type} • ID ${id}`;if(body) body.innerHTML=`<div style="background:rgba(255,255,255,.06);border:1px solid rgba(120,200,255,.18);border-radius:8px;padding:12px">File dokumen ${type} untuk ID ${id}. Ini adalah pratinjau dokumen dummy.</div>`;if(box) box.classList.add('open');}});
+      const closeDoc=document.getElementById('doc-close');
+      if(closeDoc){closeDoc.addEventListener('click',()=>{const box=document.getElementById('modal-doc');if(box) box.classList.remove('open');});}
+    });
   </script>
+  <div id="modal-edit" class="modal"><div class="modal-box"><div style="font-size:18px;font-weight:700;margin-bottom:10px">Edit Profile</div><div class="form-grid"><div>Nama</div><input class="input" id="pf-nama" type="text" /><div>Role</div><input class="input readonly" id="pf-role" type="text" value="Administrator" readonly /><div>NIP</div><input class="input" id="pf-nip" type="text" /><div>Email</div><input class="input" id="pf-email" type="email" /><div>No Tlp</div><input class="input" id="pf-tlp" type="text" /></div><div class="modal-actions"><button id="save-edit" class="save-btn">Simpan</button></div></div></div>
+  <div id="modal-sec" class="modal"><div class="modal-box"><div style="font-size:18px;font-weight:700;margin-bottom:10px">Keamanan</div><div class="form-grid"><div>Password Lama</div><input class="input" id="sec-old" type="password" /><div>Password Baru</div><input class="input" id="sec-new" type="password" /></div><div class="modal-actions"><button id="save-sec" class="save-btn">Simpan</button></div></div></div>
+  <div id="modal-doc" class="modal"><div class="modal-box"><div id="doc-title" style="font-size:18px;font-weight:700;margin-bottom:10px">Dokumen</div><div id="doc-body" style="margin-bottom:12px"></div><div class="modal-actions"><button id="doc-close" class="save-btn">Tutup</button></div></div></div>
+  <div id="modal-adv" class="modal"><div class="modal-box"><div id="adv-title" style="font-size:18px;font-weight:700;margin-bottom:10px">Advance Search</div><div id="adv-form" class="form-grid"></div><div class="modal-actions"><button id="adv-apply" class="save-btn">Terapkan</button> <button id="adv-close" class="save-btn">Tutup</button></div></div></div>
 </body>
 </html>
