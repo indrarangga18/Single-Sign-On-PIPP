@@ -185,7 +185,7 @@
      return '<span class="muted">-</span>';
    }
    // Chart.js instances cache
-   const Charts = { auth: null, access: null, usage: null };
+   const Charts = { auth: null, access: null, usage: null, methods: null, groupDist: null };
 
    function renderAuthChart(labels, counts, colors){
      const ctx = document.getElementById('overview-auth'); if(!ctx || typeof Chart === 'undefined') return;
@@ -207,10 +207,51 @@
      });
    }
 
-   // Center text plugin for doughnut
+   function renderMethodsChart(labels, counts, colors){
+      const ctx = document.getElementById('overview-methods'); if(!ctx || typeof Chart==='undefined') return;
+      if(Charts.methods){
+        Charts.methods.data.labels = labels;
+        Charts.methods.data.datasets[0].data = counts;
+        Charts.methods.update();
+      } else {
+        Charts.methods = new Chart(ctx, {
+          type: 'bar',
+          data: { labels, datasets: [{ label: 'Methods', data: counts, backgroundColor: colors, borderWidth: 0 }] },
+          options: {
+            responsive: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: '#dbeafe' } },
+              y: { ticks: { color: '#a7b4c7' }, beginAtZero: true, precision: 0 }
+            }
+          }
+        });
+      }
+    }
+
+   function renderGroupDistributionChart(labels, counts){
+      const ctx = document.getElementById('overview-group'); if(!ctx || typeof Chart==='undefined') return;
+      if(Charts.groupDist){
+        Charts.groupDist.data.labels = labels;
+        Charts.groupDist.data.datasets[0].data = counts;
+        Charts.groupDist.update();
+      } else {
+        Charts.groupDist = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'API per Group', data:counts, backgroundColor:'#0ea5e9', borderWidth:0 }] }, options:{ responsive:false, plugins:{ legend:{ display:false } }, scales:{ x:{ ticks:{ color:'#dbeafe' } }, y:{ ticks:{ color:'#a7b4c7', precision:0 }, beginAtZero:true } } } });
+      }
+    }
+
+   function updateLegendSimple(elId, labels, counts, colors){
+     const el = byId(elId); if(!el) return;
+     el.innerHTML = labels.map((lab,i)=>`<span class=\"legend-item\"><span class=\"legend-dot\" style=\"background:${colors[i]||'#64748b'}\"></span>${lab}: ${counts[i]||0}</span>`).join(' ');
+   }
+
+   function updateGroupBadge(n){ const el=byId('group-badge'); if(el) el.textContent = `${n} group`; }
+
+   // Center text plugin for doughnut + value labels for bar charts
    if(typeof Chart!=='undefined'){
      const centerTextPlugin={id:'centerText',afterDraw(chart){try{const ds=chart.data.datasets[0]; if(!ds||!ds.data||ds.data.length<2) return; const total=ds.data.reduce((a,b)=>a+b,0)||0; const pub=ds.data[0]||0; const priv=ds.data[1]||0; const pubPct=total?Math.round(pub/total*100):0; const privPct=total?Math.round(priv/total*100):0; const meta=chart.getDatasetMeta(0); const cx=meta.data[0].x; const cy=meta.data[0].y; const ctx=chart.ctx; ctx.save(); ctx.fillStyle='#cbd5e1'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.font='bold 11px sans-serif'; ctx.fillText(`Public ${pubPct}%`, cx, cy-8); ctx.font='10px sans-serif'; ctx.fillText(`Private ${privPct}%`, cx, cy+8); ctx.restore(); }catch(e){/* noop */}}};
-     Chart.register(centerTextPlugin);
+     const valueLabelsPlugin={id:'valueLabels',afterDatasetsDraw(chart){try{if(chart.config.type!=='bar') return; const {ctx} = chart; const metas=chart.getSortedVisibleDatasetMetas(); if(!metas.length) return; const totals=[]; metas.forEach(meta=>{ meta.data.forEach((el,i)=>{ totals[i]=(totals[i]||0)+((meta.dataset.data[i]||0)); }); }); const last=metas[metas.length-1]; ctx.save(); ctx.fillStyle='#cbd5e1'; ctx.font='11px sans-serif'; ctx.textBaseline='middle'; ctx.textAlign='left'; last.data.forEach((el,i)=>{ const val=totals[i]||0; const x=(chart.config.options.indexAxis==='y')? (el.x+6) : el.x; const y=(chart.config.options.indexAxis==='y')? el.y : (el.y-12); ctx.fillText(String(val), x, y); }); ctx.restore(); }catch(e){/* noop */}}};
+     void 0;
    }
    
    // Extend charts cache
@@ -225,8 +266,8 @@
      } else {
        Charts.access = new Chart(ctx, {
          type: 'doughnut',
-         data: { labels: ['Public','Private'], datasets: [{ data, backgroundColor: ['#14b8a6','#f43f5e'] }] },
-         options: { responsive: false, plugins: { legend: { display: false }, centerText: {} }, cutout: '75%' }
+         data: { labels: ['Public','Private'], datasets: [{ data, backgroundColor: ['#14b8a6','#f43f5e'], borderWidth: 0 }] },
+         options: { responsive: false, plugins: { legend: { display: false } }, cutout: '70%' }
        });
      }
    }
@@ -235,15 +276,25 @@
      const ctx=document.getElementById('overview-auth-group'); if(!ctx||typeof Chart==='undefined') return;
      const eps=S.endpoints||[];
      const groups=[...new Set(eps.map(e=>e.group||'Other'))];
-     const authTypes=['none','apiKey','jwt','oauth'];
-     const colors={none:'#94a3b8',apiKey:'#22c55e',jwt:'#38bdf8',oauth:'#f59e0b'};
-     const datasets=authTypes.map(t=>({label:t,data:groups.map(g=>eps.filter(e=>(e.group||'Other')===g && (e.auth||'none')===t).length),backgroundColor:colors[t]}));
+     const authTypes=[{key:'none',label:'None',color:'#94a3b8'},{key:'api_key',label:'API Key',color:'#22c55e'},{key:'oauth2',label:'OAuth2',color:'#f59e0b'},{key:'jwt',label:'JWT',color:'#38bdf8'},{key:'basic',label:'Basic',color:'#ef4444'}];
+     const datasets=authTypes.map(a=>({label:a.label,data:groups.map(g=>eps.filter(e=>(e.group||'Other')===g && (e.auth||'none')===a.key).length),backgroundColor:a.color,borderWidth:0}));
      if(Charts.authGroup){
        Charts.authGroup.data.labels=groups;
        Charts.authGroup.data.datasets=datasets;
        Charts.authGroup.update();
      } else {
-       Charts.authGroup=new Chart(ctx,{type:'bar',data:{labels:groups,datasets},options:{responsive:false,plugins:{legend:{display:true}},scales:{x:{stacked:true,ticks:{color:'#dbeafe'}},y:{stacked:true,ticks:{color:'#a7b4c7'},beginAtZero:true}}}});
+       Charts.authGroup = new Chart(ctx, {
+         type: 'bar',
+         data: { labels: groups, datasets },
+         options: {
+           responsive: false,
+           plugins: { legend: { display: true } },
+           scales: {
+             x: { stacked: true, ticks: { color: '#dbeafe' } },
+             y: { stacked: true, ticks: { color: '#a7b4c7' }, beginAtZero: true }
+           }
+         }
+       });
      }
    }
 
@@ -277,23 +328,24 @@
      if(ratioEl){ ratioEl.innerHTML=`<span class="num-ok">${aktif}</span>/<span class="num-bad">${inactive}</span>`; }
      // Visual charts
      const eps=S.endpoints;
-     const authLabels=['NONE','API_KEY','OAUTH2','JWT','BASIC'];
-     const authKeys=['none','api_key','oauth2','jwt','basic'];
-     const authColors=['#64748b','#0ea5e9','#a855f7','#f59e0b','#f43f5e'];
-     const authCounts=authKeys.map(t=>eps.filter(e=>((e.auth||'none')===t)).length);
-     const cAuth=document.getElementById('overview-auth');
-     if(typeof Chart!=='undefined'){ renderAuthChart(authLabels, authCounts, authColors); } else { drawBars(cAuth, authLabels, authCounts, authColors); }
-     updateLegendAuth(authLabels, authCounts, authColors);
-     const pub=eps.filter(e=>((e.access||'public')==='public')).length;
-     const priv=eps.filter(e=>((e.access||'public')==='private')).length;
-     const cAcc=document.getElementById('overview-access');
-     if(typeof Chart!=='undefined'){ renderAccessChart(pub, priv); } else { drawDonut(cAcc, [pub, priv], ['#14b8a6','#f43f5e'], ['Public','Private']); }
-     updateLegendAccess(pub, priv);
-     // Chart tambahan: Auth per Group
-     if(typeof Chart!=='undefined'){ renderGroupAuthChart(); }
-     // Optional: usage chart with Chart.js (skip if Chart not available)
-     if(typeof Chart!=='undefined'){ renderUsageChart(); }
-   }
+     const methodLabels=['GET','POST','PUT','DELETE','PATCH','HEAD'];
+     const methodColors=['#22c55e','#f59e0b','#0ea5e9','#f43f5e','#a855f7','#64748b'];
+     const methodCounts=methodLabels.map(m=>eps.filter(ep=>{const arr=Array.isArray(ep.method)?ep.method:[ep.method||'GET']; return arr.includes(m);}).length);
+     if(typeof Chart!=='undefined'){ renderMethodsChart(methodLabels, methodCounts, methodColors); } else { const cM=document.getElementById('overview-methods'); drawBars(cM, methodLabels, methodCounts, methodColors); }
+     updateLegendSimple('legend-methods', methodLabels, methodCounts, methodColors);
+      const pub=eps.filter(e=>((e.access||'public')==='public')).length;
+      const priv=eps.filter(e=>((e.access||'public')==='private')).length;
+      const cAcc=document.getElementById('overview-access');
+      if(typeof Chart!=='undefined'){ renderAccessChart(pub, priv); } else { drawDonut(cAcc, [pub, priv], ['#14b8a6','#f43f5e'], ['Public','Private']); }
+      updateLegendAccess(pub, priv);
+      // Chart tambahan: Auth per Group
+      if(typeof Chart!=='undefined'){ renderGroupAuthChart(); }
+      // Distribusi API per Group
+      const byGroup={}; eps.forEach(ep=>{const g=(ep.group||'Other'); byGroup[g]=(byGroup[g]||0)+1;});
+      const gLabels=Object.keys(byGroup); const gCounts=gLabels.map(l=>byGroup[l]);
+      if(typeof Chart!=='undefined'){ renderGroupDistributionChart(gLabels, gCounts); } else { const cG=document.getElementById('overview-group'); const colors=gLabels.map(()=> '#3b82f6'); drawBars(cG, gLabels, gCounts, colors); }
+      updateGroupBadge(gLabels.length); updateLegendSimple('legend-group', gLabels, gCounts, gLabels.map(()=> '#3b82f6'));
+    }
    byId('api-search')?.addEventListener('input',()=>{renderApi()});
    byId('btn-test-all')?.addEventListener('click',async()=>{
      let ok=0,err=0; for(const ep of S.endpoints){const r=await test(ep); if(r.status==='ERR') err++; else ok++;}
@@ -755,7 +807,7 @@ function drawDonut(c, values, colors, labels){
   const prev=Array.isArray(c._lastValues)?c._lastValues:[0,0];
   const next=values.slice();
   const sumNext=next.reduce((a,b)=>a+b,0);
-  if(sumNext<=0){ ctx.clearRect(0,0,W,H); ctx.fillStyle='#a7b4c7'; ctx.font='12px system-ui'; ctx.fillText('No data', cx-26, cy+4); if(badge){badge.textContent='Public 0% • Private 0%'; badge.classList.remove('dominant-public','dominant-private','balanced');} c._lastValues=next; return; }
+  if(sumNext<=0){ ctx.clearRect(0,0,W,H); ctx.fillStyle='#a7b4c7'; ctx.font='12px system-ui'; ctx.fillText('No data', cx-26, cy+4); if(badge){ badge.textContent=''; badge.classList.remove('show','dominant-public','dominant-private','balanced'); } c._lastValues=next; return; }
   const dur=600; const t0=performance.now();
   function easeOutQuad(t){return 1-(1-t)*(1-t)}
   function frame(now){
@@ -766,16 +818,20 @@ function drawDonut(c, values, colors, labels){
     let a=-Math.PI/2; for(let i=0;i<curr.length;i++){ const ang=(curr[i]/sum)*Math.PI*2; ctx.beginPath(); ctx.arc(cx,cy,r,a,a+ang); ctx.arc(cx,cy,r-th,a+ang,a,true); ctx.closePath(); ctx.fillStyle=colors[i%colors.length]; ctx.fill(); a+=ang; }
     const pubPct=Math.round((curr[0]/sum)*100); const privPct=100-pubPct;
     const isAccess=(c.id==='overview-access');
-    ctx.fillStyle='#dbeafe'; ctx.font=(isAccess?'11px system-ui':'12px system-ui'); ctx.textAlign='center'; ctx.fillText(labels[0]+' '+pubPct+'%', cx, isAccess?cy-1:cy-2);
-    ctx.fillStyle='#a7b4c7'; ctx.font=(isAccess?'10px system-ui':'12px system-ui'); ctx.fillText(labels[1]+' '+privPct+'%', cx, isAccess?cy+12:cy+14);
+    // Jangan gambar teks tengah untuk Access Ratio
+    if(!isAccess){
+      ctx.fillStyle='#dbeafe'; ctx.font='12px system-ui'; ctx.textAlign='center'; ctx.fillText(labels[0]+' '+pubPct+'%', cx, cy-2);
+      ctx.fillStyle='#a7b4c7'; ctx.font='12px system-ui'; ctx.fillText(labels[1]+' '+privPct+'%', cx, cy+14);
+    }
+    // Jangan tampilkan badge untuk Access Ratio
     if(badge){
-      badge.textContent=`Public ${pubPct}% • Private ${privPct}%`;
-      badge.classList.add('show');
-      badge.classList.remove('dominant-public','dominant-private','balanced');
-      const thr=ACCESS_DOMINANCE_THRESHOLD;
-      if(pubPct>=thr){ badge.classList.add('dominant-public'); }
-      else if(privPct>=thr){ badge.classList.add('dominant-private'); }
-      else { badge.classList.add('balanced'); }
+      if(isAccess){
+        badge.textContent='';
+        badge.classList.remove('show','dominant-public','dominant-private','balanced');
+      } else {
+        badge.textContent=`${labels[0]} ${pubPct}% • ${labels[1]} ${privPct}%`;
+        badge.classList.add('show');
+      }
     }
     if(t<1){ requestAnimationFrame(frame); } else { c._lastValues=next; }
   }

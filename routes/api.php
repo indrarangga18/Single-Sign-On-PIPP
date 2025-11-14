@@ -8,9 +8,6 @@ use App\Http\Controllers\API\Sahbandar\SahbandarController;
 use App\Http\Controllers\API\SPB\SPBController;
 use App\Http\Controllers\API\SHTI\SHTIController;
 use App\Http\Controllers\API\EPIT\EPITController;
-use App\Http\Controllers\Monitoring\HealthController;
-use App\Http\Controllers\Monitoring\MetricsController;
-use App\Http\Controllers\Monitoring\LogsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,34 +20,13 @@ use App\Http\Controllers\Monitoring\LogsController;
 |
 */
 
-// Health Check Routes
-Route::get('/health', [HealthController::class, 'basic']);
-Route::get('/health/detailed', [HealthController::class, 'detailed'])->middleware(['jwt.auth', 'role:admin']);
-
-// Monitoring and Metrics Routes (Admin only)
-Route::prefix('monitoring')->middleware(['jwt.auth', 'role:admin'])->group(function () {
-    // System Health
-    Route::get('/health', [HealthController::class, 'systemHealth']);
-    Route::get('/health/components', [HealthController::class, 'componentHealth']);
-    
-    // Metrics
-    Route::get('/metrics', [MetricsController::class, 'general']);
-    Route::get('/metrics/api', [MetricsController::class, 'apiMetrics']);
-    Route::get('/metrics/database', [MetricsController::class, 'databaseMetrics']);
-    Route::get('/metrics/cache', [MetricsController::class, 'cacheMetrics']);
-    Route::get('/metrics/auth', [MetricsController::class, 'authMetrics']);
-    Route::get('/metrics/sso', [MetricsController::class, 'ssoMetrics']);
-    Route::get('/metrics/security', [MetricsController::class, 'securityMetrics']);
-    Route::get('/metrics/performance', [MetricsController::class, 'performanceMetrics']);
-    Route::get('/metrics/export', [MetricsController::class, 'exportMetrics']);
-    
-    // Logs
-    Route::get('/logs', [LogsController::class, 'search']);
-    Route::get('/logs/stats', [LogsController::class, 'statistics']);
-    Route::get('/logs/export', [LogsController::class, 'export']);
-    Route::get('/logs/security', [LogsController::class, 'securityLogs']);
-    Route::get('/logs/audit', [LogsController::class, 'auditLogs']);
-    Route::get('/logs/performance', [LogsController::class, 'performanceLogs']);
+// Health Check
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toISOString(),
+        'service' => 'SSO-PIPP'
+    ]);
 });
 
 // Public Authentication Routes

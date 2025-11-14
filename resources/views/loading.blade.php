@@ -243,7 +243,7 @@
     
     <!-- Loading text -->
     <h1 class="loading-text">Sistem Single Sign-On</h1>
-    <p class="loading-subtitle">Kementerian Kelautan dan Perikanan</p>
+    
     
     <!-- Loading spinner and progress -->
     <div class="loading-spinner">

@@ -36,12 +36,6 @@
     .profile-dropdown a { display: block; padding: 8px 10px; color: #e6f2ff; text-decoration: none; border-radius: 8px; }
     .profile-dropdown a:hover { background: rgba(10,20,50,0.35); }
 
-    /* Headbar (menu teks) dengan gaya pill, sticky, dan neon glow */
-    .headbar { background: rgba(18,28,56,0.65); border: 1px solid rgba(120,200,255,0.28); border-radius: 12px; backdrop-filter: blur(10px); padding: 8px 10px; margin-bottom: 12px; box-shadow: 0 0 20px rgba(34,211,238,0.15), 0 0 40px rgba(168,85,247,0.12); overflow-x: auto; position: sticky; top: 0; z-index: 100; }
-    .headbar-menu { display: flex; gap: 10px; min-width: max-content; }
-    .headbar-link { display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; background: rgba(10,20,50,0.35); border: 1px solid rgba(120,200,255,0.18); color: #dbeafe; text-decoration: none; white-space: nowrap; transition: all .2s ease; }
-    .headbar-link:hover { border-color: rgba(140,220,255,0.45); color: #e6f2ff; transform: translateY(-1px); }
-
     .section-title { color: #e6f2ff; font-size: 24px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     .services-section { background: rgba(18,28,56,0.55); border: 1px solid rgba(120,200,255,0.25); border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
     .placeholder { border: 1px dashed rgba(120,200,255,0.35); border-radius: 12px; padding: 18px; color: #a7b4c7; text-align: center; }
@@ -77,18 +71,6 @@
         </nav>
     </aside>
     <main class="page">
-        <div class="headbar">
-            <div class="headbar-menu">
-                <a href="#" class="headbar-link">VTC</a>
-                <a href="#" class="headbar-link">CCTV</a>
-                <a href="#" class="headbar-link">Profil Pelabuhan</a>
-                <a href="#" class="headbar-link">Kinerja Petugas</a>
-                <a href="#" class="headbar-link">Kedatangan & Keberangkatan Kapal</a>
-                <a href="#" class="headbar-link">Pendaratan Ikan</a>
-                <a href="#" class="headbar-link">SHTI</a>
-                <a href="#" class="headbar-link">Penggunaan Fasilitas</a>
-            </div>
-        </div>
         <div class="topbar">
             <div class="header-brand">
                 <img src="{{ asset('images/logo-kkp-pipp.png') }}" class="brand-logo" alt="KKP PIPP Logo">

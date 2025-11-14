@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SSO PIPP — Settings Microservices</title>
+  <title>SSO PIPP — Dashboard</title>
   <link rel="icon" href="/images/logo-kkp-pipp.png" />
   <style>
     :root {
@@ -11,58 +11,48 @@
       --glass: rgba(18,28,56,.60);
       --border: rgba(120,200,255,.28);
       --muted: #a7b4c7; --text: #e6f2ff;
-      --primary: #0ea5e9; --secondary: #6366f1; --ok:#22c55e; --bad:#ef4444;
+      --primary: #0ea5e9; --secondary: #6366f1;
     }
     *{box-sizing:border-box} body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
     .fx{position:fixed;inset:0;pointer-events:none;z-index:0}
     .orb{position:absolute;width:380px;height:380px;border-radius:50%;filter:blur(86px);opacity:.35}
-    .orb.o1{background:radial-gradient(closest-side,rgba(53,225,255,.9),transparent 72%);top:10%;left:8%;animation:float 14s ease-in-out infinite}
-    .orb.o2{background:radial-gradient(closest-side,rgba(167,139,250,.9),transparent 72%);bottom:12%;right:10%;animation:float 18s ease-in-out infinite reverse}
-    .orb.o3{background:radial-gradient(closest-side,rgba(96,165,250,.9),transparent 72%);top:58%;left:58%;animation:float 22s ease-in-out infinite}
+    .orb.o1{background:radial-gradient(closest-side,rgba(53,225,255,.9),transparent 72%);top:12%;left:10%;animation:float 14s ease-in-out infinite}
+    .orb.o2{background:radial-gradient(closest-side,rgba(167,139,250,.9),transparent 72%);bottom:10%;right:12%;animation:float 18s ease-in-out infinite reverse}
     @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-12px)}}
+
     .layout{display:flex;gap:20px;padding:20px;min-height:100vh;position:relative;z-index:1}
     .sidebar{width:220px;min-width:220px;background:var(--glass);border:1px solid var(--border);border-radius:12px;backdrop-filter:blur(10px);padding:12px;position:sticky;top:20px;height:calc(100vh - 40px);box-shadow:0 12px 28px rgba(34,211,238,.12)}
     .brand{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid var(--border);margin-bottom:10px}
-    .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--secondary))}
     .menu{display:flex;flex-direction:column;gap:8px;margin-top:10px}
     .menu a{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;color:#dbeafe;text-decoration:none;border:1px solid var(--border);background:rgba(10,20,50,.35)}
     .menu a.active{border-color:rgba(140,220,255,.45);box-shadow:0 0 12px rgba(34,211,238,.12)}
     .main{flex:1;min-width:0}
     .topbar{background:var(--glass);border:1px solid var(--border);border-radius:12px;backdrop-filter:blur(10px);padding:10px 12px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
     .brand-title{font-weight:800;letter-spacing:.3px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .header{background:rgba(18,28,56,.55);border:1px solid var(--border);border-radius:15px;padding:24px;margin-bottom:20px}
-    .header h1{margin:0 0 8px;font-size:24px}
-    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-    .tab{border:1px solid var(--border);background:rgba(12,20,40,.55);color:#e6f2ff;border-radius:10px;padding:8px 10px;cursor:pointer}
-    .tab.active{background:linear-gradient(90deg,var(--primary),var(--secondary));border-color:transparent}
-    .panel{display:none;background:rgba(18,28,56,.55);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:18px}
-    .panel.active{display:block}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-    .card{background:rgba(12,20,40,.55);border:1px solid var(--border);border-radius:12px;padding:14px}
-    .card h3{margin:0 0 8px;font-size:16px}
-    .row{display:flex;gap:8px;flex-wrap:wrap}
-    .input,select,textarea{width:100%;border:1px solid rgba(226,232,240,.25);border-radius:10px;background:rgba(255,255,255,.06);color:#e2e8f0;padding:8px}
-    .btn{border:none;border-radius:10px;padding:8px 12px;color:#fff;background:linear-gradient(90deg,var(--primary),var(--secondary));cursor:pointer}
-    .btn.secondary{background:linear-gradient(90deg,#14b8a6,#22c55e)}
-    .btn.danger{background:linear-gradient(90deg,#ef4444,#f43f5e)}
-    table{width:100%;border-collapse:collapse}
-    th,td{border-bottom:1px solid rgba(120,200,255,.18);padding:8px;text-align:left}
-    .stat{display:flex;gap:12px}
-    .badge{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid var(--border);font-size:12px;color:#dbeafe}
     .muted{color:var(--muted);font-size:12px}
+    .toggle-btn{margin-left:auto;border:1px solid var(--border);background:rgba(10,20,50,.35);color:#dbeafe;border-radius:8px;padding:6px 8px;cursor:pointer}
+    .sidebar.collapsed{width:72px;min-width:72px}
+    .sidebar.collapsed .brand .muted,.sidebar.collapsed .brand .brand-title{display:none}
+    .sidebar.collapsed .menu .label{display:none}
+
+    .card{max-width:720px;width:100%;background:var(--glass);border:1px solid var(--border);border-radius:16px;backdrop-filter:blur(10px);padding:28px;text-align:center;box-shadow:0 12px 28px rgba(34,211,238,.12);margin:0 auto}
+    .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+    .btn{border:none;border-radius:12px;padding:10px 14px;color:#fff;background:linear-gradient(90deg,var(--primary),var(--secondary));cursor:pointer;text-decoration:none;display:inline-block}
+    .menu-inline{display:flex;gap:8px;justify-content:center;margin-top:12px}
+    .menu-inline a{color:#dbeafe;text-decoration:none;border:1px solid var(--border);background:rgba(10,20,50,.35);padding:8px 12px;border-radius:10px}
   </style>
 </head>
 <body>
-  <div class="fx" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
+  <div class="fx" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span></div>
   <div class="layout">
     <aside class="sidebar">
-      <div class="brand"><div><div class="brand-title">Microservices Control</div><div class="muted">API Pool System</div></div></div>
+      <div class="brand"><div><div class="brand-title">Microservices Control</div><div class="muted">API Pool System</div></div><button class="toggle-btn" id="toggleSidebar" aria-label="Toggle Sidebar">◀</button></div>
       <nav class="menu">
-        <a href="/setting/" class="active">⚙️ Settings</a>
+        <a href="/setting/">⚙️ <span class="label">Settings</span></a>
         <div class="muted" style="margin:8px 0 4px">Menu Aplikasi</div>
-        <a href="/dashboard/">📊 Dashboard</a>
-        <a href="/dataentry/">📝 Data Entry</a>
-        <a href="/pemantauan/">👁️ Pemantauan</a>
+        <a href="/dashboard/" class="active">📊 <span class="label">Dashboard</span></a>
+        <a href="/dataentry/">📝 <span class="label">Data Entry</span></a>
+        <a href="/pemantauan/">👁️ <span class="label">Pemantauan</span></a>
       </nav>
     </aside>
     <main class="main">
@@ -71,203 +61,41 @@
           <img src="/images/logo-kkp-pipp.png" alt="KKP" style="height:40px" />
           <div>
             <div class="brand-title">SSO PIPP</div>
-            <div class="muted">Settings • Microservices + API Gateway + ETL</div>
+            <div class="muted">Dashboard • Selamat Datang</div>
           </div>
-        </div>
-        <div class="stat">
-          <span class="badge" id="stat-endpoints">0 API</span>
-          <span class="badge" id="stat-roles">0 Role</span>
-          <span class="badge" id="stat-uptime">Uptime: —</span>
         </div>
       </div>
-
-      <section class="header">
-        <h1>Control Center — Microservices Management</h1>
-        <p class="muted">Kelola konfigurasi API, akses, keamanan, monitoring, sinkronisasi, dan environment secara terpadu.</p>
-        <div class="tabs" id="tabs">
-          <button class="tab active" data-tab="api">API Config</button>
-          <button class="tab" data-tab="rbac">RBAC</button>
-          <button class="tab" data-tab="routing">Integration & Routing</button>
-          <button class="tab" data-tab="security">Security</button>
-          <button class="tab" data-tab="monitor">Monitoring</button>
-          <button class="tab" data-tab="sync">Data Sync</button>
-          <button class="tab" data-tab="env">Environment</button>
-          <button class="tab" data-tab="advanced">Advanced</button>
+      <div class="card">
+        <h1>Selamat datang di PIPP Dashboard</h1>
+        <p class="muted">Halaman ini sementara menjadi halaman sambutan. Silakan menuju Settings untuk mengelola konfigurasi dan layanan.</p>
+        <div class="actions">
+          <a class="btn" href="/setting/">Buka Settings</a>
+          <a class="btn" href="/login/">Masuk</a>
         </div>
-      </section>
-
-      <!-- API CONFIG -->
-      <section class="panel active" id="panel-api">
-        <div class="grid">
-          <div class="card">
-            <h3>Register API Endpoint</h3>
-            <div class="row">
-              <input class="input" id="api-name" placeholder="Nama API (mis. Auth Service)" />
-              <input class="input" id="api-url" placeholder="URL (https://...)" />
-              <select id="api-method" class="input"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option><option>HEAD</option></select>
-              <input class="input" id="api-group" placeholder="Group (PIPP, SPB, SHTI, Logbook)" />
-              <input class="input" id="api-version" placeholder="Versi (v1, v2)" />
-              <textarea class="input" id="api-params" placeholder="Parameter (JSON) opsional" rows="2"></textarea>
-            </div>
-            <div class="row">
-              <button class="btn" id="btn-add-api">Simpan API</button>
-              <button class="btn secondary" id="btn-backup">Backup Config (JSON)</button>
-              <label class="btn" for="restore-file">Restore JSON</label>
-              <input type="file" id="restore-file" accept="application/json" style="display:none" />
-            </div>
-          </div>
-          <div class="card">
-            <h3>Daftar API</h3>
-            <table>
-              <thead><tr><th>Nama</th><th>Group</th><th>Method</th><th>Versi</th><th>Status</th><th>Aksi</th></tr></thead>
-              <tbody id="api-table"></tbody>
-            </table>
-          </div>
+        <div class="menu-inline">
+          <a href="/dashboard/">Dashboard</a>
+          <a href="/dataentry/">Data Entry</a>
+          <a href="/pemantauan/">Pemantauan</a>
         </div>
-      </section>
-
-      <!-- RBAC -->
-      <section class="panel" id="panel-rbac">
-        <div class="grid">
-          <div class="card">
-            <h3>Role Definition</h3>
-            <div class="row">
-              <input class="input" id="role-name" placeholder="Role (Admin, Developer, Viewer, Operator)" />
-              <button class="btn" id="btn-add-role">Tambah Role</button>
-            </div>
-            <ul id="role-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card">
-            <h3>Access Matrix</h3>
-            <div class="row">
-              <select id="matrix-role" class="input"></select>
-              <button class="btn" id="btn-save-matrix">Simpan Hak Akses</button>
-            </div>
-            <table>
-              <thead><tr><th>API</th><th>R</th><th>W</th><th>U</th><th>D</th></tr></thead>
-              <tbody id="matrix-table"></tbody>
-            </table>
-          </div>
-          <div class="card">
-            <h3>Token Management</h3>
-            <div class="row">
-              <button class="btn" id="btn-gen-token">Generate Token</button>
-              <input class="input" id="token-label" placeholder="Label token (opsional)" />
-            </div>
-            <table>
-              <thead><tr><th>Token</th><th>Label</th><th>Aksi</th></tr></thead>
-              <tbody id="token-table"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- INTEGRATION & ROUTING -->
-      <section class="panel" id="panel-routing">
-        <div class="grid">
-          <div class="card"><h3>Service Registry</h3><ul id="service-list" class="muted" style="list-style:none;padding-left:0"></ul></div>
-          <div class="card"><h3>Routing Rules</h3>
-            <div class="row"><input class="input" id="route-from" placeholder="Dari Service" /><input class="input" id="route-to" placeholder="Ke Service" /><button class="btn" id="btn-add-route">Tambah Rule</button></div>
-            <ul id="route-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card"><h3>Load Balancing & Fallback</h3>
-            <div class="row"><input class="input" id="lb-service" placeholder="Service" /><input class="input" id="lb-weight" placeholder="Bobot (1-100)" /><button class="btn" id="btn-set-lb">Set</button></div>
-            <p class="muted">Retry Policy: <span id="retry-policy">3x / 500ms</span></p>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECURITY -->
-      <section class="panel" id="panel-security">
-        <div class="grid">
-          <div class="card"><h3>OIDC/OAuth Client Setup</h3>
-            <div class="row"><input class="input" id="oauth-client" placeholder="Client ID" /><input class="input" id="oauth-secret" placeholder="Client Secret" /><button class="btn" id="btn-save-oauth">Simpan</button></div>
-          </div>
-          <div class="card"><h3>API Key Management</h3>
-            <div class="row"><button class="btn" id="btn-gen-key">Buat API Key</button></div>
-            <ul id="key-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card"><h3>IP Whitelisting</h3>
-            <div class="row"><input class="input" id="ip-input" placeholder="IP (x.x.x.x)" /><button class="btn" id="btn-add-ip">Tambah IP</button></div>
-            <ul id="ip-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card"><h3>Audit Trail Logging</h3>
-            <div class="row"><button class="btn" id="btn-clear-logs">Clear Logs</button></div>
-            <ul id="log-list" class="muted" style="list-style:none;padding-left:0;max-height:180px;overflow:auto"></ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- MONITORING -->
-      <section class="panel" id="panel-monitor">
-        <div class="grid">
-          <div class="card"><h3>API Usage Dashboard</h3>
-            <canvas id="chart-usage" width="600" height="180" style="width:100%"></canvas>
-          </div>
-          <div class="card"><h3>Service Health Check</h3>
-            <div class="row"><button class="btn" id="btn-health">Check Health</button></div>
-            <ul id="health-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card"><h3>Error Tracking & Alerts</h3>
-            <p class="muted">Threshold lambat: <input class="input" id="alert-th" placeholder="ms" style="max-width:120px;display:inline-block" /> • Notifikasi: on</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- SYNC -->
-      <section class="panel" id="panel-sync">
-        <div class="grid">
-          <div class="card"><h3>Manual Sync Trigger</h3>
-            <div class="row"><input class="input" id="sync-target" placeholder="Sistem (SPB, SHTI, PIPP)" /><button class="btn" id="btn-sync">Trigger</button></div>
-            <ul id="sync-log" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card"><h3>Sync Schedule Setup</h3>
-            <div class="row"><input class="input" id="sync-cron" placeholder="Jadwal (contoh: harian 02:00)" /><button class="btn" id="btn-set-cron">Simpan Jadwal</button></div>
-            <ul id="cron-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card"><h3>Data Status Report</h3>
-            <ul id="status-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- ENV -->
-      <section class="panel" id="panel-env">
-        <div class="grid">
-          <div class="card"><h3>Environment Variables</h3>
-            <div class="row"><input class="input" id="env-key" placeholder="KEY" /><input class="input" id="env-val" placeholder="VALUE" /><button class="btn" id="btn-add-env">Tambah</button></div>
-            <ul id="env-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card"><h3>Server Connection Settings</h3>
-            <div class="row"><input class="input" id="srv-name" placeholder="Nama Server" /><input class="input" id="srv-host" placeholder="Host/IP" /><button class="btn" id="btn-add-srv">Simpan</button></div>
-            <ul id="srv-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card"><h3>Version Deployment Control</h3>
-            <p class="muted">Lacak versi konfigurasi & deployment service</p>
-            <ul id="ver-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- ADVANCED -->
-      <section class="panel" id="panel-advanced">
-        <div class="grid">
-          <div class="card"><h3>Webhook Management</h3>
-            <div class="row"><input class="input" id="wh-url" placeholder="Webhook URL" /><button class="btn" id="btn-add-wh">Tambah</button></div>
-            <ul id="wh-list" class="muted" style="list-style:none;padding-left:0"></ul>
-          </div>
-          <div class="card"><h3>Service Dependency Map</h3>
-            <p class="muted">Visual sederhana dependensi antar service</p>
-            <canvas id="dep-map" width="600" height="200" style="width:100%"></canvas>
-          </div>
-          <div class="card"><h3>Integration Sandbox</h3>
-            <div class="row"><input class="input" id="sb-url" placeholder="URL" /><select id="sb-method" class="input"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select><button class="btn" id="btn-run-sb">Run</button></div>
-            <pre id="sb-out" class="muted" style="max-height:180px;overflow:auto"></pre>
-          </div>
-        </div>
-      </section>
+      </div>
     </main>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    (function(){
+      const sidebar = document.querySelector('.sidebar');
+      const btn = document.getElementById('toggleSidebar');
+      const collapsed = localStorage.getItem('sidebarCollapsed') === '1';
+      if (collapsed) sidebar.classList.add('collapsed');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');
+          const isCollapsed = sidebar.classList.contains('collapsed');
+          localStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0');
+          btn.textContent = isCollapsed ? '☰' : '◀';
+        });
+        btn.textContent = collapsed ? '☰' : '◀';
+      }
+    })();
+  </script>
 </body>
 </html>

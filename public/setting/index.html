@@ -93,9 +93,17 @@
     .kpi .label{font-size:12px;color:var(--muted)}
     tbody tr:hover{background:rgba(12,20,40,.35)}
     /* Overview charts */
-    .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-    .mini { background: rgba(12, 20, 40, 0.55); border: 1px solid var(--border); border-radius: 12px; padding: 10px; position: relative; }
-    .mini-title { font-size: 12px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.4px; }
+    .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; justify-items: center; }
+      /* Gaya khusus untuk men-center dua chart utama */
+      #mini-methods, #mini-access { text-align: center; }
+      #mini-methods canvas, #mini-access canvas { display: block; margin: 0 auto; }
+      /* Ukuran Access Ratio yang lebih besar */
+      #mini-access { padding: 10px; }
+      #mini-access canvas { width: 160px; height: 160px; }
+      #mini-access .mini-title { font-size: 13px; }
+      #mini-access .mini-legend { font-size: 12px; gap: 8px; }
+      .mini { background: rgba(12, 20, 40, 0.55); border: 1px solid var(--border); border-radius: 12px; padding: 10px; position: relative; }
+      .mini-title { font-size: 12px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.4px; }
     .mini canvas { width: 100%; height: auto; }
     .mini .glow-line { position: absolute; height: 1px; left: 10px; right: 10px; top: 36px; background: linear-gradient(90deg, var(--primary), var(--secondary)); opacity: 0.25; }
     .mini-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
@@ -202,10 +210,17 @@
   <div class="fx" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
   <div class="layout">
     <aside class="sidebar">
-      <div class="brand"><div><div class="brand-title">Microservices Control</div><div class="muted">API Pool System</div></div><button class="toggle-btn" id="toggleSidebar" aria-label="Toggle Sidebar">◀</button></div>
+      <div class="brand">
+        <div>
+          <div class="brand-title">Microservices Control</div>
+          <div class="muted">API Pool System</div>
+        </div>
+        <button class="toggle-btn" id="toggleSidebar" aria-label="Toggle Sidebar">◀</button>
+      </div>
       <nav class="menu">
         <a href="/setting/" class="active">⚙️ <span class="label">Settings</span></a>
         <div class="muted" style="margin:8px 0 4px">Menu Aplikasi</div>
+        <a href="/dashboard/">📊 <span class="label">Dashboard</span></a>
         <a href="/dataentry/">📝 <span class="label">Data Entry</span></a>
         <a href="/pemantauan/">👁️ <span class="label">Pemantauan</span></a>
       </nav>
@@ -289,17 +304,18 @@
               <div class="item"><div class="num" id="api-active-ratio"><span class="num-ok">0</span>/<span class="num-bad">0</span></div><div class="label">Aktif/Tidak Aktif</div></div>
             </div>
             <div class="overview-grid">
-              <div class="mini">
-                 <div class="mini-title">Auth Mix</div>
-                 <div class="glow-line"></div>
-                 <canvas id="overview-auth" width="260" height="100"></canvas>
-                 <div class="mini-legend" id="legend-auth"></div>
-               </div>
-              <div class="mini">
+              <div class="mini" id="mini-methods">
+          <div class="mini-title">Methods Mix</div>
+          <div class="glow-line"></div>
+          <canvas id="overview-methods" width="200" height="200"></canvas>
+          <div class="mini-legend" id="legend-methods"></div>
+        </div>
+              <div class="mini" id="mini-access">
                  <div class="mini-title">Access Ratio</div>
                   <div class="glow-line"></div>
-                  <canvas id="overview-access" width="100" height="100"></canvas>
-                  <div class="badge-small" id="access-badge">Public 0% • Private 0%</div>
+                  <canvas id="overview-access" width="84" height="84"></canvas>
+                  <!-- Hilangkan badge persentase otomatis -->
+                  <div class="badge-small" id="access-badge" style="display:none"></div>
                   <div class="mini-legend" id="legend-access"></div>
             </div>
             <div class="mini">
@@ -307,6 +323,13 @@
                <div class="glow-line"></div>
                <canvas id="overview-auth-group" width="280" height="140"></canvas>
                <div class="mini-legend" id="legend-auth-group"></div>
+            </div>
+            <div class="mini">
+               <div class="mini-title">API per Group</div>
+               <div class="glow-line"></div>
+               <canvas id="overview-group" width="280" height="140"></canvas>
+               <div class="badge-small" id="group-badge">0 group</div>
+               <div class="mini-legend" id="legend-group"></div>
             </div>
           </div>
           <div class="card">
