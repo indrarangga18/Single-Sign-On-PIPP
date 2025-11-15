@@ -3,6 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cd public && python3 server.py"
+    "dev": "cd public && python3 server.py 8899"
   }
 }

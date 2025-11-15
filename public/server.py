@@ -65,7 +65,7 @@ def run_server(port=8000):
         return
     
     try:
-        with socketserver.TCPServer(("", port), SPAHandler) as httpd:
+        with socketserver.TCPServer(("localhost", port), SPAHandler) as httpd:
             print(f"🚀 Server SPA berjalan di http://localhost:{port}")
             print(f"📁 Serving files dari: {os.getcwd()}")
             print("📋 Routes yang tersedia:")
