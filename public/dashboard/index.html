@@ -22,12 +22,12 @@
 
     .page{min-height:100vh;position:relative;z-index:1}
     .sticky{position:sticky;top:0;z-index:10;background:rgba(10,20,40,.78);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
-    .header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px}
-    .title{font-size:28px;font-weight:800;letter-spacing:.3px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .header{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:16px 20px;position:relative}
+    .title{font-size:28px;font-weight:800;letter-spacing:.3px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;background-clip:text;color:transparent;position:absolute;left:50%;transform:translateX(-50%);}
     .apps{display:flex;gap:18px;justify-content:center;padding:8px 20px}
     .app-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border:2px solid #60a5fa;color:#e6f2ff;text-decoration:none;border-radius:8px;min-width:160px;background:transparent}
     .app-btn:hover{filter:brightness(1.06)}
-    .tabs{display:flex;gap:10px;flex-wrap:wrap;padding:10px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:10px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
     .tab{border:2px solid #cbd5e1;background:#0b1020;color:#e6f2ff;border-radius:8px;padding:8px 12px;cursor:pointer}
     .tab.active{background:#ea580c;border-color:#ea580c;color:#fff}
     .content{padding:16px clamp(14px, 2.5vw, 28px);max-width:min(1600px, 96vw);margin:0 auto}
@@ -50,6 +50,7 @@
     .setting-tab{border:2px solid #cbd5e1;background:#0b1020;color:#e6f2ff;border-radius:8px;padding:10px;cursor:pointer;text-align:left}
     .setting-tab.active{background:#facc15;color:#0b1020;border-color:#facc15}
     .setting-content{flex:1}
+    #set-security{display:block !important}
     .mini{background:rgba(12,20,40,.55);border:1px solid var(--border);border-radius:12px;padding:14px}
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .profile-menu{position:relative;display:flex;align-items:center;gap:8px}
@@ -74,6 +75,29 @@
     .compare-wrap{max-height:160px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px;display:none;margin-bottom:12px}
     .compare-wrap.open{display:block}
     .tooltip{position:fixed;background:rgba(18,28,56,.95);color:#e6f2ff;border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:12px;display:none;pointer-events:none;z-index:50}
+    .hero-apps{display:flex;gap:28px;justify-content:center;padding:16px 20px}
+    .app-hero{width:132px;height:132px;border:2px solid #60a5fa;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#e6f2ff;text-decoration:none;background:transparent;font-weight:700;text-align:center;padding:0 10px}
+    .app-hero:hover{filter:brightness(1.06)}
+    .sticky.compact .hero-apps{display:none}
+    .sticky:not(.compact) .apps{display:none}
+    .sticky.compact .apps{display:flex}
+    .sec-layout{display:grid;grid-template-columns:1fr;gap:18px}
+    .sec-nav{display:flex;flex-direction:column;gap:10px}
+    .sec-subtab{border:2px solid #0b0b0b;background:#ffffff;color:#0b0b0b;border-radius:6px;padding:10px;cursor:pointer;text-align:left}
+    .sec-subtab.active{background:#facc15;color:#0b0b0b;border-color:#0b0b0b}
+    .sec-frame{border:2px solid #38bdf8;border-radius:10px;padding:18px;margin:12px auto;max-width:1000px;background:#ffffff;min-height:360px;color:#0b0b0b}
+    .sec-content{padding-left:16px}
+    .sec-subnav-card{background:#ffffff;border:2px solid #0b0b0b;border-radius:10px;padding:10px}
+    .sec-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+    .sec-tab{border:2px solid #0b0b0b;background:#ffffff;color:#0b0b0b;border-radius:8px;padding:8px 12px;cursor:pointer}
+    .sec-tab.active{background:#facc15;color:#0b0b0b;border-color:#0b0b0b}
+    .sec-box{background:#ffffff;border:2px solid #38bdf8;border-radius:10px;padding:12px;color:#0b0b0b}
+    .sec-inner{border:2px solid #38bdf8;border-radius:10px;padding:16px;background:#ffffff}
+    .sec-title{font-weight:800;margin-bottom:12px;color:#0b0b0b}
+    .note{color:#dc2626;margin-left:6px}
+    .toggle{border:2px solid #0b0b0b;background:#ffffff;color:#0b0b0b;border-radius:6px;padding:8px 12px}
+    #sec-session .input{background:#ffffff;color:#0b0b0b;border:2px solid #0b0b0b;border-radius:6px}
+    #sec-session .save-btn{background:#ffffff;color:#0b0b0b;border-color:#0b0b0b}
   </style>
 </head>
 <body>
@@ -84,10 +108,17 @@
         <div class="title">Selamat Datang di SSO</div>
         <div class="profile-menu"><img src="/images/logo-kkp-pipp.png" alt="KKP" style="height:40px;border-radius:8px" /><button class="profile-btn" id="profileBtn">Bomski ▾</button><div class="profile-dropdown" id="profileDropdown"><div class="profile-title">Selamat Datang Bomski’s</div><div class="profile-sub">Role: Administrator</div><button class="dropdown-btn" id="btnEditProfile">Edit Profile</button><button class="dropdown-btn" id="btnSecurity">Keamanan</button></div></div>
       </div>
+      <div class="hero-apps">
+        <a class="app-hero" href="/dashboard/">PIPP</a>
+        <a class="app-hero" href="/pemantauan/">SHTI</a>
+        <a class="app-hero" href="/dashboard/">Teman SPB</a>
+        <a class="app-hero" href="/permohonan/">Permohonan Pendaratan Darurat</a>
+      </div>
       <div class="apps">
         <a class="app-btn" href="/dashboard/">PIPP</a>
         <a class="app-btn" href="/pemantauan/">SHTI</a>
         <a class="app-btn" href="/dashboard/">Teman SPB</a>
+        <a class="app-btn" href="/permohonan/">Permohonan Pendaratan Darurat</a>
       </div>
       <div class="tabs" id="tabs">
         <button class="tab active" data-target="#distribusi">View Distribusi data</button>
@@ -180,9 +211,9 @@
       <section class="section" id="setting">
         <h2>Setting</h2>
         <div class="setting-layout">
-          <aside class="setting-nav"><button class="setting-tab active" data-view="#set-monitoring">Monitoring</button><button class="setting-tab" data-view="#set-rbac">RBAC</button><button class="setting-tab" data-view="#set-security">Security</button></aside>
+          <aside class="setting-nav"><button class="setting-tab" data-view="#set-monitoring">Monitoring</button><button class="setting-tab" data-view="#set-rbac">RBAC</button><button class="setting-tab active" data-view="#set-security">Security</button><button class="setting-tab" data-view="#set-datawarehouse">Datawarehouse</button><button class="setting-tab" data-view="#set-layout">Layout</button></aside>
           <div class="setting-content">
-            <div id="set-monitoring" class="set-panel">
+            <div id="set-monitoring" class="set-panel" style="display:none">
               <div class="grid-3">
                 <div class="mini"><div style="font-weight:700;margin-bottom:6px">Trend Akses</div><div style="height:140px;background:rgba(255,255,255,.05);border:1px dashed rgba(226,232,240,.25);border-radius:8px"></div></div>
                 <div class="mini"><div style="font-weight:700;margin-bottom:6px">Akses Profile</div><div style="height:140px;background:rgba(255,255,255,.05);border:1px dashed rgba(226,232,240,.25);border-radius:8px"></div></div>
@@ -197,8 +228,47 @@
             <div id="set-rbac" class="set-panel" style="display:none">
               <div class="mini"><div style="font-weight:700;margin-bottom:6px">Role Base Access</div><div class="toolbar"><div class="search"><input id="rbac-q" type="text" placeholder="Search" /><button id="rbac-search" class="outline">Cari</button></div></div><div style="overflow:auto"><table id="tbl-rbac"><thead><tr><th>Original ID</th><th>OID</th><th>Username</th><th>Password</th><th>Role</th><th>Access Matrix</th><th>Action</th><th>Log View</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><div class="pager" id="pager-rbac"></div></div>
             </div>
-            <div id="set-security" class="set-panel" style="display:none">
-              <div class="mini"><div style="font-weight:700;margin-bottom:6px">Security</div><div class="toolbar"><div class="search"><input id="sec-q" type="text" placeholder="Search" /><button id="sec-search" class="outline">Cari</button></div></div><div style="overflow:auto"><table id="tbl-sec"><thead><tr><th>Policy</th><th>Status</th><th>Updated</th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table><div class="pager" id="pager-sec"></div></div></div>
+            <div id="set-security" class="set-panel">
+              <div class="sec-frame">
+                <div class="sec-layout">
+                  <div class="sec-content">
+                  <div class="sec-tabs">
+                    <button class="sec-tab active" data-view="#sec-session">Session Management</button>
+                    <button class="sec-tab" data-view="#sec-api">API Security</button>
+                    <button class="sec-tab" data-view="#sec-audit">Audit Trail / Activity Log</button>
+                  </div>
+                  <div id="sec-session" class="sec-box">
+                    <div class="sec-inner">
+                    <div class="sec-title">Session Policy Settings</div>
+                    <div class="form-grid">
+                      <div>Session Timeout (Idle Timeout) <span class="note">!</span></div>
+                      <input id="sec-idle" class="input" placeholder="menit" />
+                      <div>Absolute Timeout <span class="note">!</span></div>
+                      <input id="sec-absolute" class="input" placeholder="menit" />
+                      <div>Max Concurrent Sessions per User <span class="note">!</span></div>
+                      <input id="sec-max" class="input" placeholder="jumlah" />
+                      <div>Allow/Disallow Multi-device Login</div>
+                      <button id="sec-multidevice" class="toggle">Allow</button>
+                    </div>
+                    <div class="modal-actions"><button id="save-sec-policy" class="save-btn">Save</button></div>
+                    </div>
+                  </div>
+                  <div id="sec-api" class="sec-box" style="display:none">
+                    <div class="sec-title">API Security</div>
+                    <div>Coming soon</div>
+                  </div>
+                  <div id="sec-audit" class="sec-box" style="display:none">
+                    <div class="sec-title">Audit Trail / Activity Log</div>
+                    <div>Coming soon</div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="set-datawarehouse" class="set-panel" style="display:none">
+              <div class="mini"><div style="font-weight:700;margin-bottom:6px">Datawarehouse</div><div class="grid-3" style="margin-top:12px"><div class="mini"><div style="font-weight:700;margin-bottom:6px">Skema</div><div style="height:140px;background:rgba(255,255,255,.05);border:1px dashed rgba(226,232,240,.25);border-radius:8px"></div></div><div class="mini"><div style="font-weight:700;margin-bottom:6px">Pipeline</div><div style="height:140px;background:rgba(255,255,255,.05);border:1px dashed rgba(226,232,240,.25);border-radius:8px"></div></div><div class="mini"><div style="font-weight:700;margin-bottom:6px">Status Sink</div><div style="height:140px;background:rgba(255,255,255,.05);border:1px dashed rgba(226,232,240,.25);border-radius:8px"></div></div></div></div>
+            <div id="set-layout" class="set-panel" style="display:none">
+              <div class="mini"><div style="font-weight:700;margin-bottom:6px">Layout</div><div class="grid-3" style="margin-top:12px"><div class="mini"><div style="font-weight:700;margin-bottom:6px">Tema</div><div style="display:flex;gap:8px"><button class="outline">Gelap</button><button class="outline">Terang</button></div></div><div class="mini"><div style="font-weight:700;margin-bottom:6px">Kepadatan</div><div style="display:flex;gap:8px"><button class="outline">Normal</button><button class="outline">Kompak</button></div></div><div class="mini"><div style="font-weight:700;margin-bottom:6px">Akses Cepat</div><div style="height:140px;background:rgba(255,255,255,.05);border:1px dashed rgba(226,232,240,.25);border-radius:8px"></div></div></div></div>
             </div>
           </div>
         </div>
@@ -213,7 +283,7 @@
       tabs.forEach(t=>t.addEventListener('click',e=>{const id=t.getAttribute('data-target');const el=id?document.querySelector(id):null;if(el){focusSection(el.id);}}));
       const tabMap=new Map();
       tabs.forEach(t=>{const id=t.getAttribute('data-target');const el=id?document.querySelector(id):null;if(el) tabMap.set(el.id,t)});
-      function updateActive(){const sticky=document.querySelector('.sticky');const h=sticky?sticky.offsetHeight:0;const y=window.scrollY + h + 20;let current=sections[0]?.id;for(let i=0;i<sections.length;i++){const s=sections[i];const top=s.offsetTop;const nextTop=i<sections.length-1?sections[i+1].offsetTop:Infinity;if(y>=top && y<nextTop){current=s.id;break;}}tabs.forEach(x=>x.classList.remove('active'));const t=tabMap.get(current);if(t) t.classList.add('active');}
+      function updateActive(){const sticky=document.querySelector('.sticky');if(sticky){if(window.scrollY>60){sticky.classList.add('compact');}else{sticky.classList.remove('compact');}}const h=sticky?sticky.offsetHeight:0;const y=window.scrollY + h + 20;let current=sections[0]?.id;for(let i=0;i<sections.length;i++){const s=sections[i];const top=s.offsetTop;const nextTop=i<sections.length-1?sections[i+1].offsetTop:Infinity;if(y>=top && y<nextTop){current=s.id;break;}}tabs.forEach(x=>x.classList.remove('active'));const t=tabMap.get(current);if(t) t.classList.add('active');}
       window.addEventListener('scroll',updateActive);
       window.addEventListener('resize',updateActive);
       setTimeout(updateActive,100);
@@ -225,6 +295,9 @@
       const settingTabs=document.querySelectorAll('.setting-tab');
       const setPanels=document.querySelectorAll('.set-panel');
       settingTabs.forEach(b=>b.addEventListener('click',()=>{settingTabs.forEach(x=>x.classList.remove('active'));b.classList.add('active');setPanels.forEach(p=>p.style.display='none');const tgt=b.getAttribute('data-view');const el=document.querySelector(tgt);if(el) el.style.display='block';}));
+      // Pastikan default tampilan adalah Security sesuai mockup
+      (function ensureDefaultSecurity(){const secBtn=document.querySelector('.setting-tab[data-view="#set-security"]');const secPanel=document.getElementById('set-security');if(secBtn&&secPanel){settingTabs.forEach(x=>x.classList.remove('active'));secBtn.classList.add('active');setPanels.forEach(p=>p.style.display='none');secPanel.style.display='block';}})();
+      // default panel sudah Security via markup
       const profileBtn=document.getElementById('profileBtn');
       const profileDropdown=document.getElementById('profileDropdown');
       document.addEventListener('click',e=>{if(e.target===profileBtn){if(profileDropdown) profileDropdown.classList.toggle('open');}else{if(profileDropdown && !profileDropdown.contains(e.target)) profileDropdown.classList.remove('open');}});
@@ -244,7 +317,7 @@
       function renderHTML(tableId,pagerId,rows){const tb=document.querySelector(`#${tableId} tbody`);const pager=document.getElementById(pagerId);if(!tb||!pager) return;let page=1;const total=rows.length;const pages=Math.max(1,Math.ceil(total/pageSize));function draw(){tb.innerHTML='';const start=(page-1)*pageSize;const slice=rows.slice(start,start+pageSize);slice.forEach(r=>{const tr=document.createElement('tr');r.forEach(c=>{const td=document.createElement('td');td.innerHTML=c;tr.appendChild(td);});tb.appendChild(tr);});pager.innerHTML='';const prev=document.createElement('button');prev.className='page-btn';prev.textContent='Prev';prev.disabled=page===1;prev.addEventListener('click',()=>{if(page>1){page--;draw();}});pager.appendChild(prev);for(let i=1;i<=pages;i++){const b=document.createElement('button');b.className='page-btn'+(i===page?' active':'');b.textContent=String(i);b.addEventListener('click',()=>{page=i;draw();});pager.appendChild(b);}const next=document.createElement('button');next.className='page-btn';next.textContent='Next';next.disabled=page===pages;next.addEventListener('click',()=>{if(page<pages){page++;draw();}});pager.appendChild(next);}draw();}
       function seq(n,fn){const a=[];for(let i=1;i<=n;i++) a.push(fn(i));return a;}
       const dist=seq(24,i=>{const id=251100000+i;const pel=`PPS Nizam Zachman`;const jenis=i%2?"Pengangkut/Pengumpul":"Penangkap";const kapal=`Kapal ${i}`;const stblkk=`STBLK-${1000+i}`;const tgl=`10-11-2025`;const rencana=i%2?"Bongkar":"Muat";const notif=`<ul class="notif-list"><li>Data rekom bongkar : <a href="#" class="notif-link" data-doc="REKOM" data-id="${id}">ok</a></li><li>Data STBLKK status bongkar : <a href="#" class="notif-link" data-doc="STBLKK" data-id="${id}">ok</a></li><li>STBLKK : ${tgl} / 14:33:00</li><li>Rekom Bongkar : ${tgl} / 14:50:49</li></ul>`;return [String(id),pel,jenis,kapal,stblkk,tgl,rencana,notif];});renderHTML('tbl-distribusi','pager-distribusi',dist);
-      const ked=seq(34,i=>[`STLBKK-${i}`,`10-11-2025`,`SPB-${i}`,`10-11-2025`,`SIP-${i}`,`12-12-2025`,`SIUP-${i}`,`PPS NZ ${i}`,'PPN Sibolga',`KM Nusantara ${i}`,String(100+i),i%2?"Pancing":"Jaring",`PT Laut ${i}`]);render('tbl-kedatangan','pager-kedatangan',ked);
+      const ked=seq(34,i=>[`<a href="#" class="notif-link" data-doc="STLBKK" data-id="${i}">STLBKK-${i}</a>`,`10-11-2025`,`<a href="#" class="notif-link" data-doc="SPB" data-id="${i}">SPB-${i}</a>`,`10-11-2025`,`<a href="#" class="notif-link" data-doc="SIP/SIKPI" data-id="${i}">SIP-${i}</a>`,`12-12-2025`,`SIUP-${i}`,`PPS NZ ${i}`,'PPN Sibolga',`KM Nusantara ${i}`,String(100+i),i%2?"Pancing":"Jaring",`PT Laut ${i}`]);renderHTML('tbl-kedatangan','pager-kedatangan',ked);
       const shti=seq(27,i=>[`SHTI-${i}`,`09-11-2025`,`Ekspor`,`PPS NZ`,`BK-${i}`,`KM Samudra ${i}`,String(150+i),`Andi ${i}`,i%2?"Pancing":"Jaring","JP"]);render('tbl-shti','pager-shti',shti);
       const ikan=seq(52,i=>[String(i),`Ikan ${i}`,`Fish ${i}`,`Pisces ${i}`,i%2?"Pelagis":"Demersal","-",`Daerah ${i}`]);
       const pel=seq(43,i=>[`PLB${i}`,`Pelabuhan ${i}`,'DKI Jakarta','Jakarta Utara',`-`,i%2?"PPS":"PPN"]);render('tbl-pelabuhan','pager-pelabuhan',pel);
@@ -283,9 +356,18 @@
       const secSearchBtn=document.getElementById('sec-search');
       if(secSearchBtn){secSearchBtn.addEventListener('click',()=>{const q=secQ?secQ.value:'';const f=q?sec.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase())):sec;render('tbl-sec','pager-sec',f);});}
       if(btn){btn.addEventListener('click',()=>{const v=srcSel?srcSel.value:'';if(!v){alert('Pilih sumber data kapal');return;}showPanel(v);const q=qInput?qInput.value:'';renderKapal(v,q);});}
-      const users=seq(26,i=>[String(i),`user${i}`,`10.0.0.${i}`,i%2?"Local":"Public","ID","10:00","11:00",i%2?"Aktif":"Idle","View","Log"]);render('tbl-users','pager-users',users);
+      const users=seq(26,i=>[String(i),`user${i}`,`10.0.0.${i}`,i%2?"Local":"Public","ID","10:00","11:00",i%2?"Aktif":"Idle",`<div style="display:flex;gap:6px"><button class="outline user-terminate" data-user="user${i}">Terminate</button><button class="outline user-refresh" data-user="user${i}">Refresh</button></div>`, `<a href="#" class="log-link" data-user="user${i}" data-id="${i}">Aktifitas</a>`]);renderHTML('tbl-users','pager-users',users);
       const rbac=seq(29,i=>[`RID${i}`,`OID${i}`,`user${i}`,'***','admin',`MATRIX-${i}`,'edit','view']);render('tbl-rbac','pager-rbac',rbac);
       const sec=seq(18,i=>[`Policy-${i}`,i%2?"Enabled":"Disabled","2025-11-10"]);render('tbl-sec','pager-sec',sec);
+      const secTabs=document.querySelectorAll('.sec-tab');
+      const secPanels=document.querySelectorAll('#set-security .sec-box');
+      secTabs.forEach(b=>b.addEventListener('click',()=>{secTabs.forEach(x=>x.classList.remove('active'));b.classList.add('active');secPanels.forEach(p=>p.style.display='none');const tgt=b.getAttribute('data-view');const el=document.querySelector(tgt);if(el) el.style.display='block';}));
+      // Default subtab: Session Management
+      (function ensureDefaultSession(){const btn=document.querySelector('.sec-tab[data-view="#sec-session"]');const panel=document.getElementById('sec-session');if(btn&&panel){secTabs.forEach(x=>x.classList.remove('active'));btn.classList.add('active');secPanels.forEach(p=>p.style.display='none');panel.style.display='block';}})();
+      const btnMD=document.getElementById('sec-multidevice');
+      if(btnMD){btnMD.addEventListener('click',()=>{btnMD.textContent=btnMD.textContent==='Allow'?'Disallow':'Allow';});}
+      const savePolicy=document.getElementById('save-sec-policy');
+      if(savePolicy){savePolicy.addEventListener('click',()=>{const idle=document.getElementById('sec-idle')?.value||'';const abs=document.getElementById('sec-absolute')?.value||'';const max=document.getElementById('sec-max')?.value||'';const md=btnMD?btnMD.textContent:'';alert(`Saved Session Policy:\nIdle Timeout: ${idle}\nAbsolute Timeout: ${abs}\nMax Sessions/User: ${max}\nMulti-device: ${md}`);});}
       const prodData=[
         {port:'PPS Nizam Zachman',val:6000000},{port:'PPS Belawan',val:3600000},{port:'PPN Bajomulyo',val:3100000},{port:'PPN Tegalsari',val:2900000},{port:'PPN Brondong',val:2100000},{port:'PPS Cilacap',val:1800000},{port:'PPN Sibolga',val:1700000},{port:'PPS Bitung',val:1600000},{port:'PPN Pengambengan',val:1400000},{port:'PPN Kejawanan',val:1300000},{port:'PPN Pekalongan',val:1200000},{port:'PPN Prigi',val:1100000},{port:'PPN Sendang Biru',val:1000000},{port:'PPN Sungai Liat',val:930000},{port:'PPN Lampulo',val:900000},{port:'PPN Sadeng',val:850000},{port:'PPN Tamperan',val:820000},{port:'PPN Kendal',val:780000},{port:'PPN Untia',val:760000},{port:'PPN Ujung Batu',val:740000},{port:'PPN Eretan',val:700000},{port:'PPN PPP Muncar',val:680000},{port:'PPN PPP Kedonganan',val:660000},{port:'PPN PPP Lhokseumawe',val:640000}
       ];
@@ -298,7 +380,7 @@
       const prodTooltip=document.getElementById('prod-tooltip');
       function fmt(n){return n.toLocaleString('id-ID');}
       function fmtShort(n){if(n>=1000000){const v=Math.round(n/1000000);return v+" jt";}if(n>=1000){const v=Math.round(n/1000);return v+" rb";}return String(n);}
-      function drawBarChart(svgId,data,showValues){const svg=document.getElementById(svgId);if(!svg) return;const w=1400,h=520;svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.setAttribute('height','520');const left=120,bottom=130,right=30,top=30;const innerW=w-left-right,innerH=h-top-bottom;const max=Math.max(1,...data.map(d=>d.val));function stepFor(m){if(m<=1000000) return 200000; if(m<=3000000) return 500000; if(m<=6000000) return 1000000; return 2000000;}const step=stepFor(max);const scaleMax=Math.ceil(max/step)*step;const bw=Math.max(6,Math.min(18,(innerW/data.length)-18));const gap=18;let x=left;let bars='';const baseColor='#60a5fa';const hoverColor='#93c5fd';const axisY=h-bottom;const labelY=axisY-10;data.forEach(d=>{const bh=(d.val/scaleMax)*innerH;const by=top+(innerH-bh);bars+=`<rect class="bar-rect" data-port="${d.port}" data-val="${d.val}" x="${x}" y="${by}" width="${bw}" height="${bh}" fill="${baseColor}" style="cursor:pointer"></rect>`;if(showValues){const ty=Math.max(top+18,by-14);bars+=`<text x="${x+bw/2}" y="${ty}" fill="#e6f2ff" font-size="12" text-anchor="middle">${fmtShort(d.val)}</text>`;}const off=Math.max(16,gap+6);const lx=x+bw+off;const label=d.port.replace(/\b(PPN|PPS|PPP)\b\s*/g,'').trim();const fs=Math.max(10,Math.min(12,Math.floor(bw*0.95)));bars+=`<text class="bar-label" x="${lx}" y="${labelY}" fill="#e6f2ff" font-size="${fs}" text-anchor="start" transform="rotate(-90 ${lx},${labelY})" style="paint-order:stroke;stroke:#00000055;stroke-width:0.75">${label}</text>`;x+=bw+gap;});let grid='';for(let t=0;t<=scaleMax;t+=step){const y=top+innerH-(t/scaleMax)*innerH;grid+=`<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" stroke="rgba(226,232,240,.15)"/>`;grid+=`<text x="${left-14}" y="${y+5}" fill="#e6f2ff" font-size="12" text-anchor="end">${fmt(t)}</text>`;}const axis=`<line x1="${left}" y1="${top}" x2="${left}" y2="${h-bottom}" stroke="rgba(226,232,240,.35)"/><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="rgba(226,232,240,.35)"/>`;const titleX=left-90;const titleY=top+innerH/2;const title=`<text x="${titleX}" y="${titleY}" fill="#e6f2ff" font-size="14" text-anchor="middle" transform="rotate(-90 ${titleX},${titleY})">Jumlah Produksi</text>`;svg.innerHTML=grid+axis+title+bars;const rects=svg.querySelectorAll('.bar-rect');rects.forEach(r=>{r.addEventListener('mouseenter',()=>{r.setAttribute('fill',hoverColor);r.setAttribute('stroke','#ffffff55');r.setAttribute('stroke-width','1.5');});r.addEventListener('mousemove',e=>{const port=r.getAttribute('data-port');const val=r.getAttribute('data-val');if(prodTooltip){prodTooltip.style.display='block';prodTooltip.textContent=`${port}: ${fmt(parseInt(val,10))}`;prodTooltip.style.left=`${e.clientX+12}px`;prodTooltip.style.top=`${e.clientY+12}px`;}});r.addEventListener('mouseleave',()=>{r.setAttribute('fill',baseColor);r.removeAttribute('stroke');r.removeAttribute('stroke-width');if(prodTooltip){prodTooltip.style.display='none';}});});}
+      function drawBarChart(svgId,data,showValues){const svg=document.getElementById(svgId);if(!svg) return;const w=1400,h=520;svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.setAttribute('height','520');const left=120,bottom=130,right=30,top=30;const innerW=w-left-right,innerH=h-top-bottom;const max=Math.max(1,...data.map(d=>d.val));function stepFor(m){if(m<=1000000) return 200000; if(m<=3000000) return 500000; if(m<=6000000) return 1000000; return 2000000;}const step=stepFor(max);const scaleMax=Math.ceil(max/step)*step;const bw=Math.max(6,Math.min(18,(innerW/data.length)-18));const gap=28;let x=left;let bars='';const baseColor='#60a5fa';const hoverColor='#93c5fd';const axisY=h-bottom;const labelY=axisY-10;data.forEach(d=>{const bh=(d.val/scaleMax)*innerH;const by=top+(innerH-bh);bars+=`<rect class="bar-rect" data-port="${d.port}" data-val="${d.val}" x="${x}" y="${by}" width="${bw}" height="${bh}" fill="${baseColor}" style="cursor:pointer"></rect>`;if(showValues){const isTopBar=d.val===max;const ty=isTopBar?Math.max(top+6,by-10):Math.max(top+18,by-14);bars+=`<text x="${x+bw/2}" y="${ty}" fill="#e6f2ff" font-size="12" text-anchor="middle">${fmtShort(d.val)}</text>`;}const off=Math.max(16,gap+6);const lx=x+bw+off;const label=d.port.replace(/\b(PPN|PPS|PPP)\b\s*/g,'').trim();const fs=Math.max(10,Math.min(12,Math.floor(bw*0.95)));bars+=`<text class="bar-label" x="${lx}" y="${labelY}" fill="#e6f2ff" font-size="${fs}" text-anchor="start" transform="rotate(-90 ${lx},${labelY})" style="paint-order:stroke;stroke:#00000055;stroke-width:0.75">${label}</text>`;x+=bw+gap;});let grid='';for(let t=0;t<=scaleMax;t+=step){const y=top+innerH-(t/scaleMax)*innerH;grid+=`<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" stroke="rgba(226,232,240,.15)"/>`;grid+=`<text x="${left-14}" y="${y+5}" fill="#e6f2ff" font-size="12" text-anchor="end">${fmt(t)}</text>`;}const axis=`<line x1="${left}" y1="${top}" x2="${left}" y2="${h-bottom}" stroke="rgba(226,232,240,.35)"/><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="rgba(226,232,240,.35)"/>`;const titleX=left-90;const titleY=top+innerH/2;const title=`<text x="${titleX}" y="${titleY}" fill="#e6f2ff" font-size="14" text-anchor="middle" transform="rotate(-90 ${titleX},${titleY})">Jumlah Produksi</text>`;svg.innerHTML=grid+axis+title+bars;const rects=svg.querySelectorAll('.bar-rect');rects.forEach(r=>{r.addEventListener('mouseenter',()=>{r.setAttribute('fill',hoverColor);r.setAttribute('stroke','#ffffff55');r.setAttribute('stroke-width','1.5');});r.addEventListener('mousemove',e=>{const port=r.getAttribute('data-port');const val=r.getAttribute('data-val');if(prodTooltip){prodTooltip.style.display='block';prodTooltip.textContent=`${port}: ${fmt(parseInt(val,10))}`;prodTooltip.style.left=`${e.clientX+12}px`;prodTooltip.style.top=`${e.clientY+12}px`;}});r.addEventListener('mouseleave',()=>{r.setAttribute('fill',baseColor);r.removeAttribute('stroke');r.removeAttribute('stroke-width');if(prodTooltip){prodTooltip.style.display='none';}});});}
       function fillPortSelect(){if(!prodPortSel) return;prodPortSel.innerHTML='<option value="">Semua</option>'+prodData.map(p=>`<option value="${p.port}">${p.port}</option>`).join('');}
       function fillCompare(){if(!prodCompareWrap) return;const controls=`<div style="display:flex;gap:8px;margin-bottom:8px"><input id="prod-compare-search" class="input" placeholder="Cari pelabuhan" style="flex:1"/><button id="prod-compare-all" class="outline">Pilih Semua</button><button id="prod-compare-clear" class="outline">Hapus Semua</button></div>`;const list=prodData.map(p=>`<label style="display:block"><input type="checkbox" value="${p.port}"/> ${p.port}</label>`).join('');prodCompareWrap.innerHTML=controls+list;const s=document.getElementById('prod-compare-search');const btnAll=document.getElementById('prod-compare-all');const btnClear=document.getElementById('prod-compare-clear');if(s){s.addEventListener('input',()=>{const q=s.value.toLowerCase();prodCompareWrap.querySelectorAll('label').forEach(l=>{const t=(l.textContent||'').toLowerCase();l.style.display=t.includes(q)?'block':'none';});});}if(btnAll){btnAll.addEventListener('click',()=>{prodCompareWrap.querySelectorAll('input[type=\"checkbox\"]').forEach(i=>i.checked=true);updateCompareInput();applyProd();});}if(btnClear){btnClear.addEventListener('click',()=>{prodCompareWrap.querySelectorAll('input[type=\"checkbox\"]').forEach(i=>i.checked=false);updateCompareInput();applyProd();});}}
       function getChecks(){return prodCompareWrap?Array.from(prodCompareWrap.querySelectorAll('input[type="checkbox"]:checked')).map(i=>i.value):[]}
@@ -306,9 +388,10 @@
       function setLabelsToFullPorts(svgId){const svg=document.getElementById(svgId);if(!svg) return;const rects=svg.querySelectorAll('.bar-rect');const labels=svg.querySelectorAll('.bar-label');for(let i=0;i<labels.length;i++){const full=rects[i]?rects[i].getAttribute('data-port')||labels[i].textContent:labels[i].textContent;labels[i].textContent=full;}}
       function removeBarLabels(svgId){const svg=document.getElementById(svgId);if(!svg) return;svg.querySelectorAll('.bar-label').forEach(el=>el.remove());}
       function nudgeLabelsRight(svgId,dx){const svg=document.getElementById(svgId);if(!svg) return;svg.querySelectorAll('.bar-label').forEach(el=>{const x=parseFloat(el.getAttribute('x'))||0;el.setAttribute('x',String(x+dx));});}
+      function positionTopValueAboveBar(svgId){const svg=document.getElementById(svgId);if(!svg) return;const rects=svg.querySelectorAll('.bar-rect');if(rects.length===0) return;let maxRect=rects[0];let maxVal=parseInt(maxRect.getAttribute('data-val')||'0',10);rects.forEach(r=>{const v=parseInt(r.getAttribute('data-val')||'0',10);if(v>maxVal){maxVal=v;maxRect=r;}});const x=parseFloat(maxRect.getAttribute('x')||'0');const bw=parseFloat(maxRect.getAttribute('width')||'0');const by=parseFloat(maxRect.getAttribute('y')||'0');const targetX=x + bw/2;const texts=Array.from(svg.querySelectorAll('text')).filter(t=>t.getAttribute('text-anchor')==='middle');const valueText=texts.find(t=>Math.abs((parseFloat(t.getAttribute('x')||'0')) - targetX) < 0.5);if(valueText){const newY=Math.max(14,by-24);valueText.setAttribute('y',String(newY));}}
       
       function currentTopData(){let arr=[...prodData];const range=prodRangeSel?prodRangeSel.value:'all';if(range==='lt500') arr=arr.filter(d=>d.val<500000);else if(range==='500to1000') arr=arr.filter(d=>d.val>=500000&&d.val<1000000);else if(range==='1000to3000') arr=arr.filter(d=>d.val>=1000000&&d.val<3000000);else if(range==='gte3000') arr=arr.filter(d=>d.val>=3000000);const port=prodPortSel?prodPortSel.value:'';if(port) arr=arr.filter(d=>d.port===port);arr.sort((a,b)=>b.val-a.val);const n=prodTopSel?parseInt(prodTopSel.value,10):10;return arr.slice(0,n);} 
-      function applyProd(){let arr=currentTopData();const compareOn=prodCompareOn?prodCompareOn.checked:false;const checks=getChecks();if(compareOn&&checks.length>0) arr=arr.filter(d=>checks.includes(d.port));const showVals=prodValuesOn?prodValuesOn.checked:false;drawBarChart('chart-produksi',arr,showVals);removeBarLabels('chart-produksi');} 
+      function applyProd(){let arr=currentTopData();const compareOn=prodCompareOn?prodCompareOn.checked:false;const checks=getChecks();if(compareOn&&checks.length>0) arr=arr.filter(d=>checks.includes(d.port));const showVals=prodValuesOn?prodValuesOn.checked:false;drawBarChart('chart-produksi',arr,showVals);removeBarLabels('chart-produksi');positionTopValueAboveBar('chart-produksi');} 
       if(prodCompareOn){prodCompareOn.addEventListener('change',()=>{if(prodCompareOn.checked){prodCompareWrap.classList.add('open');applyProd();}else{prodCompareWrap.classList.remove('open');prodCompareWrap.querySelectorAll('input[type="checkbox"]').forEach(i=>{i.checked=false;});applyProd();}})}
       document.addEventListener('click',e=>{if(prodCompareWrap&&!prodCompareWrap.contains(e.target)){prodCompareWrap.classList.remove('open');}});
       ['change'].forEach(ev=>{if(prodTopSel) prodTopSel.addEventListener(ev,()=>{applyProd();});if(prodRangeSel) prodRangeSel.addEventListener(ev,()=>{applyProd();});if(prodPortSel) prodPortSel.addEventListener(ev,()=>{applyProd();});if(prodValuesOn) prodValuesOn.addEventListener(ev,()=>{applyProd();});});
@@ -344,7 +427,7 @@
       const jenisFilter=document.getElementById('jenis-filter');if(jenisFilter){jenisFilter.addEventListener('click',()=>openFilter('jenisikan'));}
       const pelFilter=document.getElementById('pel-filter');if(pelFilter){pelFilter.addEventListener('click',()=>openFilter('pelabuhan'));}
       const kapalFilter=document.getElementById('kapal-filter');if(kapalFilter){kapalFilter.addEventListener('click',()=>openFilter('kapal'));}
-      document.addEventListener('click',e=>{const a=e.target.closest('.notif-link');if(a){e.preventDefault();const type=a.getAttribute('data-doc');const id=a.getAttribute('data-id');const box=document.getElementById('modal-doc');const title=document.getElementById('doc-title');const body=document.getElementById('doc-body');if(title) title.textContent=`Dokumen ${type} • ID ${id}`;if(body) body.innerHTML=`<div style="background:rgba(255,255,255,.06);border:1px solid rgba(120,200,255,.18);border-radius:8px;padding:12px">File dokumen ${type} untuk ID ${id}. Ini adalah pratinjau dokumen dummy.</div>`;if(box) box.classList.add('open');}});
+      document.addEventListener('click',e=>{const a=e.target.closest('.notif-link');if(a){e.preventDefault();const type=a.getAttribute('data-doc');const id=a.getAttribute('data-id');const box=document.getElementById('modal-doc');const title=document.getElementById('doc-title');const body=document.getElementById('doc-body');if(title) title.textContent=`Dokumen ${type} • ID ${id}`;if(body) body.innerHTML=`<div style="background:rgba(255,255,255,.06);border:1px solid rgba(120,200,255,.18);border-radius:8px;padding:12px">File dokumen ${type} untuk ID ${id}. Ini adalah pratinjau dokumen dummy.</div>`;if(box) box.classList.add('open');}const log=e.target.closest('.log-link');if(log){e.preventDefault();const user=log.getAttribute('data-user');const id=log.getAttribute('data-id');const box=document.getElementById('modal-doc');const title=document.getElementById('doc-title');const body=document.getElementById('doc-body');if(title) title.textContent=`Aktifitas • ${user}`;if(body) body.innerHTML=`<div style="background:rgba(255,255,255,.06);border:1px solid rgba(120,200,255,.18);border-radius:8px;padding:12px"><ul style="margin:0;padding-left:18px"><li>Login: 10:00</li><li>Akses Dashboard: 10:05</li><li>Lihat Data Produksi: 10:12</li><li>Logout: -</li></ul></div>`;if(box) box.classList.add('open');}const term=e.target.closest('.user-terminate');if(term){e.preventDefault();const user=term.getAttribute('data-user');const tr=term.closest('tr');if(tr){const td=tr.children[7];if(td) td.textContent='Terminated';}const box=document.getElementById('modal-doc');const title=document.getElementById('doc-title');const body=document.getElementById('doc-body');if(title) title.textContent=`Terminate • ${user}`;if(body) body.innerHTML=`<div style="background:rgba(255,255,255,.06);border:1px solid rgba(120,200,255,.18);border-radius:8px;padding:12px">Session pengguna ${user} diterminasi.</div>`;if(box) box.classList.add('open');}const ref=e.target.closest('.user-refresh');if(ref){e.preventDefault();const user=ref.getAttribute('data-user');const tr=ref.closest('tr');if(tr){const td=tr.children[7];if(td) td.textContent='Aktif';}const box=document.getElementById('modal-doc');const title=document.getElementById('doc-title');const body=document.getElementById('doc-body');if(title) title.textContent=`Refresh • ${user}`;if(body) body.innerHTML=`<div style="background:rgba(255,255,255,.06);border:1px solid rgba(120,200,255,.18);border-radius:8px;padding:12px">Session pengguna ${user} di-refresh.</div>`;if(box) box.classList.add('open');}});
       const closeDoc=document.getElementById('doc-close');
       if(closeDoc){closeDoc.addEventListener('click',()=>{const box=document.getElementById('modal-doc');if(box) box.classList.remove('open');});}
     });
